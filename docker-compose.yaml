@@ -1,0 +1,38 @@
+services:
+
+  database:
+    image: "mysql:latest"
+    container_name: "management-database"
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=LiferayApp
+    healthcheck:
+      test: [ "CMD", "mysqladmin" ,"ping", "-h", "localhost" ]
+      timeout: 20s
+      retries: 10
+    ports:
+      - "3307:3306"
+    volumes:
+      - ./docker-compose/database/*.sql:/docker-entrypoint
+
+  liferay:
+    image: "liferay/dxp:latest"
+    container_name: "management-liferay"
+    depends_on:
+      database:
+        condition: service_healthy
+    environment:
+      - LIFERAY_JVM_OPTS=-Xms3g -Xmx4g
+      - LIFERAY_JDBC_PERIOD_DEFAULT_PERIOD_DRIVER_UPPERCASEC_LASS_UPPERCASEN_AME=com.mysql.cj.jdbc.Driver
+      - LIFERAY_JDBC_PERIOD_DEFAULT_PERIOD_URL=jdbc:mysql://database/LiferayApp?characterEncoding=utf8&dontTrackOpenResources=true&holdResultsOpenOverStatementClose=true&serverTimezone=GMT&useFastDateParsing=false&useUnicode=true
+      - LIFERAY_JDBC_PERIOD_DEFAULT_PERIOD_USERNAME=root
+      - LIFERAY_JDBC_PERIOD_DEFAULT_PERIOD_PASSWORD=root
+      - LIFERAY_MODULE_PERIOD_FRAMEWORK_PERIOD_PROPERTIES_PERIOD_OSGI_PERIOD_CONSOLE=0.0.0.0:11311
+    ports:
+      - "11311:11311"
+      - "8080:8080"
+      - "8000:8000"
+    volumes:
+      - ./docker-compose/liferay/files/data:/mnt/liferay/data
+      - ./docker-compose/liferay/files/script":/mnt/liferay/files/script
