@@ -9,20 +9,20 @@ import com.liferay.portal.kernel.exception.PortalException;
 /**
  * @author Albert Cabral
  */
-public class ManagerException extends PortalException {
+public class ManagerDuplicatedNameException extends PortalException {
 
-	public ManagerException() {
+	public ManagerDuplicatedNameException() {
 	}
 
-	public ManagerException(String msg) {
+	public ManagerDuplicatedNameException(String msg) {
 		super(msg);
 	}
 
-	public ManagerException(String msg, Throwable throwable) {
+	public ManagerDuplicatedNameException(String msg, Throwable throwable) {
 		super(msg, throwable);
 	}
 
-	public ManagerException(Throwable throwable) {
+	public ManagerDuplicatedNameException(Throwable throwable) {
 		super(throwable);
 	}
 

@@ -9,20 +9,20 @@ import com.liferay.portal.kernel.exception.PortalException;
 /**
  * @author Albert Cabral
  */
-public class EmployeeException extends PortalException {
+public class EmployeeDuplicatedNameException extends PortalException {
 
-	public EmployeeException() {
+	public EmployeeDuplicatedNameException() {
 	}
 
-	public EmployeeException(String msg) {
+	public EmployeeDuplicatedNameException(String msg) {
 		super(msg);
 	}
 
-	public EmployeeException(String msg, Throwable throwable) {
+	public EmployeeDuplicatedNameException(String msg, Throwable throwable) {
 		super(msg, throwable);
 	}
 
-	public EmployeeException(Throwable throwable) {
+	public EmployeeDuplicatedNameException(Throwable throwable) {
 		super(throwable);
 	}
 
