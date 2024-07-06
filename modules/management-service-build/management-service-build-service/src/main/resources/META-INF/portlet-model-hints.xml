@@ -1,0 +1,65 @@
+<?xml version="1.0"?>
+
+<model-hints>
+	<model name="management.service.build.model.Employee">
+		<field name="uuid" type="String" />
+		<field name="employeeId" type="long" />
+		<field name="groupId" type="long" />
+		<field name="companyId" type="long" />
+		<field name="userId" type="long" />
+		<field name="userName" type="String" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="firstName" type="String" />
+		<field name="lastName" type="String" />
+		<field name="position" type="String" />
+		<field name="stateCode" type="String" />
+		<field name="managerIdFk" type="long" />
+	</model>
+	<model name="management.service.build.model.Manager">
+		<field name="uuid" type="String" />
+		<field name="managerId" type="long" />
+		<field name="groupId" type="long" />
+		<field name="companyId" type="long" />
+		<field name="userId" type="long" />
+		<field name="userName" type="String" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="firstName" type="String" />
+		<field name="lastName" type="String" />
+		<field name="position" type="String" />
+		<field name="stateCode" type="String" />
+	</model>
+	<model name="com.management.app.model.Employee">
+		<field name="mvccVersion" type="long" />
+		<field name="uuid" type="String" />
+		<field name="employeeId" type="long" />
+		<field name="groupId" type="long" />
+		<field name="companyId" type="long" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="firstName" type="String" />
+		<field name="lastName" type="String" />
+		<field name="managerIdPK" type="long" />
+		<field name="position" type="String" />
+		<field name="stateCode" type="String" />
+		<field name="status" type="int" />
+		<field name="companyTime" type="long" />
+	</model>
+	<model name="com.management.app.model.Manager">
+		<field name="mvccVersion" type="long" />
+		<field name="uuid" type="String" />
+		<field name="managerId" type="long" />
+		<field name="groupId" type="long" />
+		<field name="companyId" type="long" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="firstName" type="String" />
+		<field name="lastName" type="String" />
+		<field name="employeeIdPK" type="long" />
+		<field name="position" type="String" />
+		<field name="stateCode" type="String" />
+		<field name="status" type="int" />
+		<field name="companyTime" type="int" />
+	</model>
+</model-hints>

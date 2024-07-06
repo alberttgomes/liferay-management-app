@@ -1,0 +1,10 @@
+Bundle-Name: management-service-build-api
+Bundle-SymbolicName: management.service.build.api
+Bundle-Version: 1.0.0
+Export-Package:\
+	management.service.build.exception,\
+	management.service.build.model,\
+	management.service.build.service,\
+	management.service.build.service.persistence
+-check: EXPORTS
+-includeresource: META-INF/service.xml=../management-service-build-service/service.xml
