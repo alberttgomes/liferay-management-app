@@ -28,11 +28,12 @@
 
 		<column name="firstName" type="String" />
 		<column name="lastName" type="String" />
-		<column name="managerIdPK" type="long" />
+		<column name="companyTime" type="long" />
 		<column name="position" type="String" />
+		<column name="managerIdPK" type="long" />
 		<column name="stateCode" type="String" />
 		<column name="status" type="int" />
-		<column name="companyTime" type="long" />
+		<column name="userId" type="long" />
 
 		<!-- Order -->
 
@@ -43,20 +44,27 @@
 
 		<!-- Finder methods -->
 
-		<finder name="employee" return-type="Collection">
+		<finder name="CompanyId" return-type="Collection">
 			<finder-column name="companyId" />
 		</finder>
-		<finder name="employeeId" return-type="Manager">
+		<finder name="EmployeeId" return-type="Collection">
 			<finder-column name="employeeId" />
-			<finder-column name="companyId" />
 		</finder>
-		<finder name="C_E_S" return-type="Collection">
+		<finder name="C_E" return-type="Collection">
+			<finder-column name="companyId" />
+			<finder-column name="employeeId" />
+		</finder>
+		<finder name="E_S" return-type="Collection">
+			<finder-column name="employeeId" />
 			<finder-column comparator="!=" name="status" />
 		</finder>
-		<finder name="F_L_C" return-type="Collection">
+		<finder name="F_L" return-type="Collection">
 			<finder-column name="firstName" />
 			<finder-column name="lastName" />
-			<finder-column name="companyId" />
+		</finder>
+		<finder name="M_S" return-type="">
+			<finder-column name="managerIdPK" />
+			<finder-column name="status" />
 		</finder>
 
 	</entity>
@@ -97,21 +105,23 @@
 
 		<!-- Finder methods -->
 
-		<finder name="manager" return-type="Collection">
+		<finder name="CompanyId" return-type="Collection">
 			<finder-column name="companyId" />
+		</finder>
+		<finder name="ManagerId" return-type="Collection">
+			<finder-column name="managerId" />
 		</finder>
 		<finder name="managerId" return-type="Manager">
 			<finder-column name="managerId" />
 			<finder-column name="companyId" />
 		</finder>
-		<finder name="E_M_C" return-type="java.util.List&lt;Employee">
+		<finder name="E_M" return-type="java.util.List&lt;Employee">
+			<finder-column name="employeeIdPK" />
 			<finder-column name="managerId" />
-			<finder-column name="companyId" />
 		</finder>
-		<finder name="F_L_C" return-type="Manager">
+		<finder name="F_L" return-type="Manager">
 			<finder-column name="firstName" />
 			<finder-column name="lastName" />
-			<finder-column name="companyId" />
 		</finder>
 
 	</entity>
