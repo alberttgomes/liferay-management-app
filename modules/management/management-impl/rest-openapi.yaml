@@ -1,0 +1,210 @@
+components:
+    schemas:
+        Employee:
+            properties:
+                employeeId:
+                    format: int64
+                    type: integer
+                firstName:
+                    type: string
+                lastName:
+                    type: string
+                position:
+                    type: string
+                managerId:
+                    format: int64
+                    type: integer
+                stateCode:
+                    type: string
+            type: object
+        Manager:
+            properties:
+                firstName:
+                    type: string
+                lastName:
+                    type: string
+                managerId:
+                    format: int64
+                    type: integer
+                position:
+                    type: string
+                stateCode:
+                    type: string
+paths:
+    "/employee":
+        get:
+            operationId: getEmployee
+            responses:
+                200:
+                    content:
+                        application/json:
+                            schema:
+                                items:
+                                    $ref: "#/components/schemas/Employee"
+                                type: array
+                        application/xml:
+                            schema:
+                                items:
+                                    $ref: "#/components/schemas/Employee"
+                                type: array
+            tags: [ "Employee" ]
+        post:
+            operationId: postEmployee
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: "#/components/schemas/Employee"
+                    application/xml:
+                        schema:
+                            $ref: "#/components/schemas/Employee"
+            responses:
+                201:
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Employee"
+                        application/xml:
+                            schema:
+                                $ref: "#/components/schemas/Employee"
+            tags: [ "Employee" ]
+    "/employee/delete-employee/{employeeId}":
+        delete:
+            operationId: deleteEmployeeById
+            parameters:
+                - in: path
+                  name: employeeId
+                  required: true
+                  schema:
+                      type: integer
+            responses:
+                200:
+                    description: "Employee was deleted with success"
+
+    "/employee/employee-by-id/{employeeId}":
+        get:
+            operationId: getEmployeeById
+            parameters:
+                - in: path
+                  name: employeeId
+                  required: true
+                  schema:
+                      type: integer
+            responses:
+                200:
+                    description: "Employee Found!"
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Employee"
+                        application/xml:
+                            schema:
+                                $ref: "#/components/schemas/Employee"
+    "/manager/":
+        get:
+            operationId: getManager
+            responses:
+                200:
+                    content:
+                        application/json:
+                            schema:
+                                items:
+                                    $ref: "#/components/schemas/Manager"
+                                type: array
+                        application/xml:
+                            schema:
+                                items:
+                                    $ref: "#/components/schemas/Manager"
+                                type: array
+            tags: [ "Manager" ]
+        post:
+            operationId: postManager
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: "#/components/schemas/Manager"
+                    application/xml:
+                        schema:
+                            $ref: "#/components/schemas/Manager"
+            responses:
+                201:
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Manager"
+                        application/xml:
+                            schema:
+                                $ref: "#/components/schemas/Manager"
+            tags: [ "Manager" ]
+    "/manager/delete-manager-by-id/{managerId}":
+        delete:
+            operationId: deleteManagerById
+            parameters:
+                - in: path
+                  name: employeeId
+                  required: true
+                  schema:
+                      type: integer
+            tags: [ "Manager" ]
+    "/manager/get-manager-by-id/{managerId}":
+        get:
+            operationId: getManageById
+            parameters:
+                - in: path
+                  name: managerId
+                  required: true
+                  schema:
+                      type: integer
+            tags: [ "Manager" ]
+    "/manager/manager-get-employees/{managerId}":
+        get:
+            operationId: getEmployeesByManagerId
+            parameters:
+                - in: path
+                  name: managerId
+                  required: true
+                  schema:
+                      type: integer
+            responses:
+                200:
+                    content:
+                        application/json:
+                            schema:
+                                items:
+                                    $ref: "#/components/schemas/Employee"
+                                type: array
+                        application/xml:
+                            schema:
+                                items:
+                                    $ref: "#/components/schemas/Employee"
+                                type: array
+            tags: [ "Employees" ]
+    "/manager/update/{managerId}":
+        put:
+            operationId: updateManagerById
+            parameters:
+                - in: path
+                  name: managerId
+                  required: true
+                  schema:
+                      format: int64
+                      type: integer
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: "#/components/schemas/Manager"
+                    application/xml:
+                        schema:
+                            $ref: "#/components/schemas/Manager"
+            responses:
+                200:
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Manager"
+                        application/xml:
+                            schema:
+                                $ref: "#/components/schemas/Manager"
+            tags: [ "Manager" ]

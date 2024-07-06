@@ -1,0 +1,9 @@
+apiDir: "../management-api/src/main/java"
+apiPackagePath: "management"
+application:
+    baseURI: "/management"
+    className: "ManagementApplication"
+    name: "Management"
+author: "me"
+clientDir: "../management-client/src/main/java"
+testDir: "../management-test/src/testIntegration/java"
