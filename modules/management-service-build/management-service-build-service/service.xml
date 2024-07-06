@@ -117,8 +117,10 @@
 	</entity>
 
 	<exceptions>
-		<exception>Employee</exception>
-		<exception>Manager</exception>
+		<exception>EmployeeDuplicatedName</exception>
+		<exception>ManagerDuplicatedName</exception>
+		<exception>NoSuchEmployee</exception>
+		<exception>NoSuchManager</exception>
 	</exceptions>
 
 </service-builder>
