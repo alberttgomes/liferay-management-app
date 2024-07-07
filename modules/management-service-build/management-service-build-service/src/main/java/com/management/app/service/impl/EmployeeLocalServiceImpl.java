@@ -14,8 +14,9 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.util.ArrayUtil;
-
+import com.liferay.portal.kernel.util.HashMapBuilder;
 import com.liferay.portal.kernel.util.StringBundler;
+
 import com.management.app.exception.NoSuchEmployeeException;
 import com.management.app.exception.NoSuchManagerException;
 import com.management.app.model.Employee;
@@ -43,9 +44,9 @@ public class EmployeeLocalServiceImpl extends EmployeeLocalServiceBaseImpl {
 
 	@Override
 	public Employee addEmployee(
-			String firstName, String lastName, String position,
-			String stateCode, int status, long managerIdPK, int companyTime,
-			long groupId, long companyId, long userId)
+			String firstName, String lastName, String position, String level,
+			String stateCode, int status, long managerIdPK, long groupId,
+			long companyId, long userId, boolean isManager)
 		throws NoSuchManagerException {
 
 		long employeeId = CounterLocalServiceUtil.increment();
@@ -148,7 +149,8 @@ public class EmployeeLocalServiceImpl extends EmployeeLocalServiceBaseImpl {
 	}
 
 	private void _validate(
-			String firstName, String lastName, String position, long managerIdPK)
+			String firstName, String lastName, String position,
+			int level, String department, long managerIdPK)
 		throws NoSuchManagerException {
 
 		try {
@@ -166,9 +168,20 @@ public class EmployeeLocalServiceImpl extends EmployeeLocalServiceBaseImpl {
 						"Not found manager with id " + managerIdPK);
 			}
 			else {
-				// Process about positions available on company
+				// Validate job available positions
 
 				JSONObject jsonObject = _jsonObjectPositionsBuilder();
+
+				Map<String, String> departmentMap = HashMapBuilder.put(
+						"department", department).build();
+
+				if (departmentMap.isEmpty()) {
+					throw new RuntimeException(
+							"No available department identifier " +
+									department);
+				}
+
+				jsonObject.get("engineer");
 
 				if (jsonObject.get(position) == null) {
 					throw new RuntimeException(
