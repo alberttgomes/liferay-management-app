@@ -15,6 +15,7 @@ import com.liferay.portal.kernel.dao.orm.Projection;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.model.PersistedModel;
+import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.search.Indexable;
 import com.liferay.portal.kernel.search.IndexableType;
 import com.liferay.portal.kernel.service.BaseLocalService;
@@ -33,6 +34,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
+import com.management.app.model.Manager;
 import org.osgi.annotation.versioning.ProviderType;
 
 /**
@@ -311,6 +313,11 @@ public interface EmployeeLocalService
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public PersistedModel getPersistedModel(Serializable primaryKeyObj)
 		throws PortalException;
+
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	Manager promotingEmployee(
+			Employee employee, User user) throws NoSuchEmployeeException;
 
 	/**
 	 * Updates the employee in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
