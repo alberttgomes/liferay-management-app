@@ -1,8 +1,11 @@
-create index IX_F3467A55 on Management_Employee (companyId, employeeId);
-create index IX_810386C8 on Management_Employee (companyId, firstName[$COLUMN_LENGTH:75$], lastName[$COLUMN_LENGTH:75$]);
-create index IX_58891756 on Management_Employee (status);
+create index IX_6D9670FB on Management_Employee (employeeId, companyId);
+create index IX_7F563AF3 on Management_Employee (employeeId, status);
+create index IX_F525B710 on Management_Employee (firstName[$COLUMN_LENGTH:75$], lastName[$COLUMN_LENGTH:75$]);
+create index IX_C0441647 on Management_Employee (position[$COLUMN_LENGTH:75$], level);
+create index IX_4D34497D on Management_Employee (status, managerIdPK);
 create unique index IX_E8C65DE6 on Management_Employee (uuid_[$COLUMN_LENGTH:75$], groupId);
 
-create index IX_D4A3CD8F on Management_Manager (companyId, firstName[$COLUMN_LENGTH:75$], lastName[$COLUMN_LENGTH:75$]);
-create index IX_DE492A27 on Management_Manager (companyId, managerId);
+create index IX_DD4C4091 on Management_Manager (companyId);
+create index IX_C39BD5C7 on Management_Manager (managerId, companyId);
+create index IX_19AD5719 on Management_Manager (managerId, employeeIdPK);
 create unique index IX_904312AD on Management_Manager (uuid_[$COLUMN_LENGTH:75$], groupId);

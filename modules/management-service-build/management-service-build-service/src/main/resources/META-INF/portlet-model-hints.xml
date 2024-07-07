@@ -40,11 +40,13 @@
 		<field name="modifiedDate" type="Date" />
 		<field name="firstName" type="String" />
 		<field name="lastName" type="String" />
-		<field name="managerIdPK" type="long" />
 		<field name="position" type="String" />
+		<field name="isManager" type="boolean" />
+		<field name="level" type="int" />
+		<field name="managerIdPK" type="long" />
 		<field name="stateCode" type="String" />
 		<field name="status" type="int" />
-		<field name="companyTime" type="long" />
+		<field name="userId" type="long" />
 	</model>
 	<model name="com.management.app.model.Manager">
 		<field name="mvccVersion" type="long" />
@@ -54,12 +56,6 @@
 		<field name="companyId" type="long" />
 		<field name="createDate" type="Date" />
 		<field name="modifiedDate" type="Date" />
-		<field name="firstName" type="String" />
-		<field name="lastName" type="String" />
 		<field name="employeeIdPK" type="long" />
-		<field name="position" type="String" />
-		<field name="stateCode" type="String" />
-		<field name="status" type="int" />
-		<field name="companyTime" type="int" />
 	</model>
 </model-hints>

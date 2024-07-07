@@ -68,7 +68,7 @@ public class ManagerCacheModel
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(29);
+		StringBundler sb = new StringBundler(17);
 
 		sb.append("{mvccVersion=");
 		sb.append(mvccVersion);
@@ -84,20 +84,8 @@ public class ManagerCacheModel
 		sb.append(createDate);
 		sb.append(", modifiedDate=");
 		sb.append(modifiedDate);
-		sb.append(", firstName=");
-		sb.append(firstName);
-		sb.append(", lastName=");
-		sb.append(lastName);
 		sb.append(", employeeIdPK=");
 		sb.append(employeeIdPK);
-		sb.append(", position=");
-		sb.append(position);
-		sb.append(", stateCode=");
-		sb.append(stateCode);
-		sb.append(", status=");
-		sb.append(status);
-		sb.append(", companyTime=");
-		sb.append(companyTime);
 		sb.append("}");
 
 		return sb.toString();
@@ -134,38 +122,7 @@ public class ManagerCacheModel
 			managerImpl.setModifiedDate(new Date(modifiedDate));
 		}
 
-		if (firstName == null) {
-			managerImpl.setFirstName("");
-		}
-		else {
-			managerImpl.setFirstName(firstName);
-		}
-
-		if (lastName == null) {
-			managerImpl.setLastName("");
-		}
-		else {
-			managerImpl.setLastName(lastName);
-		}
-
 		managerImpl.setEmployeeIdPK(employeeIdPK);
-
-		if (position == null) {
-			managerImpl.setPosition("");
-		}
-		else {
-			managerImpl.setPosition(position);
-		}
-
-		if (stateCode == null) {
-			managerImpl.setStateCode("");
-		}
-		else {
-			managerImpl.setStateCode(stateCode);
-		}
-
-		managerImpl.setStatus(status);
-		managerImpl.setCompanyTime(companyTime);
 
 		managerImpl.resetOriginalValues();
 
@@ -184,16 +141,8 @@ public class ManagerCacheModel
 		companyId = objectInput.readLong();
 		createDate = objectInput.readLong();
 		modifiedDate = objectInput.readLong();
-		firstName = objectInput.readUTF();
-		lastName = objectInput.readUTF();
 
 		employeeIdPK = objectInput.readLong();
-		position = objectInput.readUTF();
-		stateCode = objectInput.readUTF();
-
-		status = objectInput.readInt();
-
-		companyTime = objectInput.readInt();
 	}
 
 	@Override
@@ -215,39 +164,7 @@ public class ManagerCacheModel
 		objectOutput.writeLong(createDate);
 		objectOutput.writeLong(modifiedDate);
 
-		if (firstName == null) {
-			objectOutput.writeUTF("");
-		}
-		else {
-			objectOutput.writeUTF(firstName);
-		}
-
-		if (lastName == null) {
-			objectOutput.writeUTF("");
-		}
-		else {
-			objectOutput.writeUTF(lastName);
-		}
-
 		objectOutput.writeLong(employeeIdPK);
-
-		if (position == null) {
-			objectOutput.writeUTF("");
-		}
-		else {
-			objectOutput.writeUTF(position);
-		}
-
-		if (stateCode == null) {
-			objectOutput.writeUTF("");
-		}
-		else {
-			objectOutput.writeUTF(stateCode);
-		}
-
-		objectOutput.writeInt(status);
-
-		objectOutput.writeInt(companyTime);
 	}
 
 	public long mvccVersion;
@@ -257,12 +174,6 @@ public class ManagerCacheModel
 	public long companyId;
 	public long createDate;
 	public long modifiedDate;
-	public String firstName;
-	public String lastName;
 	public long employeeIdPK;
-	public String position;
-	public String stateCode;
-	public int status;
-	public int companyTime;
 
 }

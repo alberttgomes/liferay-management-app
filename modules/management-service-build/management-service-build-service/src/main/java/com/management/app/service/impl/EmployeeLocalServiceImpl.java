@@ -20,11 +20,10 @@ import com.management.app.exception.NoSuchEmployeeException;
 import com.management.app.exception.NoSuchManagerException;
 import com.management.app.model.Employee;
 import com.management.app.model.Manager;
-import com.management.app.model.impl.EmployeeImpl;
 import com.management.app.service.ManagerLocalService;
 import com.management.app.service.base.EmployeeLocalServiceBaseImpl;
 import com.management.app.service.persistence.EmployeePersistence;
-import com.management.app.service.persistence.impl.constants.EmployeeStatusConstant;
+import com.management.app.service.util.EmployeeStatusConstant;
 
 import java.util.*;
 import java.util.regex.Matcher;
@@ -49,11 +48,13 @@ public class EmployeeLocalServiceImpl extends EmployeeLocalServiceBaseImpl {
 			long groupId, long companyId, long userId)
 		throws NoSuchManagerException {
 
+		long employeeId = CounterLocalServiceUtil.increment();
+
 		_validate(firstName, lastName, position, managerIdPK);
 
 		return _addEmployee(
 				firstName, lastName, position, stateCode,
-				managerIdPK, groupId, companyId);
+				managerIdPK, groupId, companyId, employeeId);
 	}
 
 	@Override
@@ -124,11 +125,9 @@ public class EmployeeLocalServiceImpl extends EmployeeLocalServiceBaseImpl {
 
 	private Employee _addEmployee(
 			String firstName, String lastName, String position, String stateCode,
-			long managerIdPK, long groupId, long companyId) {
+			long managerIdPK, long groupId, long companyId, long employeeId) {
 
-		Employee employee = new EmployeeImpl();
-
-		long employeeId = CounterLocalServiceUtil.increment();
+		Employee employee = _employeePersistence.create(employeeId);
 
 		employee.setEmployeeId(employeeId);
 		employee.setCreateDate(new Date());

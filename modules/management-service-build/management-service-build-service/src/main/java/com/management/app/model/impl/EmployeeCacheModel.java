@@ -68,7 +68,7 @@ public class EmployeeCacheModel
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(29);
+		StringBundler sb = new StringBundler(33);
 
 		sb.append("{mvccVersion=");
 		sb.append(mvccVersion);
@@ -88,16 +88,20 @@ public class EmployeeCacheModel
 		sb.append(firstName);
 		sb.append(", lastName=");
 		sb.append(lastName);
-		sb.append(", managerIdPK=");
-		sb.append(managerIdPK);
 		sb.append(", position=");
 		sb.append(position);
+		sb.append(", isManager=");
+		sb.append(isManager);
+		sb.append(", level=");
+		sb.append(level);
+		sb.append(", managerIdPK=");
+		sb.append(managerIdPK);
 		sb.append(", stateCode=");
 		sb.append(stateCode);
 		sb.append(", status=");
 		sb.append(status);
-		sb.append(", companyTime=");
-		sb.append(companyTime);
+		sb.append(", userId=");
+		sb.append(userId);
 		sb.append("}");
 
 		return sb.toString();
@@ -148,14 +152,16 @@ public class EmployeeCacheModel
 			employeeImpl.setLastName(lastName);
 		}
 
-		employeeImpl.setManagerIdPK(managerIdPK);
-
 		if (position == null) {
 			employeeImpl.setPosition("");
 		}
 		else {
 			employeeImpl.setPosition(position);
 		}
+
+		employeeImpl.setIsManager(isManager);
+		employeeImpl.setLevel(level);
+		employeeImpl.setManagerIdPK(managerIdPK);
 
 		if (stateCode == null) {
 			employeeImpl.setStateCode("");
@@ -165,7 +171,7 @@ public class EmployeeCacheModel
 		}
 
 		employeeImpl.setStatus(status);
-		employeeImpl.setCompanyTime(companyTime);
+		employeeImpl.setUserId(userId);
 
 		employeeImpl.resetOriginalValues();
 
@@ -186,14 +192,18 @@ public class EmployeeCacheModel
 		modifiedDate = objectInput.readLong();
 		firstName = objectInput.readUTF();
 		lastName = objectInput.readUTF();
+		position = objectInput.readUTF();
+
+		isManager = objectInput.readBoolean();
+
+		level = objectInput.readInt();
 
 		managerIdPK = objectInput.readLong();
-		position = objectInput.readUTF();
 		stateCode = objectInput.readUTF();
 
 		status = objectInput.readInt();
 
-		companyTime = objectInput.readLong();
+		userId = objectInput.readLong();
 	}
 
 	@Override
@@ -229,14 +239,18 @@ public class EmployeeCacheModel
 			objectOutput.writeUTF(lastName);
 		}
 
-		objectOutput.writeLong(managerIdPK);
-
 		if (position == null) {
 			objectOutput.writeUTF("");
 		}
 		else {
 			objectOutput.writeUTF(position);
 		}
+
+		objectOutput.writeBoolean(isManager);
+
+		objectOutput.writeInt(level);
+
+		objectOutput.writeLong(managerIdPK);
 
 		if (stateCode == null) {
 			objectOutput.writeUTF("");
@@ -247,7 +261,7 @@ public class EmployeeCacheModel
 
 		objectOutput.writeInt(status);
 
-		objectOutput.writeLong(companyTime);
+		objectOutput.writeLong(userId);
 	}
 
 	public long mvccVersion;
@@ -259,10 +273,12 @@ public class EmployeeCacheModel
 	public long modifiedDate;
 	public String firstName;
 	public String lastName;
-	public long managerIdPK;
 	public String position;
+	public boolean isManager;
+	public int level;
+	public long managerIdPK;
 	public String stateCode;
 	public int status;
-	public long companyTime;
+	public long userId;
 
 }

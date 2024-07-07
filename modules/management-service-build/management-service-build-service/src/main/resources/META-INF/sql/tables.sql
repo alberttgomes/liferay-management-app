@@ -8,11 +8,13 @@ create table Management_Employee (
 	modifiedDate DATE null,
 	firstName VARCHAR(75) null,
 	lastName VARCHAR(75) null,
-	managerIdPK LONG,
 	position VARCHAR(75) null,
+	isManager BOOLEAN,
+	level INTEGER,
+	managerIdPK LONG,
 	stateCode VARCHAR(75) null,
 	status INTEGER,
-	companyTime LONG
+	userId LONG
 );
 
 create table Management_Manager (
@@ -23,11 +25,5 @@ create table Management_Manager (
 	companyId LONG,
 	createDate DATE null,
 	modifiedDate DATE null,
-	firstName VARCHAR(75) null,
-	lastName VARCHAR(75) null,
-	employeeIdPK LONG,
-	position VARCHAR(75) null,
-	stateCode VARCHAR(75) null,
-	status INTEGER,
-	companyTime INTEGER
+	employeeIdPK LONG
 );

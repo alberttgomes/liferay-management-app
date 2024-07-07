@@ -28,8 +28,9 @@
 
 		<column name="firstName" type="String" />
 		<column name="lastName" type="String" />
-		<column name="companyTime" type="long" />
 		<column name="position" type="String" />
+		<column name="isManager" type="boolean" />
+		<column name="level" type="int" />
 		<column name="managerIdPK" type="long" />
 		<column name="stateCode" type="String" />
 		<column name="status" type="int" />
@@ -62,6 +63,10 @@
 			<finder-column name="firstName" />
 			<finder-column name="lastName" />
 		</finder>
+		<finder name="P_L" return-type="Collection">
+			<finder-column name="position" />
+			<finder-column name="level" />
+		</finder>
 		<finder name="M_S" return-type="">
 			<finder-column name="managerIdPK" />
 			<finder-column name="status" />
@@ -88,20 +93,7 @@
 
 		<!-- Other fields -->
 
-		<column name="firstName" type="String" />
-		<column name="lastName" type="String" />
 		<column name="employeeIdPK" type="long" />
-		<column name="position" type="String" />
-		<column name="stateCode" type="String" />
-		<column name="status" type="int" />
-		<column name="companyTime" type="int" />
-
-		<!-- Order -->
-
-		<order by="asc">
-			<order-column name="firstName" />
-			<order-column name="lastName" />
-		</order>
 
 		<!-- Finder methods -->
 
@@ -118,10 +110,6 @@
 		<finder name="E_M" return-type="java.util.List&lt;Employee">
 			<finder-column name="employeeIdPK" />
 			<finder-column name="managerId" />
-		</finder>
-		<finder name="F_L" return-type="Manager">
-			<finder-column name="firstName" />
-			<finder-column name="lastName" />
 		</finder>
 
 	</entity>

@@ -113,11 +113,14 @@ public abstract class EmployeeLocalServiceBaseImpl
 	 *
 	 * @param employeeId the primary key of the employee
 	 * @return the employee that was removed
+	 * @throws NoSuchEmployeeException
 	 * @throws PortalException if a employee with the primary key could not be found
 	 */
 	@Indexable(type = IndexableType.DELETE)
 	@Override
-	public Employee deleteEmployee(long employeeId) throws PortalException {
+	public Employee deleteEmployee(long employeeId)
+		throws NoSuchEmployeeException, PortalException {
+
 		return employeePersistence.remove(employeeId);
 	}
 

@@ -1,4 +1,4 @@
-package com.management.app.service.persistence.impl.constants;
+package com.management.app.service.util;
 
 /**
  * @author Albert Cabral

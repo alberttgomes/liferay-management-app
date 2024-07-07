@@ -65,10 +65,7 @@ public class ManagerModelImpl
 		{"mvccVersion", Types.BIGINT}, {"uuid_", Types.VARCHAR},
 		{"managerId", Types.BIGINT}, {"groupId", Types.BIGINT},
 		{"companyId", Types.BIGINT}, {"createDate", Types.TIMESTAMP},
-		{"modifiedDate", Types.TIMESTAMP}, {"firstName", Types.VARCHAR},
-		{"lastName", Types.VARCHAR}, {"employeeIdPK", Types.BIGINT},
-		{"position", Types.VARCHAR}, {"stateCode", Types.VARCHAR},
-		{"status", Types.INTEGER}, {"companyTime", Types.INTEGER}
+		{"modifiedDate", Types.TIMESTAMP}, {"employeeIdPK", Types.BIGINT}
 	};
 
 	public static final Map<String, Integer> TABLE_COLUMNS_MAP =
@@ -82,25 +79,19 @@ public class ManagerModelImpl
 		TABLE_COLUMNS_MAP.put("companyId", Types.BIGINT);
 		TABLE_COLUMNS_MAP.put("createDate", Types.TIMESTAMP);
 		TABLE_COLUMNS_MAP.put("modifiedDate", Types.TIMESTAMP);
-		TABLE_COLUMNS_MAP.put("firstName", Types.VARCHAR);
-		TABLE_COLUMNS_MAP.put("lastName", Types.VARCHAR);
 		TABLE_COLUMNS_MAP.put("employeeIdPK", Types.BIGINT);
-		TABLE_COLUMNS_MAP.put("position", Types.VARCHAR);
-		TABLE_COLUMNS_MAP.put("stateCode", Types.VARCHAR);
-		TABLE_COLUMNS_MAP.put("status", Types.INTEGER);
-		TABLE_COLUMNS_MAP.put("companyTime", Types.INTEGER);
 	}
 
 	public static final String TABLE_SQL_CREATE =
-		"create table Management_Manager (mvccVersion LONG default 0 not null,uuid_ VARCHAR(75) null,managerId LONG not null primary key,groupId LONG,companyId LONG,createDate DATE null,modifiedDate DATE null,firstName VARCHAR(75) null,lastName VARCHAR(75) null,employeeIdPK LONG,position VARCHAR(75) null,stateCode VARCHAR(75) null,status INTEGER,companyTime INTEGER)";
+		"create table Management_Manager (mvccVersion LONG default 0 not null,uuid_ VARCHAR(75) null,managerId LONG not null primary key,groupId LONG,companyId LONG,createDate DATE null,modifiedDate DATE null,employeeIdPK LONG)";
 
 	public static final String TABLE_SQL_DROP = "drop table Management_Manager";
 
 	public static final String ORDER_BY_JPQL =
-		" ORDER BY manager.firstName ASC, manager.lastName ASC";
+		" ORDER BY manager.managerId ASC";
 
 	public static final String ORDER_BY_SQL =
-		" ORDER BY Management_Manager.firstName ASC, Management_Manager.lastName ASC";
+		" ORDER BY Management_Manager.managerId ASC";
 
 	public static final String DATA_SOURCE = "liferayDataSource";
 
@@ -124,31 +115,19 @@ public class ManagerModelImpl
 	 * @deprecated As of Athanasius (7.3.x), replaced by {@link #getColumnBitmask(String)}
 	 */
 	@Deprecated
-	public static final long FIRSTNAME_COLUMN_BITMASK = 4L;
+	public static final long GROUPID_COLUMN_BITMASK = 4L;
 
 	/**
 	 * @deprecated As of Athanasius (7.3.x), replaced by {@link #getColumnBitmask(String)}
 	 */
 	@Deprecated
-	public static final long GROUPID_COLUMN_BITMASK = 8L;
+	public static final long MANAGERID_COLUMN_BITMASK = 8L;
 
 	/**
 	 * @deprecated As of Athanasius (7.3.x), replaced by {@link #getColumnBitmask(String)}
 	 */
 	@Deprecated
-	public static final long LASTNAME_COLUMN_BITMASK = 16L;
-
-	/**
-	 * @deprecated As of Athanasius (7.3.x), replaced by {@link #getColumnBitmask(String)}
-	 */
-	@Deprecated
-	public static final long MANAGERID_COLUMN_BITMASK = 32L;
-
-	/**
-	 * @deprecated As of Athanasius (7.3.x), replaced by {@link #getColumnBitmask(String)}
-	 */
-	@Deprecated
-	public static final long UUID_COLUMN_BITMASK = 64L;
+	public static final long UUID_COLUMN_BITMASK = 16L;
 
 	/**
 	 * @deprecated As of Athanasius (7.3.x), with no direct replacement
@@ -266,15 +245,8 @@ public class ManagerModelImpl
 			attributeGetterFunctions.put("createDate", Manager::getCreateDate);
 			attributeGetterFunctions.put(
 				"modifiedDate", Manager::getModifiedDate);
-			attributeGetterFunctions.put("firstName", Manager::getFirstName);
-			attributeGetterFunctions.put("lastName", Manager::getLastName);
 			attributeGetterFunctions.put(
 				"employeeIdPK", Manager::getEmployeeIdPK);
-			attributeGetterFunctions.put("position", Manager::getPosition);
-			attributeGetterFunctions.put("stateCode", Manager::getStateCode);
-			attributeGetterFunctions.put("status", Manager::getStatus);
-			attributeGetterFunctions.put(
-				"companyTime", Manager::getCompanyTime);
 
 			_attributeGetterFunctions = Collections.unmodifiableMap(
 				attributeGetterFunctions);
@@ -309,23 +281,8 @@ public class ManagerModelImpl
 				"modifiedDate",
 				(BiConsumer<Manager, Date>)Manager::setModifiedDate);
 			attributeSetterBiConsumers.put(
-				"firstName",
-				(BiConsumer<Manager, String>)Manager::setFirstName);
-			attributeSetterBiConsumers.put(
-				"lastName", (BiConsumer<Manager, String>)Manager::setLastName);
-			attributeSetterBiConsumers.put(
 				"employeeIdPK",
 				(BiConsumer<Manager, Long>)Manager::setEmployeeIdPK);
-			attributeSetterBiConsumers.put(
-				"position", (BiConsumer<Manager, String>)Manager::setPosition);
-			attributeSetterBiConsumers.put(
-				"stateCode",
-				(BiConsumer<Manager, String>)Manager::setStateCode);
-			attributeSetterBiConsumers.put(
-				"status", (BiConsumer<Manager, Integer>)Manager::setStatus);
-			attributeSetterBiConsumers.put(
-				"companyTime",
-				(BiConsumer<Manager, Integer>)Manager::setCompanyTime);
 
 			_attributeSetterBiConsumers = Collections.unmodifiableMap(
 				(Map)attributeSetterBiConsumers);
@@ -489,64 +446,6 @@ public class ManagerModelImpl
 
 	@JSON
 	@Override
-	public String getFirstName() {
-		if (_firstName == null) {
-			return "";
-		}
-		else {
-			return _firstName;
-		}
-	}
-
-	@Override
-	public void setFirstName(String firstName) {
-		if (_columnOriginalValues == Collections.EMPTY_MAP) {
-			_setColumnOriginalValues();
-		}
-
-		_firstName = firstName;
-	}
-
-	/**
-	 * @deprecated As of Athanasius (7.3.x), replaced by {@link
-	 *             #getColumnOriginalValue(String)}
-	 */
-	@Deprecated
-	public String getOriginalFirstName() {
-		return getColumnOriginalValue("firstName");
-	}
-
-	@JSON
-	@Override
-	public String getLastName() {
-		if (_lastName == null) {
-			return "";
-		}
-		else {
-			return _lastName;
-		}
-	}
-
-	@Override
-	public void setLastName(String lastName) {
-		if (_columnOriginalValues == Collections.EMPTY_MAP) {
-			_setColumnOriginalValues();
-		}
-
-		_lastName = lastName;
-	}
-
-	/**
-	 * @deprecated As of Athanasius (7.3.x), replaced by {@link
-	 *             #getColumnOriginalValue(String)}
-	 */
-	@Deprecated
-	public String getOriginalLastName() {
-		return getColumnOriginalValue("lastName");
-	}
-
-	@JSON
-	@Override
 	public long getEmployeeIdPK() {
 		return _employeeIdPK;
 	}
@@ -568,76 +467,6 @@ public class ManagerModelImpl
 	public long getOriginalEmployeeIdPK() {
 		return GetterUtil.getLong(
 			this.<Long>getColumnOriginalValue("employeeIdPK"));
-	}
-
-	@JSON
-	@Override
-	public String getPosition() {
-		if (_position == null) {
-			return "";
-		}
-		else {
-			return _position;
-		}
-	}
-
-	@Override
-	public void setPosition(String position) {
-		if (_columnOriginalValues == Collections.EMPTY_MAP) {
-			_setColumnOriginalValues();
-		}
-
-		_position = position;
-	}
-
-	@JSON
-	@Override
-	public String getStateCode() {
-		if (_stateCode == null) {
-			return "";
-		}
-		else {
-			return _stateCode;
-		}
-	}
-
-	@Override
-	public void setStateCode(String stateCode) {
-		if (_columnOriginalValues == Collections.EMPTY_MAP) {
-			_setColumnOriginalValues();
-		}
-
-		_stateCode = stateCode;
-	}
-
-	@JSON
-	@Override
-	public int getStatus() {
-		return _status;
-	}
-
-	@Override
-	public void setStatus(int status) {
-		if (_columnOriginalValues == Collections.EMPTY_MAP) {
-			_setColumnOriginalValues();
-		}
-
-		_status = status;
-	}
-
-	@JSON
-	@Override
-	public int getCompanyTime() {
-		return _companyTime;
-	}
-
-	@Override
-	public void setCompanyTime(int companyTime) {
-		if (_columnOriginalValues == Collections.EMPTY_MAP) {
-			_setColumnOriginalValues();
-		}
-
-		_companyTime = companyTime;
 	}
 
 	@Override
@@ -709,13 +538,7 @@ public class ManagerModelImpl
 		managerImpl.setCompanyId(getCompanyId());
 		managerImpl.setCreateDate(getCreateDate());
 		managerImpl.setModifiedDate(getModifiedDate());
-		managerImpl.setFirstName(getFirstName());
-		managerImpl.setLastName(getLastName());
 		managerImpl.setEmployeeIdPK(getEmployeeIdPK());
-		managerImpl.setPosition(getPosition());
-		managerImpl.setStateCode(getStateCode());
-		managerImpl.setStatus(getStatus());
-		managerImpl.setCompanyTime(getCompanyTime());
 
 		managerImpl.resetOriginalValues();
 
@@ -738,40 +561,25 @@ public class ManagerModelImpl
 			this.<Date>getColumnOriginalValue("createDate"));
 		managerImpl.setModifiedDate(
 			this.<Date>getColumnOriginalValue("modifiedDate"));
-		managerImpl.setFirstName(
-			this.<String>getColumnOriginalValue("firstName"));
-		managerImpl.setLastName(
-			this.<String>getColumnOriginalValue("lastName"));
 		managerImpl.setEmployeeIdPK(
 			this.<Long>getColumnOriginalValue("employeeIdPK"));
-		managerImpl.setPosition(
-			this.<String>getColumnOriginalValue("position"));
-		managerImpl.setStateCode(
-			this.<String>getColumnOriginalValue("stateCode"));
-		managerImpl.setStatus(this.<Integer>getColumnOriginalValue("status"));
-		managerImpl.setCompanyTime(
-			this.<Integer>getColumnOriginalValue("companyTime"));
 
 		return managerImpl;
 	}
 
 	@Override
 	public int compareTo(Manager manager) {
-		int value = 0;
+		long primaryKey = manager.getPrimaryKey();
 
-		value = getFirstName().compareTo(manager.getFirstName());
-
-		if (value != 0) {
-			return value;
+		if (getPrimaryKey() < primaryKey) {
+			return -1;
 		}
-
-		value = getLastName().compareTo(manager.getLastName());
-
-		if (value != 0) {
-			return value;
+		else if (getPrimaryKey() > primaryKey) {
+			return 1;
 		}
-
-		return 0;
+		else {
+			return 0;
+		}
 	}
 
 	@Override
@@ -866,43 +674,7 @@ public class ManagerModelImpl
 			managerCacheModel.modifiedDate = Long.MIN_VALUE;
 		}
 
-		managerCacheModel.firstName = getFirstName();
-
-		String firstName = managerCacheModel.firstName;
-
-		if ((firstName != null) && (firstName.length() == 0)) {
-			managerCacheModel.firstName = null;
-		}
-
-		managerCacheModel.lastName = getLastName();
-
-		String lastName = managerCacheModel.lastName;
-
-		if ((lastName != null) && (lastName.length() == 0)) {
-			managerCacheModel.lastName = null;
-		}
-
 		managerCacheModel.employeeIdPK = getEmployeeIdPK();
-
-		managerCacheModel.position = getPosition();
-
-		String position = managerCacheModel.position;
-
-		if ((position != null) && (position.length() == 0)) {
-			managerCacheModel.position = null;
-		}
-
-		managerCacheModel.stateCode = getStateCode();
-
-		String stateCode = managerCacheModel.stateCode;
-
-		if ((stateCode != null) && (stateCode.length() == 0)) {
-			managerCacheModel.stateCode = null;
-		}
-
-		managerCacheModel.status = getStatus();
-
-		managerCacheModel.companyTime = getCompanyTime();
 
 		return managerCacheModel;
 	}
@@ -973,13 +745,7 @@ public class ManagerModelImpl
 	private Date _createDate;
 	private Date _modifiedDate;
 	private boolean _setModifiedDate;
-	private String _firstName;
-	private String _lastName;
 	private long _employeeIdPK;
-	private String _position;
-	private String _stateCode;
-	private int _status;
-	private int _companyTime;
 
 	public <T> T getColumnValue(String columnName) {
 		columnName = _attributeNames.getOrDefault(columnName, columnName);
@@ -1018,13 +784,7 @@ public class ManagerModelImpl
 		_columnOriginalValues.put("companyId", _companyId);
 		_columnOriginalValues.put("createDate", _createDate);
 		_columnOriginalValues.put("modifiedDate", _modifiedDate);
-		_columnOriginalValues.put("firstName", _firstName);
-		_columnOriginalValues.put("lastName", _lastName);
 		_columnOriginalValues.put("employeeIdPK", _employeeIdPK);
-		_columnOriginalValues.put("position", _position);
-		_columnOriginalValues.put("stateCode", _stateCode);
-		_columnOriginalValues.put("status", _status);
-		_columnOriginalValues.put("companyTime", _companyTime);
 	}
 
 	private static final Map<String, String> _attributeNames;
@@ -1062,19 +822,7 @@ public class ManagerModelImpl
 
 		columnBitmasks.put("modifiedDate", 64L);
 
-		columnBitmasks.put("firstName", 128L);
-
-		columnBitmasks.put("lastName", 256L);
-
-		columnBitmasks.put("employeeIdPK", 512L);
-
-		columnBitmasks.put("position", 1024L);
-
-		columnBitmasks.put("stateCode", 2048L);
-
-		columnBitmasks.put("status", 4096L);
-
-		columnBitmasks.put("companyTime", 8192L);
+		columnBitmasks.put("employeeIdPK", 128L);
 
 		_columnBitmasks = Collections.unmodifiableMap(columnBitmasks);
 	}
