@@ -8,11 +8,14 @@ package com.management.app.service.impl;
 import com.liferay.counter.kernel.service.CounterLocalServiceUtil;
 import com.liferay.portal.aop.AopService;
 import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.json.JSONObject;
+import com.liferay.portal.kernel.json.JSONUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.util.ArrayUtil;
-import com.liferay.portal.kernel.util.HashMapBuilder;
 
+import com.liferay.portal.kernel.util.StringBundler;
 import com.management.app.exception.NoSuchEmployeeException;
 import com.management.app.exception.NoSuchManagerException;
 import com.management.app.model.Employee;
@@ -73,6 +76,9 @@ public class EmployeeLocalServiceImpl extends EmployeeLocalServiceBaseImpl {
 
 		try {
 			if (managerIdPK == -1) {
+				_log.warn(StringBundler.concat("Unable to get employees ",
+						"with the associated ", "manager id " + managerIdPK));
+
 				return null;
 			}
 
@@ -107,6 +113,13 @@ public class EmployeeLocalServiceImpl extends EmployeeLocalServiceBaseImpl {
 			}
 		}
 
+	}
+
+	@Override
+	public Manager promotingEmployee(
+			Employee employee, User user) throws NoSuchEmployeeException {
+
+		return null;
 	}
 
 	private Employee _addEmployee(
@@ -156,22 +169,9 @@ public class EmployeeLocalServiceImpl extends EmployeeLocalServiceBaseImpl {
 			else {
 				// Process about positions available on company
 
-				HashMap<String, Integer[]> positionsMap =
-						HashMapBuilder.put(
-								"Assoc Software Engineer",
-								ArrayUtil.append(new Integer[]{1, 2, 3, 4})
-						).put(
-								"SoftwareEngineer",
-								ArrayUtil.append(new Integer[]{1, 2, 3, 4, 5})
-						).put(
-								"Senior Software Engineer", ArrayUtil.append(
-										new Integer[]{1, 2, 3, 4, 5, 6})
-						).put(
-								"Team Leader Software Engineer",
-								ArrayUtil.append(new Integer[]{1, 2, 3})
-						).build();
+				JSONObject jsonObject = _jsonObjectPositionsBuilder();
 
-				if (!positionsMap.containsKey(position)) {
+				if (jsonObject.get(position) == null) {
 					throw new RuntimeException(
 							"That position not is available " + position);
 				}
@@ -186,6 +186,70 @@ public class EmployeeLocalServiceImpl extends EmployeeLocalServiceBaseImpl {
 			}
 		}
 
+	}
+
+	private JSONObject _jsonObjectPositionsBuilder() {
+		return JSONUtil.put(
+				"engineer",
+				JSONUtil.put(
+						"Assoc Software Engineer",
+						JSONUtil.put(
+								"level",
+								ArrayUtil.append(new Integer[]{1, 2, 3, 4})
+						)
+				).put(
+						"SoftwareEngineer",
+						JSONUtil.put(
+								"level",
+								ArrayUtil.append(new Integer[]{1, 2, 3, 4, 5})
+						)
+				).put(
+						"Senior Software Engineer",
+						JSONUtil.put(
+								"level",
+								ArrayUtil.append(new Integer[]{1, 2, 3, 4, 5, 6})
+						)
+				).put(
+						"Team Leader Software Engineer",
+						JSONUtil.put(
+								"level",
+								ArrayUtil.append(new Integer[]{1, 2, 3})
+						)
+				)
+		).put(
+				"general",
+				JSONUtil.put(
+						"Marketing",
+						JSONUtil.put(
+								"level",
+								ArrayUtil.append(new Integer[]{1, 2, 3})
+						)
+				).put(
+						"Sales Product",
+						JSONUtil.put(
+								"level",
+								ArrayUtil.append(new Integer[]{1, 2, 3})
+						)
+				).put(
+						"Operations",
+						JSONUtil.put(
+								"level",
+								ArrayUtil.append(new Integer[]{1, 2, 3, 4})
+						)
+				).put(
+						"Product Design",
+						JSONUtil.put(
+								"level",
+								ArrayUtil.append(new Integer[]{1, 2, 3})
+						)
+				).put(
+						"Human Resources",
+						JSONUtil.put(
+								"level",
+								ArrayUtil.append(new Integer[]{1, 2, 3, 4, 5})
+						)
+				)
+		);
 	}
 
 	private boolean _validRegex(String content) {
