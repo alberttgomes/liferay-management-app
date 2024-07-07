@@ -26,6 +26,7 @@
 
 		<!-- Other fields -->
 
+		<column name="department" type="String" />
 		<column name="firstName" type="String" />
 		<column name="lastName" type="String" />
 		<column name="position" type="String" />
@@ -55,6 +56,11 @@
 			<finder-column name="companyId" />
 			<finder-column name="employeeId" />
 		</finder>
+		<finder name="D_P_L" return-type="Collection">
+			<finder-column name="department" />
+			<finder-column name="position" />
+			<finder-column name="level" />
+		</finder>
 		<finder name="E_S" return-type="Collection">
 			<finder-column name="employeeId" />
 			<finder-column comparator="!=" name="status" />
@@ -62,10 +68,6 @@
 		<finder name="F_L" return-type="Collection">
 			<finder-column name="firstName" />
 			<finder-column name="lastName" />
-		</finder>
-		<finder name="P_L" return-type="Collection">
-			<finder-column name="position" />
-			<finder-column name="level" />
 		</finder>
 		<finder name="M_S" return-type="">
 			<finder-column name="managerIdPK" />
