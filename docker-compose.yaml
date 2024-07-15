@@ -1,4 +1,5 @@
 services:
+
   database:
     image: "mysql:latest"
     container_name: "management-database"
@@ -16,13 +17,20 @@ services:
       - ./docker-compose/database/dump/*.sql:/docker-entrypoint
 
   liferay:
-    image: "liferay/dxp:latest"
+    image: "liferay/dxp:2024.q2.4"
     container_name: "management-liferay"
     depends_on:
       database:
         condition: service_healthy
+    environment:
+      - JAVA_VERSION=zulu11
+      - LIFERAY_DISABLE_TRIAL_LICENSE=true
+      - LIFERAY_JPDA_ENABLED=true
+      - LIFERAY_JVM_OPTS=-Xms6g -Xmx6g
     ports:
-      - "11311:11311"
       - "8080:8080"
+      - "8000:8000"
+    user: root:root
     volumes:
+      - ./bundles/osgi/modules/:/opt/liferay/osgi/modules
       - ./docker-compose/liferay/files/:/mnt/liferay/files/
