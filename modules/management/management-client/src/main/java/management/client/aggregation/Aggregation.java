@@ -6,7 +6,7 @@ import java.util.Map;
 import javax.annotation.Generated;
 
 /**
- * @author me
+ * @author Albert Cabral
  * @generated
  */
 @Generated("")

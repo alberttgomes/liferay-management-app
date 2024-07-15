@@ -3,7 +3,7 @@ package management.client.pagination;
 import javax.annotation.Generated;
 
 /**
- * @author me
+ * @author Albert Cabral
  * @generated
  */
 @Generated("")

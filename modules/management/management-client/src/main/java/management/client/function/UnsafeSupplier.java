@@ -3,7 +3,7 @@ package management.client.function;
 import javax.annotation.Generated;
 
 /**
- * @author me
+ * @author Albert Cabral
  * @generated
  */
 @FunctionalInterface

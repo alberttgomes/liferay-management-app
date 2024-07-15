@@ -16,7 +16,7 @@ import java.util.TreeMap;
 import javax.annotation.Generated;
 
 /**
- * @author me
+ * @author Albert Cabral
  * @generated
  */
 @Generated("")

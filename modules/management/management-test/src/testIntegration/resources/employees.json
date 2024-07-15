@@ -1,0 +1,35 @@
+[
+  {
+    "department": "system",
+    "firstName": "System",
+    "lastName": "Administration",
+    "position": "Owner System",
+    "isManager": true,
+    "level": 0,
+    "managerIdPK": 0,
+    "stateCode": "BR",
+    "status": 1
+  },
+  {
+    "department": "engineer",
+    "firstName": "Albert",
+    "lastName": "Cabral",
+    "position": "Assoc Software Engineer",
+    "isManager": false,
+    "level": 1,
+    "managerIdPK": 0,
+    "stateCode": "BR",
+    "status": 1
+  },
+  {
+    "department": "general",
+    "firstName": "Mariah",
+    "lastName": "Lira",
+    "position": "Marketing",
+    "isManager": false,
+    "level": 2,
+    "managerIdPK": 0,
+    "stateCode": "BR",
+    "status": 1
+  }
+]

@@ -15,7 +15,7 @@ import management.client.aggregation.Facet;
 import management.client.json.BaseJSONParser;
 
 /**
- * @author me
+ * @author Albert Cabral
  * @generated
  */
 @Generated("")

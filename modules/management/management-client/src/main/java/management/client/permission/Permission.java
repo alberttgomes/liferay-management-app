@@ -7,7 +7,7 @@ import javax.annotation.Generated;
 import management.client.json.BaseJSONParser;
 
 /**
- * @author me
+ * @author Albert Cabral
  * @generated
  */
 @Generated("")

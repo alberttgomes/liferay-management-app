@@ -4,6 +4,8 @@ dependencies {
 	compileOnly group: "com.liferay.portal", name: "release.dxp.api"
 
 	restBuilder group: "com.liferay", name: "com.liferay.portal.tools.rest.builder", version: "1.0.222"
+
+	compileOnly project(path: ":modules:management-service-build:management-service-build-service")
 }
 
 group = "management"

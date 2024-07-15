@@ -4,6 +4,6 @@ application:
     baseURI: "/management"
     className: "ManagementApplication"
     name: "Management"
-author: "me"
+author: "Albert Cabral"
 clientDir: "../management-client/src/main/java"
 testDir: "../management-test/src/testIntegration/java"

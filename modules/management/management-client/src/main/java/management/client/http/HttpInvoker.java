@@ -25,7 +25,7 @@ import java.util.Set;
 import javax.annotation.Generated;
 
 /**
- * @author me
+ * @author Albert Cabral
  * @generated
  */
 @Generated("")
