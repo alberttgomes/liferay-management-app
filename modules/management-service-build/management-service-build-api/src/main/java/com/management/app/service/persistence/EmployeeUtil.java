@@ -1002,6 +1002,208 @@ public class EmployeeUtil {
 	}
 
 	/**
+	 * Returns all the employees where department = &#63; and position = &#63; and level = &#63;.
+	 *
+	 * @param department the department
+	 * @param position the position
+	 * @param level the level
+	 * @return the matching employees
+	 */
+	public static List<Employee> findByD_P_L(
+		String department, String position, int level) {
+
+		return getPersistence().findByD_P_L(department, position, level);
+	}
+
+	/**
+	 * Returns a range of all the employees where department = &#63; and position = &#63; and level = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>EmployeeModelImpl</code>.
+	 * </p>
+	 *
+	 * @param department the department
+	 * @param position the position
+	 * @param level the level
+	 * @param start the lower bound of the range of employees
+	 * @param end the upper bound of the range of employees (not inclusive)
+	 * @return the range of matching employees
+	 */
+	public static List<Employee> findByD_P_L(
+		String department, String position, int level, int start, int end) {
+
+		return getPersistence().findByD_P_L(
+			department, position, level, start, end);
+	}
+
+	/**
+	 * Returns an ordered range of all the employees where department = &#63; and position = &#63; and level = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>EmployeeModelImpl</code>.
+	 * </p>
+	 *
+	 * @param department the department
+	 * @param position the position
+	 * @param level the level
+	 * @param start the lower bound of the range of employees
+	 * @param end the upper bound of the range of employees (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching employees
+	 */
+	public static List<Employee> findByD_P_L(
+		String department, String position, int level, int start, int end,
+		OrderByComparator<Employee> orderByComparator) {
+
+		return getPersistence().findByD_P_L(
+			department, position, level, start, end, orderByComparator);
+	}
+
+	/**
+	 * Returns an ordered range of all the employees where department = &#63; and position = &#63; and level = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>EmployeeModelImpl</code>.
+	 * </p>
+	 *
+	 * @param department the department
+	 * @param position the position
+	 * @param level the level
+	 * @param start the lower bound of the range of employees
+	 * @param end the upper bound of the range of employees (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @param useFinderCache whether to use the finder cache
+	 * @return the ordered range of matching employees
+	 */
+	public static List<Employee> findByD_P_L(
+		String department, String position, int level, int start, int end,
+		OrderByComparator<Employee> orderByComparator, boolean useFinderCache) {
+
+		return getPersistence().findByD_P_L(
+			department, position, level, start, end, orderByComparator,
+			useFinderCache);
+	}
+
+	/**
+	 * Returns the first employee in the ordered set where department = &#63; and position = &#63; and level = &#63;.
+	 *
+	 * @param department the department
+	 * @param position the position
+	 * @param level the level
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching employee
+	 * @throws NoSuchEmployeeException if a matching employee could not be found
+	 */
+	public static Employee findByD_P_L_First(
+			String department, String position, int level,
+			OrderByComparator<Employee> orderByComparator)
+		throws com.management.app.exception.NoSuchEmployeeException {
+
+		return getPersistence().findByD_P_L_First(
+			department, position, level, orderByComparator);
+	}
+
+	/**
+	 * Returns the first employee in the ordered set where department = &#63; and position = &#63; and level = &#63;.
+	 *
+	 * @param department the department
+	 * @param position the position
+	 * @param level the level
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching employee, or <code>null</code> if a matching employee could not be found
+	 */
+	public static Employee fetchByD_P_L_First(
+		String department, String position, int level,
+		OrderByComparator<Employee> orderByComparator) {
+
+		return getPersistence().fetchByD_P_L_First(
+			department, position, level, orderByComparator);
+	}
+
+	/**
+	 * Returns the last employee in the ordered set where department = &#63; and position = &#63; and level = &#63;.
+	 *
+	 * @param department the department
+	 * @param position the position
+	 * @param level the level
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching employee
+	 * @throws NoSuchEmployeeException if a matching employee could not be found
+	 */
+	public static Employee findByD_P_L_Last(
+			String department, String position, int level,
+			OrderByComparator<Employee> orderByComparator)
+		throws com.management.app.exception.NoSuchEmployeeException {
+
+		return getPersistence().findByD_P_L_Last(
+			department, position, level, orderByComparator);
+	}
+
+	/**
+	 * Returns the last employee in the ordered set where department = &#63; and position = &#63; and level = &#63;.
+	 *
+	 * @param department the department
+	 * @param position the position
+	 * @param level the level
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching employee, or <code>null</code> if a matching employee could not be found
+	 */
+	public static Employee fetchByD_P_L_Last(
+		String department, String position, int level,
+		OrderByComparator<Employee> orderByComparator) {
+
+		return getPersistence().fetchByD_P_L_Last(
+			department, position, level, orderByComparator);
+	}
+
+	/**
+	 * Returns the employees before and after the current employee in the ordered set where department = &#63; and position = &#63; and level = &#63;.
+	 *
+	 * @param employeeId the primary key of the current employee
+	 * @param department the department
+	 * @param position the position
+	 * @param level the level
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the previous, current, and next employee
+	 * @throws NoSuchEmployeeException if a employee with the primary key could not be found
+	 */
+	public static Employee[] findByD_P_L_PrevAndNext(
+			long employeeId, String department, String position, int level,
+			OrderByComparator<Employee> orderByComparator)
+		throws com.management.app.exception.NoSuchEmployeeException {
+
+		return getPersistence().findByD_P_L_PrevAndNext(
+			employeeId, department, position, level, orderByComparator);
+	}
+
+	/**
+	 * Removes all the employees where department = &#63; and position = &#63; and level = &#63; from the database.
+	 *
+	 * @param department the department
+	 * @param position the position
+	 * @param level the level
+	 */
+	public static void removeByD_P_L(
+		String department, String position, int level) {
+
+		getPersistence().removeByD_P_L(department, position, level);
+	}
+
+	/**
+	 * Returns the number of employees where department = &#63; and position = &#63; and level = &#63;.
+	 *
+	 * @param department the department
+	 * @param position the position
+	 * @param level the level
+	 * @return the number of matching employees
+	 */
+	public static int countByD_P_L(
+		String department, String position, int level) {
+
+		return getPersistence().countByD_P_L(department, position, level);
+	}
+
+	/**
 	 * Returns all the employees where employeeId = &#63; and status &ne; &#63;.
 	 *
 	 * @param employeeId the employee ID
@@ -1346,6 +1548,69 @@ public class EmployeeUtil {
 	 */
 	public static int countByF_L(String firstName, String lastName) {
 		return getPersistence().countByF_L(firstName, lastName);
+	}
+
+	/**
+	 * Returns the employee where managerIdPK = &#63; and status = &#63; or throws a <code>NoSuchEmployeeException</code> if it could not be found.
+	 *
+	 * @param managerIdPK the manager ID pk
+	 * @param status the status
+	 * @return the matching employee
+	 * @throws NoSuchEmployeeException if a matching employee could not be found
+	 */
+	public static Employee findByM_S(long managerIdPK, int status)
+		throws com.management.app.exception.NoSuchEmployeeException {
+
+		return getPersistence().findByM_S(managerIdPK, status);
+	}
+
+	/**
+	 * Returns the employee where managerIdPK = &#63; and status = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
+	 *
+	 * @param managerIdPK the manager ID pk
+	 * @param status the status
+	 * @return the matching employee, or <code>null</code> if a matching employee could not be found
+	 */
+	public static Employee fetchByM_S(long managerIdPK, int status) {
+		return getPersistence().fetchByM_S(managerIdPK, status);
+	}
+
+	/**
+	 * Returns the employee where managerIdPK = &#63; and status = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
+	 *
+	 * @param managerIdPK the manager ID pk
+	 * @param status the status
+	 * @param useFinderCache whether to use the finder cache
+	 * @return the matching employee, or <code>null</code> if a matching employee could not be found
+	 */
+	public static Employee fetchByM_S(
+		long managerIdPK, int status, boolean useFinderCache) {
+
+		return getPersistence().fetchByM_S(managerIdPK, status, useFinderCache);
+	}
+
+	/**
+	 * Removes the employee where managerIdPK = &#63; and status = &#63; from the database.
+	 *
+	 * @param managerIdPK the manager ID pk
+	 * @param status the status
+	 * @return the employee that was removed
+	 */
+	public static Employee removeByM_S(long managerIdPK, int status)
+		throws com.management.app.exception.NoSuchEmployeeException {
+
+		return getPersistence().removeByM_S(managerIdPK, status);
+	}
+
+	/**
+	 * Returns the number of employees where managerIdPK = &#63; and status = &#63;.
+	 *
+	 * @param managerIdPK the manager ID pk
+	 * @param status the status
+	 * @return the number of matching employees
+	 */
+	public static int countByM_S(long managerIdPK, int status) {
+		return getPersistence().countByM_S(managerIdPK, status);
 	}
 
 	/**

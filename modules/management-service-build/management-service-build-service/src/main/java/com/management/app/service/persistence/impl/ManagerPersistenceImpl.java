@@ -2504,9 +2504,6 @@ public class ManagerPersistenceImpl
 		return count.intValue();
 	}
 
-	private static final String _FINDER_COLUMN_MANAGERID_MANAGERID_2 =
-		"manager.managerId = ? AND ";
-
 	private static final String _FINDER_COLUMN_MANAGERID_COMPANYID_2 =
 		"manager.companyId = ?";
 
@@ -3451,32 +3448,6 @@ public class ManagerPersistenceImpl
 		ManagerUtil.setPersistence(null);
 
 		entityCache.removeCache(ManagerImpl.class.getName());
-	}
-
-	@Override
-	@Reference(
-		target = ManagementPersistenceConstants.SERVICE_CONFIGURATION_FILTER,
-		unbind = "-"
-	)
-	public void setConfiguration(Configuration configuration) {
-	}
-
-	@Override
-	@Reference(
-		target = ManagementPersistenceConstants.ORIGIN_BUNDLE_SYMBOLIC_NAME_FILTER,
-		unbind = "-"
-	)
-	public void setDataSource(DataSource dataSource) {
-		super.setDataSource(dataSource);
-	}
-
-	@Override
-	@Reference(
-		target = ManagementPersistenceConstants.ORIGIN_BUNDLE_SYMBOLIC_NAME_FILTER,
-		unbind = "-"
-	)
-	public void setSessionFactory(SessionFactory sessionFactory) {
-		super.setSessionFactory(sessionFactory);
 	}
 
 	@Reference

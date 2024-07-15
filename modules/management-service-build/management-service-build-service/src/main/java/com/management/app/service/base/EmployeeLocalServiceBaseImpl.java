@@ -38,11 +38,11 @@ import com.liferay.portal.kernel.transaction.Transactional;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.PortalUtil;
 
+import com.management.app.exception.NoSuchEmployeeException;
 import com.management.app.model.Employee;
 import com.management.app.service.EmployeeLocalService;
 import com.management.app.service.EmployeeLocalServiceUtil;
 import com.management.app.service.persistence.EmployeePersistence;
-import com.management.app.service.persistence.ManagerPersistence;
 
 import java.io.Serializable;
 
@@ -571,9 +571,6 @@ public abstract class EmployeeLocalServiceBaseImpl
 
 	@Reference
 	protected EmployeePersistence employeePersistence;
-
-	@Reference
-	protected ManagerPersistence managerPersistence;
 
 	@Reference
 	protected com.liferay.counter.kernel.service.CounterLocalService

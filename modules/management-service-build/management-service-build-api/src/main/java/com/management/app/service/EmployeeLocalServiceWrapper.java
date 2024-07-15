@@ -6,14 +6,10 @@
 package com.management.app.service;
 
 import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.service.ServiceWrapper;
 import com.liferay.portal.kernel.service.persistence.BasePersistence;
 import com.management.app.exception.NoSuchEmployeeException;
-import com.management.app.exception.NoSuchManagerException;
-import com.management.app.model.Employee;
-
-import java.util.Date;
-import java.util.List;
 
 /**
  * Provides a wrapper for {@link EmployeeLocalService}.
@@ -53,15 +49,15 @@ public class EmployeeLocalServiceWrapper
 	}
 
 	@Override
-	public Employee addEmployee(
-			String firstName, String lastName, String position,
-			String stateCode, int status, long managerIdPK, int companyTime,
-			long groupId, long companyId, long userId)
-		throws NoSuchManagerException {
+	public com.management.app.model.Employee addEmployee(
+			String firstName, String lastName, String department, String position,
+			int level, String stateCode, int status, long managerIdPK,
+			boolean isManager, User user)
+		throws com.management.app.exception.NoSuchManagerException {
 
 		return _employeeLocalService.addEmployee(
-				firstName, lastName, position, stateCode,
-				status, managerIdPK, companyTime, groupId, companyId, userId);
+			firstName, lastName, department, position, level, stateCode, status,
+			managerIdPK, isManager, user);
 	}
 
 	/**
@@ -112,11 +108,13 @@ public class EmployeeLocalServiceWrapper
 	 *
 	 * @param employeeId the primary key of the employee
 	 * @return the employee that was removed
+	 * @throws NoSuchEmployeeException
 	 * @throws PortalException if a employee with the primary key could not be found
 	 */
 	@Override
 	public com.management.app.model.Employee deleteEmployee(long employeeId)
-		throws com.liferay.portal.kernel.exception.PortalException {
+		throws com.liferay.portal.kernel.exception.PortalException,
+			   com.management.app.exception.NoSuchEmployeeException {
 
 		return _employeeLocalService.deleteEmployee(employeeId);
 	}
@@ -275,15 +273,6 @@ public class EmployeeLocalServiceWrapper
 		return _employeeLocalService.getEmployee(employeeId);
 	}
 
-	@Override
-	public List<Employee> getEmployeesByManagerIdAndPermission(
-			long managerIdPK, long companyId, boolean hasPermission)
-		throws NoSuchEmployeeException, NoSuchManagerException {
-
-		return _employeeLocalService.getEmployeesByManagerIdAndPermission(
-				managerIdPK, companyId, hasPermission);
-	}
-
 	/**
 	 * Returns the employee matching the UUID and group.
 	 *
@@ -316,6 +305,17 @@ public class EmployeeLocalServiceWrapper
 		int start, int end) {
 
 		return _employeeLocalService.getEmployees(start, end);
+	}
+
+	@Override
+	public java.util.List<com.management.app.model.Employee>
+			getEmployeesByManagerIdAndPermission(
+				long managerIdPK, long companyId, boolean hasPermission)
+		throws com.management.app.exception.NoSuchEmployeeException,
+			   com.management.app.exception.NoSuchManagerException {
+
+		return _employeeLocalService.getEmployeesByManagerIdAndPermission(
+			managerIdPK, companyId, hasPermission);
 	}
 
 	/**
@@ -400,6 +400,15 @@ public class EmployeeLocalServiceWrapper
 		throws com.liferay.portal.kernel.exception.PortalException {
 
 		return _employeeLocalService.getPersistedModel(primaryKeyObj);
+	}
+
+	@Override
+	public com.management.app.model.Manager employeePromoting(
+			String position,
+			long userId, String department, int level, long employeeId)
+        throws PortalException {
+
+		return _employeeLocalService.employeePromoting(position, userId, department, level, employeeId);
 	}
 
 	/**

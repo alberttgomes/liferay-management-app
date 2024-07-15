@@ -68,7 +68,7 @@ public class EmployeeCacheModel
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(33);
+		StringBundler sb = new StringBundler(35);
 
 		sb.append("{mvccVersion=");
 		sb.append(mvccVersion);
@@ -84,6 +84,8 @@ public class EmployeeCacheModel
 		sb.append(createDate);
 		sb.append(", modifiedDate=");
 		sb.append(modifiedDate);
+		sb.append(", department=");
+		sb.append(department);
 		sb.append(", firstName=");
 		sb.append(firstName);
 		sb.append(", lastName=");
@@ -138,6 +140,13 @@ public class EmployeeCacheModel
 			employeeImpl.setModifiedDate(new Date(modifiedDate));
 		}
 
+		if (department == null) {
+			employeeImpl.setDepartment("");
+		}
+		else {
+			employeeImpl.setDepartment(department);
+		}
+
 		if (firstName == null) {
 			employeeImpl.setFirstName("");
 		}
@@ -190,6 +199,7 @@ public class EmployeeCacheModel
 		companyId = objectInput.readLong();
 		createDate = objectInput.readLong();
 		modifiedDate = objectInput.readLong();
+		department = objectInput.readUTF();
 		firstName = objectInput.readUTF();
 		lastName = objectInput.readUTF();
 		position = objectInput.readUTF();
@@ -224,6 +234,13 @@ public class EmployeeCacheModel
 		objectOutput.writeLong(companyId);
 		objectOutput.writeLong(createDate);
 		objectOutput.writeLong(modifiedDate);
+
+		if (department == null) {
+			objectOutput.writeUTF("");
+		}
+		else {
+			objectOutput.writeUTF(department);
+		}
 
 		if (firstName == null) {
 			objectOutput.writeUTF("");
@@ -271,6 +288,7 @@ public class EmployeeCacheModel
 	public long companyId;
 	public long createDate;
 	public long modifiedDate;
+	public String department;
 	public String firstName;
 	public String lastName;
 	public String position;

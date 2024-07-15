@@ -160,6 +160,21 @@ public interface EmployeeModel
 	public void setModifiedDate(Date modifiedDate);
 
 	/**
+	 * Returns the department of this employee.
+	 *
+	 * @return the department of this employee
+	 */
+	@AutoEscape
+	public String getDepartment();
+
+	/**
+	 * Sets the department of this employee.
+	 *
+	 * @param department the department of this employee
+	 */
+	public void setDepartment(String department);
+
+	/**
 	 * Returns the first name of this employee.
 	 *
 	 * @return the first name of this employee
@@ -190,20 +205,6 @@ public interface EmployeeModel
 	public void setLastName(String lastName);
 
 	/**
-	 * Returns the manager ID pk of this employee.
-	 *
-	 * @return the manager ID pk of this employee
-	 */
-	public long getManagerIdPK();
-
-	/**
-	 * Sets the manager ID pk of this employee.
-	 *
-	 * @param managerIdPK the manager ID pk of this employee
-	 */
-	public void setManagerIdPK(long managerIdPK);
-
-	/**
 	 * Returns the position of this employee.
 	 *
 	 * @return the position of this employee
@@ -217,6 +218,55 @@ public interface EmployeeModel
 	 * @param position the position of this employee
 	 */
 	public void setPosition(String position);
+
+	/**
+	 * Returns the is manager of this employee.
+	 *
+	 * @return the is manager of this employee
+	 */
+	public boolean getIsManager();
+
+	/**
+	 * Returns <code>true</code> if this employee is is manager.
+	 *
+	 * @return <code>true</code> if this employee is is manager; <code>false</code> otherwise
+	 */
+	public boolean isIsManager();
+
+	/**
+	 * Sets whether this employee is is manager.
+	 *
+	 * @param isManager the is manager of this employee
+	 */
+	public void setIsManager(boolean isManager);
+
+	/**
+	 * Returns the level of this employee.
+	 *
+	 * @return the level of this employee
+	 */
+	public int getLevel();
+
+	/**
+	 * Sets the level of this employee.
+	 *
+	 * @param level the level of this employee
+	 */
+	public void setLevel(int level);
+
+	/**
+	 * Returns the manager ID pk of this employee.
+	 *
+	 * @return the manager ID pk of this employee
+	 */
+	public long getManagerIdPK();
+
+	/**
+	 * Sets the manager ID pk of this employee.
+	 *
+	 * @param managerIdPK the manager ID pk of this employee
+	 */
+	public void setManagerIdPK(long managerIdPK);
 
 	/**
 	 * Returns the state code of this employee.
@@ -248,18 +298,32 @@ public interface EmployeeModel
 	public void setStatus(int status);
 
 	/**
-	 * Returns the company time of this employee.
+	 * Returns the user ID of this employee.
 	 *
-	 * @return the company time of this employee
+	 * @return the user ID of this employee
 	 */
-	public long getCompanyTime();
+	public long getUserId();
 
 	/**
-	 * Sets the company time of this employee.
+	 * Sets the user ID of this employee.
 	 *
-	 * @param companyTime the company time of this employee
+	 * @param userId the user ID of this employee
 	 */
-	public void setCompanyTime(long companyTime);
+	public void setUserId(long userId);
+
+	/**
+	 * Returns the user uuid of this employee.
+	 *
+	 * @return the user uuid of this employee
+	 */
+	public String getUserUuid();
+
+	/**
+	 * Sets the user uuid of this employee.
+	 *
+	 * @param userUuid the user uuid of this employee
+	 */
+	public void setUserUuid(String userUuid);
 
 	@Override
 	public Employee cloneWithOriginalValues();

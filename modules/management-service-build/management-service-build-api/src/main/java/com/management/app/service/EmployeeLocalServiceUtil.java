@@ -9,8 +9,10 @@ import com.liferay.petra.sql.dsl.query.DSLQuery;
 import com.liferay.portal.kernel.dao.orm.DynamicQuery;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.model.PersistedModel;
+import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.util.OrderByComparator;
 
+import com.management.app.exception.NoSuchEmployeeException;
 import com.management.app.model.Employee;
 
 import java.io.Serializable;
@@ -49,6 +51,17 @@ public class EmployeeLocalServiceUtil {
 	 */
 	public static Employee addEmployee(Employee employee) {
 		return getService().addEmployee(employee);
+	}
+
+	public static Employee addEmployee(
+			String firstName, String lastName, String department, String position,
+			int level, String stateCode, int status, long managerIdPK,
+			boolean isManager, User user)
+		throws com.management.app.exception.NoSuchManagerException {
+
+		return getService().addEmployee(
+			firstName, lastName, department, position, level, stateCode, status,
+			managerIdPK, isManager, user);
 	}
 
 	/**
@@ -94,10 +107,12 @@ public class EmployeeLocalServiceUtil {
 	 *
 	 * @param employeeId the primary key of the employee
 	 * @return the employee that was removed
+	 * @throws NoSuchEmployeeException
 	 * @throws PortalException if a employee with the primary key could not be found
 	 */
 	public static Employee deleteEmployee(long employeeId)
-		throws PortalException {
+		throws com.management.app.exception.NoSuchEmployeeException,
+			   PortalException {
 
 		return getService().deleteEmployee(employeeId);
 	}
@@ -259,6 +274,15 @@ public class EmployeeLocalServiceUtil {
 	 */
 	public static List<Employee> getEmployees(int start, int end) {
 		return getService().getEmployees(start, end);
+	}
+
+	public static List<Employee> getEmployeesByManagerIdAndPermission(
+			long managerIdPK, long companyId, boolean hasPermission)
+		throws com.management.app.exception.NoSuchEmployeeException,
+			   com.management.app.exception.NoSuchManagerException {
+
+		return getService().getEmployeesByManagerIdAndPermission(
+			managerIdPK, companyId, hasPermission);
 	}
 
 	/**

@@ -965,69 +965,6 @@ public class ManagerUtil {
 	}
 
 	/**
-	 * Returns the manager where firstName = &#63; and lastName = &#63; or throws a <code>NoSuchManagerException</code> if it could not be found.
-	 *
-	 * @param firstName the first name
-	 * @param lastName the last name
-	 * @return the matching manager
-	 * @throws NoSuchManagerException if a matching manager could not be found
-	 */
-	public static Manager findByF_L(String firstName, String lastName)
-		throws com.management.app.exception.NoSuchManagerException {
-
-		return getPersistence().findByF_L(firstName, lastName);
-	}
-
-	/**
-	 * Returns the manager where firstName = &#63; and lastName = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
-	 *
-	 * @param firstName the first name
-	 * @param lastName the last name
-	 * @return the matching manager, or <code>null</code> if a matching manager could not be found
-	 */
-	public static Manager fetchByF_L(String firstName, String lastName) {
-		return getPersistence().fetchByF_L(firstName, lastName);
-	}
-
-	/**
-	 * Returns the manager where firstName = &#63; and lastName = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
-	 *
-	 * @param firstName the first name
-	 * @param lastName the last name
-	 * @param useFinderCache whether to use the finder cache
-	 * @return the matching manager, or <code>null</code> if a matching manager could not be found
-	 */
-	public static Manager fetchByF_L(
-		String firstName, String lastName, boolean useFinderCache) {
-
-		return getPersistence().fetchByF_L(firstName, lastName, useFinderCache);
-	}
-
-	/**
-	 * Removes the manager where firstName = &#63; and lastName = &#63; from the database.
-	 *
-	 * @param firstName the first name
-	 * @param lastName the last name
-	 * @return the manager that was removed
-	 */
-	public static Manager removeByF_L(String firstName, String lastName)
-		throws com.management.app.exception.NoSuchManagerException {
-
-		return getPersistence().removeByF_L(firstName, lastName);
-	}
-
-	/**
-	 * Returns the number of managers where firstName = &#63; and lastName = &#63;.
-	 *
-	 * @param firstName the first name
-	 * @param lastName the last name
-	 * @return the number of matching managers
-	 */
-	public static int countByF_L(String firstName, String lastName) {
-		return getPersistence().countByF_L(firstName, lastName);
-	}
-
-	/**
 	 * Caches the manager in the entity cache if it is enabled.
 	 *
 	 * @param manager the manager

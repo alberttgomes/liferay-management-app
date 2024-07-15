@@ -13,6 +13,7 @@ import com.liferay.portal.kernel.json.JSONUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.User;
+import com.liferay.portal.kernel.security.auth.CompanyThreadLocal;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.HashMapBuilder;
 import com.liferay.portal.kernel.util.StringBundler;
@@ -23,7 +24,6 @@ import com.management.app.model.Employee;
 import com.management.app.model.Manager;
 import com.management.app.service.ManagerLocalService;
 import com.management.app.service.base.EmployeeLocalServiceBaseImpl;
-import com.management.app.service.persistence.EmployeePersistence;
 import com.management.app.service.util.EmployeeStatusConstant;
 
 import java.util.*;
@@ -44,30 +44,30 @@ public class EmployeeLocalServiceImpl extends EmployeeLocalServiceBaseImpl {
 
 	@Override
 	public Employee addEmployee(
-			String firstName, String lastName, String position, String level,
-			String stateCode, int status, long managerIdPK, long groupId,
-			long companyId, long userId, boolean isManager)
+			String firstName, String lastName, String department, String position,
+			int level, String stateCode, int status, long managerIdPK,
+			boolean isManager, User user)
 		throws NoSuchManagerException {
 
 		long employeeId = CounterLocalServiceUtil.increment();
 
-		_validate(firstName, lastName, position, managerIdPK);
+		_validate(firstName, lastName, position, level, department);
 
 		return _addEmployee(
-				firstName, lastName, position, stateCode,
-				managerIdPK, groupId, companyId, employeeId);
+				firstName, lastName, department, position, level, stateCode,
+				managerIdPK, employeeId, isManager, user);
 	}
 
 	@Override
 	public Employee deleteEmployee(long employeeId) throws NoSuchEmployeeException {
-		if (_employeePersistence.findByEmployeeId(employeeId) == null) {
+		if (employeePersistence.findByEmployeeId(employeeId) == null) {
 			throw new NoSuchEmployeeException(
 					"No such employee with id: " + employeeId);
 		}
 		else {
 			_log.debug("Deleting employee with id: " + employeeId);
 
-			return _employeePersistence.remove(employeeId);
+			return employeePersistence.remove(employeeId);
 		}
 	}
 
@@ -91,7 +91,7 @@ public class EmployeeLocalServiceImpl extends EmployeeLocalServiceBaseImpl {
 						"No manager found for id: " + managerIdPK);
 			}
 
-			List<Employee> employees = _employeePersistence.findAll();
+			List<Employee> employees = employeePersistence.findAll();
 
 			if (employees.isEmpty()) {
 				throw new NoSuchEmployeeException(
@@ -118,59 +118,116 @@ public class EmployeeLocalServiceImpl extends EmployeeLocalServiceBaseImpl {
 	}
 
 	@Override
-	public Manager promotingEmployee(
-			Employee employee, User user) throws NoSuchEmployeeException {
+	public Manager employeePromoting(
+			String position, long userId, String department, int level,
+			long employeeId) throws PortalException {
 
-		return null;
+		try {
+			User user = userLocalService.fetchUser(userId);
+
+			if (user == null) {
+				throw new NoSuchEmployeeException(
+						"No user site available found for id: " + userId);
+			}
+
+			_log.debug("Are promoting by " + user.getFullName());
+
+			Employee employee = super.getEmployee(employeeId);
+
+			employee.setIsManager(true);
+
+			employee.setDepartment(department);
+			employee.setLevel(level);
+			employee.setPosition(position);
+
+			employeePersistence.update(employee);
+
+			Manager manager = _managerLocalService.createManager(
+					CounterLocalServiceUtil.increment());
+
+			manager.setCreateDate(new Date());
+			manager.setCompanyId(employee.getCompanyId());
+			manager.setEmployeeIdPK(employee.getEmployeeId());
+			manager.setGroupId(employee.getGroupId());
+			manager.setPrimaryKey(employee.getPrimaryKey());
+			manager.setModifiedDate(new Date());
+			manager.setMvccVersion(0);
+
+			return _managerLocalService.updateManager(manager);
+
+		}
+		catch (NoSuchEmployeeException noSuchEmployeeException) {
+			throw new NoSuchEmployeeException(
+					"Unable to promote employee with the id " +
+							employeeId, noSuchEmployeeException);
+		}
+
 	}
 
 	private Employee _addEmployee(
-			String firstName, String lastName, String position, String stateCode,
-			long managerIdPK, long groupId, long companyId, long employeeId) {
+			String firstName, String lastName, String department, String position,
+			int level, String stateCode, long managerIdPK, long employeeId,
+			boolean isManager, User user) {
 
-		Employee employee = _employeePersistence.create(employeeId);
+		Employee employee = employeePersistence.create(employeeId);
 
-		employee.setEmployeeId(employeeId);
 		employee.setCreateDate(new Date());
 		employee.setFirstName(firstName);
 		employee.setLastName(lastName);
+		employee.setDepartment(department);
+		employee.setLevel(level);
 		employee.setManagerIdPK(managerIdPK);
 		employee.setPosition(position);
 		employee.setPrimaryKey(employeeId);
 		employee.setStateCode(stateCode);
 		employee.setStatus(EmployeeStatusConstant.ACTIVE);
-		employee.setGroupId(groupId);
+		employee.setGroupId(user.getGroupId());
+		employee.setUserId(user.getUserId());
+
+		long companyId = CompanyThreadLocal.getCompanyId();
+
 		employee.setCompanyId(companyId);
 		employee.setMvccVersion(0);
 
+		if (isManager) {
+			_log.debug("New employee also is a manager");
+
+			Manager manager = _managerLocalService.createManager(
+					CounterLocalServiceUtil.increment());
+
+			manager.setCompanyId(companyId);
+			manager.setEmployeeIdPK(employeeId);
+			manager.setGroupId(user.getGroupId());
+			manager.setMvccVersion(0);
+			manager.setCreateDate(new Date());
+			manager.setModifiedDate(new Date());
+
+			_managerLocalService.updateManager(manager);
+		}
+
 		_log.info("Create employee " + employee.getFirstName());
 
-		return _employeePersistence.update(employee);
+		return employeePersistence.update(employee);
 	}
 
 	private void _validate(
 			String firstName, String lastName, String position,
-			int level, String department, long managerIdPK)
+			int level, String department)
 		throws NoSuchManagerException {
 
 		try {
-			if (_validRegex(firstName) && _validRegex(lastName)) {
+			if (!_validRegex(firstName) && !_validRegex(lastName)) {
 				throw new RuntimeException(
-					"No valid fields names " + firstName + ", and "
-							+ lastName);
+					"No valid fields names " + firstName + ", and " +
+							lastName);
 			}
-			else if (_validRegex(position)) {
+			else if (!_validRegex(position) && _validRegex(department)) {
 				throw new RuntimeException(
-						"No valid field names " + position);
-			}
-			else if (_managerLocalService.getManager(managerIdPK) == null) {
-				throw new NoSuchManagerException(
-						"Not found manager with id " + managerIdPK);
+						"No valid field names " + position + ", and " +
+								department);
 			}
 			else {
 				// Validate job available positions
-
-				JSONObject jsonObject = _jsonObjectPositionsBuilder();
 
 				Map<String, String> departmentMap = HashMapBuilder.put(
 						"department", department).build();
@@ -181,26 +238,42 @@ public class EmployeeLocalServiceImpl extends EmployeeLocalServiceBaseImpl {
 									department);
 				}
 
-				jsonObject.get("engineer");
+				JSONObject jsonObject = _departmentsJSONObject();
+
+				jsonObject = (JSONObject)
+						jsonObject.get(departmentMap.get("department"));
 
 				if (jsonObject.get(position) == null) {
 					throw new RuntimeException(
 							"That position not is available " + position);
 				}
+
+				JSONObject levelsByPosition = (JSONObject) jsonObject.get(position);
+
+				Integer[] levels = (Integer[]) levelsByPosition.get("level");
+
+				boolean available = false;
+
+				for (int l : levels) {
+					if (l == level) {
+						available = true;
+
+						break;
+					}
+				}
+
+				if (!available) {
+					throw new RuntimeException("No available level " + level);
+				}
 			}
 		}
-		catch (PortalException portalException) {
-			if (portalException instanceof NoSuchManagerException) {
-				throw new NoSuchManagerException(portalException);
-			}
-			else {
-				throw new RuntimeException(portalException);
-			}
+		catch (RuntimeException runtimeException) {
+			throw new NoSuchManagerException(runtimeException);
 		}
 
 	}
 
-	private JSONObject _jsonObjectPositionsBuilder() {
+	private JSONObject _departmentsJSONObject() {
 		return JSONUtil.put(
 				"engineer",
 				JSONUtil.put(
@@ -210,7 +283,7 @@ public class EmployeeLocalServiceImpl extends EmployeeLocalServiceBaseImpl {
 								ArrayUtil.append(new Integer[]{1, 2, 3, 4})
 						)
 				).put(
-						"SoftwareEngineer",
+						"Software Engineer",
 						JSONUtil.put(
 								"level",
 								ArrayUtil.append(new Integer[]{1, 2, 3, 4, 5})
@@ -265,18 +338,15 @@ public class EmployeeLocalServiceImpl extends EmployeeLocalServiceBaseImpl {
 	}
 
 	private boolean _validRegex(String content) {
-		Pattern pattern = Pattern.compile("[A-Z]");
+		Pattern pattern = Pattern.compile("[A-z]");
 
 		Matcher matcher = pattern.matcher(content);
 
-		return matcher.find();
-	}
+        return matcher.find();
+    }
 
 	private static final Log _log = LogFactoryUtil.getLog(
 			EmployeeLocalServiceImpl.class);
-
-	@Reference
-	private EmployeePersistence _employeePersistence;
 
 	@Reference
 	private ManagerLocalService _managerLocalService;

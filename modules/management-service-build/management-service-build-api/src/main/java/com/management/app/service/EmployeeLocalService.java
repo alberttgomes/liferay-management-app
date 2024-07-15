@@ -28,13 +28,12 @@ import com.liferay.portal.kernel.util.OrderByComparator;
 import com.management.app.exception.NoSuchEmployeeException;
 import com.management.app.exception.NoSuchManagerException;
 import com.management.app.model.Employee;
+import com.management.app.model.Manager;
 
 import java.io.Serializable;
 
-import java.util.Date;
 import java.util.List;
 
-import com.management.app.model.Manager;
 import org.osgi.annotation.versioning.ProviderType;
 
 /**
@@ -74,10 +73,11 @@ public interface EmployeeLocalService
 	@Indexable(type = IndexableType.REINDEX)
 	public Employee addEmployee(Employee employee);
 
+	@Indexable(type = IndexableType.REINDEX)
 	Employee addEmployee(
-			String firstName, String lastName, String position,
-			String stateCode, int status, long managerIdPK, int companyTime,
-			long groupId, long companyId, long userId)
+			String firstName, String lastName, String department, String position,
+			int level, String stateCode, int status, long managerIdPK,
+			boolean isManager, User user)
 		throws NoSuchManagerException;
 
 	/**
@@ -117,10 +117,12 @@ public interface EmployeeLocalService
 	 *
 	 * @param employeeId the primary key of the employee
 	 * @return the employee that was removed
+	 * @throws NoSuchEmployeeException
 	 * @throws PortalException if a employee with the primary key could not be found
 	 */
 	@Indexable(type = IndexableType.DELETE)
-	public Employee deleteEmployee(long employeeId) throws PortalException;
+	public Employee deleteEmployee(long employeeId)
+		throws NoSuchEmployeeException, PortalException;
 
 	/**
 	 * @throws PortalException
@@ -214,6 +216,7 @@ public interface EmployeeLocalService
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public Employee fetchEmployeeByUuidAndGroupId(String uuid, long groupId);
 
+
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public ActionableDynamicQuery getActionableDynamicQuery();
 
@@ -226,11 +229,6 @@ public interface EmployeeLocalService
 	 */
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public Employee getEmployee(long employeeId) throws PortalException;
-
-
-	List<Employee> getEmployeesByManagerIdAndPermission(
-			long managerIdPK, long companyId, boolean hasPermission)
-		throws NoSuchEmployeeException, NoSuchManagerException;
 
 	/**
 	 * Returns the employee matching the UUID and group.
@@ -257,6 +255,11 @@ public interface EmployeeLocalService
 	 */
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public List<Employee> getEmployees(int start, int end);
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public List<Employee> getEmployeesByManagerIdAndPermission(
+			long managerIdPK, long companyId, boolean hasPermission)
+		throws NoSuchEmployeeException, NoSuchManagerException;
 
 	/**
 	 * Returns all the employees matching the UUID and company.
@@ -314,10 +317,10 @@ public interface EmployeeLocalService
 	public PersistedModel getPersistedModel(Serializable primaryKeyObj)
 		throws PortalException;
 
-
-	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	Manager promotingEmployee(
-			Employee employee, User user) throws NoSuchEmployeeException;
+	@Indexable(type = IndexableType.REINDEX)
+	Manager employeePromoting(
+			String position, long userId, String department, int level, long employeeId)
+    	throws PortalException;
 
 	/**
 	 * Updates the employee in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.

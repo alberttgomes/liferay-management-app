@@ -41,13 +41,7 @@ public class ManagerWrapper
 		attributes.put("companyId", getCompanyId());
 		attributes.put("createDate", getCreateDate());
 		attributes.put("modifiedDate", getModifiedDate());
-		attributes.put("firstName", getFirstName());
-		attributes.put("lastName", getLastName());
 		attributes.put("employeeIdPK", getEmployeeIdPK());
-		attributes.put("position", getPosition());
-		attributes.put("stateCode", getStateCode());
-		attributes.put("status", getStatus());
-		attributes.put("companyTime", getCompanyTime());
 
 		return attributes;
 	}
@@ -96,46 +90,10 @@ public class ManagerWrapper
 			setModifiedDate(modifiedDate);
 		}
 
-		String firstName = (String)attributes.get("firstName");
-
-		if (firstName != null) {
-			setFirstName(firstName);
-		}
-
-		String lastName = (String)attributes.get("lastName");
-
-		if (lastName != null) {
-			setLastName(lastName);
-		}
-
 		Long employeeIdPK = (Long)attributes.get("employeeIdPK");
 
 		if (employeeIdPK != null) {
 			setEmployeeIdPK(employeeIdPK);
-		}
-
-		String position = (String)attributes.get("position");
-
-		if (position != null) {
-			setPosition(position);
-		}
-
-		String stateCode = (String)attributes.get("stateCode");
-
-		if (stateCode != null) {
-			setStateCode(stateCode);
-		}
-
-		Integer status = (Integer)attributes.get("status");
-
-		if (status != null) {
-			setStatus(status);
-		}
-
-		Integer companyTime = (Integer)attributes.get("companyTime");
-
-		if (companyTime != null) {
-			setCompanyTime(companyTime);
 		}
 	}
 
@@ -152,16 +110,6 @@ public class ManagerWrapper
 	@Override
 	public long getCompanyId() {
 		return model.getCompanyId();
-	}
-
-	/**
-	 * Returns the company time of this manager.
-	 *
-	 * @return the company time of this manager
-	 */
-	@Override
-	public int getCompanyTime() {
-		return model.getCompanyTime();
 	}
 
 	/**
@@ -185,16 +133,6 @@ public class ManagerWrapper
 	}
 
 	/**
-	 * Returns the first name of this manager.
-	 *
-	 * @return the first name of this manager
-	 */
-	@Override
-	public String getFirstName() {
-		return model.getFirstName();
-	}
-
-	/**
 	 * Returns the group ID of this manager.
 	 *
 	 * @return the group ID of this manager
@@ -202,16 +140,6 @@ public class ManagerWrapper
 	@Override
 	public long getGroupId() {
 		return model.getGroupId();
-	}
-
-	/**
-	 * Returns the last name of this manager.
-	 *
-	 * @return the last name of this manager
-	 */
-	@Override
-	public String getLastName() {
-		return model.getLastName();
 	}
 
 	/**
@@ -245,16 +173,6 @@ public class ManagerWrapper
 	}
 
 	/**
-	 * Returns the position of this manager.
-	 *
-	 * @return the position of this manager
-	 */
-	@Override
-	public String getPosition() {
-		return model.getPosition();
-	}
-
-	/**
 	 * Returns the primary key of this manager.
 	 *
 	 * @return the primary key of this manager
@@ -262,26 +180,6 @@ public class ManagerWrapper
 	@Override
 	public long getPrimaryKey() {
 		return model.getPrimaryKey();
-	}
-
-	/**
-	 * Returns the state code of this manager.
-	 *
-	 * @return the state code of this manager
-	 */
-	@Override
-	public String getStateCode() {
-		return model.getStateCode();
-	}
-
-	/**
-	 * Returns the status of this manager.
-	 *
-	 * @return the status of this manager
-	 */
-	@Override
-	public int getStatus() {
-		return model.getStatus();
 	}
 
 	/**
@@ -310,16 +208,6 @@ public class ManagerWrapper
 	}
 
 	/**
-	 * Sets the company time of this manager.
-	 *
-	 * @param companyTime the company time of this manager
-	 */
-	@Override
-	public void setCompanyTime(int companyTime) {
-		model.setCompanyTime(companyTime);
-	}
-
-	/**
 	 * Sets the create date of this manager.
 	 *
 	 * @param createDate the create date of this manager
@@ -340,16 +228,6 @@ public class ManagerWrapper
 	}
 
 	/**
-	 * Sets the first name of this manager.
-	 *
-	 * @param firstName the first name of this manager
-	 */
-	@Override
-	public void setFirstName(String firstName) {
-		model.setFirstName(firstName);
-	}
-
-	/**
 	 * Sets the group ID of this manager.
 	 *
 	 * @param groupId the group ID of this manager
@@ -357,16 +235,6 @@ public class ManagerWrapper
 	@Override
 	public void setGroupId(long groupId) {
 		model.setGroupId(groupId);
-	}
-
-	/**
-	 * Sets the last name of this manager.
-	 *
-	 * @param lastName the last name of this manager
-	 */
-	@Override
-	public void setLastName(String lastName) {
-		model.setLastName(lastName);
 	}
 
 	/**
@@ -400,16 +268,6 @@ public class ManagerWrapper
 	}
 
 	/**
-	 * Sets the position of this manager.
-	 *
-	 * @param position the position of this manager
-	 */
-	@Override
-	public void setPosition(String position) {
-		model.setPosition(position);
-	}
-
-	/**
 	 * Sets the primary key of this manager.
 	 *
 	 * @param primaryKey the primary key of this manager
@@ -417,26 +275,6 @@ public class ManagerWrapper
 	@Override
 	public void setPrimaryKey(long primaryKey) {
 		model.setPrimaryKey(primaryKey);
-	}
-
-	/**
-	 * Sets the state code of this manager.
-	 *
-	 * @param stateCode the state code of this manager
-	 */
-	@Override
-	public void setStateCode(String stateCode) {
-		model.setStateCode(stateCode);
-	}
-
-	/**
-	 * Sets the status of this manager.
-	 *
-	 * @param status the status of this manager
-	 */
-	@Override
-	public void setStatus(int status) {
-		model.setStatus(status);
 	}
 
 	/**

@@ -160,36 +160,6 @@ public interface ManagerModel
 	public void setModifiedDate(Date modifiedDate);
 
 	/**
-	 * Returns the first name of this manager.
-	 *
-	 * @return the first name of this manager
-	 */
-	@AutoEscape
-	public String getFirstName();
-
-	/**
-	 * Sets the first name of this manager.
-	 *
-	 * @param firstName the first name of this manager
-	 */
-	public void setFirstName(String firstName);
-
-	/**
-	 * Returns the last name of this manager.
-	 *
-	 * @return the last name of this manager
-	 */
-	@AutoEscape
-	public String getLastName();
-
-	/**
-	 * Sets the last name of this manager.
-	 *
-	 * @param lastName the last name of this manager
-	 */
-	public void setLastName(String lastName);
-
-	/**
 	 * Returns the employee ID pk of this manager.
 	 *
 	 * @return the employee ID pk of this manager
@@ -202,64 +172,6 @@ public interface ManagerModel
 	 * @param employeeIdPK the employee ID pk of this manager
 	 */
 	public void setEmployeeIdPK(long employeeIdPK);
-
-	/**
-	 * Returns the position of this manager.
-	 *
-	 * @return the position of this manager
-	 */
-	@AutoEscape
-	public String getPosition();
-
-	/**
-	 * Sets the position of this manager.
-	 *
-	 * @param position the position of this manager
-	 */
-	public void setPosition(String position);
-
-	/**
-	 * Returns the state code of this manager.
-	 *
-	 * @return the state code of this manager
-	 */
-	@AutoEscape
-	public String getStateCode();
-
-	/**
-	 * Sets the state code of this manager.
-	 *
-	 * @param stateCode the state code of this manager
-	 */
-	public void setStateCode(String stateCode);
-
-	/**
-	 * Returns the status of this manager.
-	 *
-	 * @return the status of this manager
-	 */
-	public int getStatus();
-
-	/**
-	 * Sets the status of this manager.
-	 *
-	 * @param status the status of this manager
-	 */
-	public void setStatus(int status);
-
-	/**
-	 * Returns the company time of this manager.
-	 *
-	 * @return the company time of this manager
-	 */
-	public int getCompanyTime();
-
-	/**
-	 * Sets the company time of this manager.
-	 *
-	 * @param companyTime the company time of this manager
-	 */
-	public void setCompanyTime(int companyTime);
 
 	@Override
 	public Manager cloneWithOriginalValues();

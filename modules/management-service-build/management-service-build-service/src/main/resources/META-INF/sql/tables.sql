@@ -6,6 +6,7 @@ create table Management_Employee (
 	companyId LONG,
 	createDate DATE null,
 	modifiedDate DATE null,
+	department VARCHAR(75) null,
 	firstName VARCHAR(75) null,
 	lastName VARCHAR(75) null,
 	position VARCHAR(75) null,

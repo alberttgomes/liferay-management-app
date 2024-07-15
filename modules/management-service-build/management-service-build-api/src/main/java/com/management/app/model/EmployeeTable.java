@@ -37,20 +37,26 @@ public class EmployeeTable extends BaseTable<EmployeeTable> {
 		"createDate", Date.class, Types.TIMESTAMP, Column.FLAG_DEFAULT);
 	public final Column<EmployeeTable, Date> modifiedDate = createColumn(
 		"modifiedDate", Date.class, Types.TIMESTAMP, Column.FLAG_DEFAULT);
+	public final Column<EmployeeTable, String> department = createColumn(
+		"department", String.class, Types.VARCHAR, Column.FLAG_DEFAULT);
 	public final Column<EmployeeTable, String> firstName = createColumn(
 		"firstName", String.class, Types.VARCHAR, Column.FLAG_DEFAULT);
 	public final Column<EmployeeTable, String> lastName = createColumn(
 		"lastName", String.class, Types.VARCHAR, Column.FLAG_DEFAULT);
-	public final Column<EmployeeTable, Long> managerIdPK = createColumn(
-		"managerIdPK", Long.class, Types.BIGINT, Column.FLAG_DEFAULT);
 	public final Column<EmployeeTable, String> position = createColumn(
 		"position", String.class, Types.VARCHAR, Column.FLAG_DEFAULT);
+	public final Column<EmployeeTable, Boolean> isManager = createColumn(
+		"isManager", Boolean.class, Types.BOOLEAN, Column.FLAG_DEFAULT);
+	public final Column<EmployeeTable, Integer> level = createColumn(
+		"level", Integer.class, Types.INTEGER, Column.FLAG_DEFAULT);
+	public final Column<EmployeeTable, Long> managerIdPK = createColumn(
+		"managerIdPK", Long.class, Types.BIGINT, Column.FLAG_DEFAULT);
 	public final Column<EmployeeTable, String> stateCode = createColumn(
 		"stateCode", String.class, Types.VARCHAR, Column.FLAG_DEFAULT);
 	public final Column<EmployeeTable, Integer> status = createColumn(
 		"status", Integer.class, Types.INTEGER, Column.FLAG_DEFAULT);
-	public final Column<EmployeeTable, Long> companyTime = createColumn(
-		"companyTime", Long.class, Types.BIGINT, Column.FLAG_DEFAULT);
+	public final Column<EmployeeTable, Long> userId = createColumn(
+		"userId", Long.class, Types.BIGINT, Column.FLAG_DEFAULT);
 
 	private EmployeeTable() {
 		super("Management_Employee", EmployeeTable::new);

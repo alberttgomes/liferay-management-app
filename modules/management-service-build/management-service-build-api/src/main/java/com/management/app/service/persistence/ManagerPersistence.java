@@ -750,56 +750,6 @@ public interface ManagerPersistence extends BasePersistence<Manager> {
 	public int countByE_M(long employeeIdPK, long managerId);
 
 	/**
-	 * Returns the manager where firstName = &#63; and lastName = &#63; or throws a <code>NoSuchManagerException</code> if it could not be found.
-	 *
-	 * @param firstName the first name
-	 * @param lastName the last name
-	 * @return the matching manager
-	 * @throws NoSuchManagerException if a matching manager could not be found
-	 */
-	public Manager findByF_L(String firstName, String lastName)
-		throws NoSuchManagerException;
-
-	/**
-	 * Returns the manager where firstName = &#63; and lastName = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
-	 *
-	 * @param firstName the first name
-	 * @param lastName the last name
-	 * @return the matching manager, or <code>null</code> if a matching manager could not be found
-	 */
-	public Manager fetchByF_L(String firstName, String lastName);
-
-	/**
-	 * Returns the manager where firstName = &#63; and lastName = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
-	 *
-	 * @param firstName the first name
-	 * @param lastName the last name
-	 * @param useFinderCache whether to use the finder cache
-	 * @return the matching manager, or <code>null</code> if a matching manager could not be found
-	 */
-	public Manager fetchByF_L(
-		String firstName, String lastName, boolean useFinderCache);
-
-	/**
-	 * Removes the manager where firstName = &#63; and lastName = &#63; from the database.
-	 *
-	 * @param firstName the first name
-	 * @param lastName the last name
-	 * @return the manager that was removed
-	 */
-	public Manager removeByF_L(String firstName, String lastName)
-		throws NoSuchManagerException;
-
-	/**
-	 * Returns the number of managers where firstName = &#63; and lastName = &#63;.
-	 *
-	 * @param firstName the first name
-	 * @param lastName the last name
-	 * @return the number of matching managers
-	 */
-	public int countByF_L(String firstName, String lastName);
-
-	/**
 	 * Caches the manager in the entity cache if it is enabled.
 	 *
 	 * @param manager the manager

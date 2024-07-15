@@ -37,20 +37,8 @@ public class ManagerTable extends BaseTable<ManagerTable> {
 		"createDate", Date.class, Types.TIMESTAMP, Column.FLAG_DEFAULT);
 	public final Column<ManagerTable, Date> modifiedDate = createColumn(
 		"modifiedDate", Date.class, Types.TIMESTAMP, Column.FLAG_DEFAULT);
-	public final Column<ManagerTable, String> firstName = createColumn(
-		"firstName", String.class, Types.VARCHAR, Column.FLAG_DEFAULT);
-	public final Column<ManagerTable, String> lastName = createColumn(
-		"lastName", String.class, Types.VARCHAR, Column.FLAG_DEFAULT);
 	public final Column<ManagerTable, Long> employeeIdPK = createColumn(
 		"employeeIdPK", Long.class, Types.BIGINT, Column.FLAG_DEFAULT);
-	public final Column<ManagerTable, String> position = createColumn(
-		"position", String.class, Types.VARCHAR, Column.FLAG_DEFAULT);
-	public final Column<ManagerTable, String> stateCode = createColumn(
-		"stateCode", String.class, Types.VARCHAR, Column.FLAG_DEFAULT);
-	public final Column<ManagerTable, Integer> status = createColumn(
-		"status", Integer.class, Types.INTEGER, Column.FLAG_DEFAULT);
-	public final Column<ManagerTable, Integer> companyTime = createColumn(
-		"companyTime", Integer.class, Types.INTEGER, Column.FLAG_DEFAULT);
 
 	private ManagerTable() {
 		super("Management_Manager", ManagerTable::new);

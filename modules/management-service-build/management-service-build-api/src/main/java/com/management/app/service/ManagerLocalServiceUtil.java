@@ -61,6 +61,17 @@ public class ManagerLocalServiceUtil {
 		return getService().createManager(managerId);
 	}
 
+	public static Manager createManager(
+			long groupId, long companyId, long employeeIdPK,
+			java.util.Date modifiedDate, java.util.Date createDate,
+			long mvccVersion)
+		throws com.management.app.exception.NoSuchEmployeeException {
+
+		return getService().createManager(
+			groupId, companyId, employeeIdPK, modifiedDate, createDate,
+			mvccVersion);
+	}
+
 	/**
 	 * @throws PortalException
 	 */

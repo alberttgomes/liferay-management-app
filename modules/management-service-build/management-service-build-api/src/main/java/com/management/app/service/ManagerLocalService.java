@@ -24,10 +24,12 @@ import com.liferay.portal.kernel.transaction.Propagation;
 import com.liferay.portal.kernel.transaction.Transactional;
 import com.liferay.portal.kernel.util.OrderByComparator;
 
+import com.management.app.exception.NoSuchEmployeeException;
 import com.management.app.model.Manager;
 
 import java.io.Serializable;
 
+import java.util.Date;
 import java.util.List;
 
 import org.osgi.annotation.versioning.ProviderType;
@@ -77,6 +79,11 @@ public interface ManagerLocalService
 	 */
 	@Transactional(enabled = false)
 	public Manager createManager(long managerId);
+
+	public Manager createManager(
+			long groupId, long companyId, long employeeIdPK, Date modifiedDate,
+			Date createDate, long mvccVersion)
+		throws NoSuchEmployeeException;
 
 	/**
 	 * @throws PortalException
@@ -192,6 +199,10 @@ public interface ManagerLocalService
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public Manager fetchManager(long managerId);
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	Manager fetchManagerByFirstNameAndLastName(
+			String firstName, String lastName) throws Exception;
 
 	/**
 	 * Returns the manager matching the UUID and group.

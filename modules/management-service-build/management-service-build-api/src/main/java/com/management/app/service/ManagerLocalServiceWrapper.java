@@ -5,8 +5,10 @@
 
 package com.management.app.service;
 
+import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.service.ServiceWrapper;
 import com.liferay.portal.kernel.service.persistence.BasePersistence;
+import com.management.app.model.Manager;
 
 /**
  * Provides a wrapper for {@link ManagerLocalService}.
@@ -52,6 +54,18 @@ public class ManagerLocalServiceWrapper
 	@Override
 	public com.management.app.model.Manager createManager(long managerId) {
 		return _managerLocalService.createManager(managerId);
+	}
+
+	@Override
+	public com.management.app.model.Manager createManager(
+			long groupId, long companyId, long employeeIdPK,
+			java.util.Date modifiedDate, java.util.Date createDate,
+			long mvccVersion)
+		throws com.management.app.exception.NoSuchEmployeeException {
+
+		return _managerLocalService.createManager(
+			groupId, companyId, employeeIdPK, modifiedDate, createDate,
+			mvccVersion);
 	}
 
 	/**
@@ -215,6 +229,12 @@ public class ManagerLocalServiceWrapper
 	@Override
 	public com.management.app.model.Manager fetchManager(long managerId) {
 		return _managerLocalService.fetchManager(managerId);
+	}
+
+	@Override
+	public Manager fetchManagerByFirstNameAndLastName(
+			String firstName, String lastName) throws Exception {
+		return null;
 	}
 
 	/**

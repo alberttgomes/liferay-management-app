@@ -41,13 +41,16 @@ public class EmployeeWrapper
 		attributes.put("companyId", getCompanyId());
 		attributes.put("createDate", getCreateDate());
 		attributes.put("modifiedDate", getModifiedDate());
+		attributes.put("department", getDepartment());
 		attributes.put("firstName", getFirstName());
 		attributes.put("lastName", getLastName());
-		attributes.put("managerIdPK", getManagerIdPK());
 		attributes.put("position", getPosition());
+		attributes.put("isManager", isIsManager());
+		attributes.put("level", getLevel());
+		attributes.put("managerIdPK", getManagerIdPK());
 		attributes.put("stateCode", getStateCode());
 		attributes.put("status", getStatus());
-		attributes.put("companyTime", getCompanyTime());
+		attributes.put("userId", getUserId());
 
 		return attributes;
 	}
@@ -96,6 +99,12 @@ public class EmployeeWrapper
 			setModifiedDate(modifiedDate);
 		}
 
+		String department = (String)attributes.get("department");
+
+		if (department != null) {
+			setDepartment(department);
+		}
+
 		String firstName = (String)attributes.get("firstName");
 
 		if (firstName != null) {
@@ -108,16 +117,28 @@ public class EmployeeWrapper
 			setLastName(lastName);
 		}
 
-		Long managerIdPK = (Long)attributes.get("managerIdPK");
-
-		if (managerIdPK != null) {
-			setManagerIdPK(managerIdPK);
-		}
-
 		String position = (String)attributes.get("position");
 
 		if (position != null) {
 			setPosition(position);
+		}
+
+		Boolean isManager = (Boolean)attributes.get("isManager");
+
+		if (isManager != null) {
+			setIsManager(isManager);
+		}
+
+		Integer level = (Integer)attributes.get("level");
+
+		if (level != null) {
+			setLevel(level);
+		}
+
+		Long managerIdPK = (Long)attributes.get("managerIdPK");
+
+		if (managerIdPK != null) {
+			setManagerIdPK(managerIdPK);
 		}
 
 		String stateCode = (String)attributes.get("stateCode");
@@ -132,10 +153,10 @@ public class EmployeeWrapper
 			setStatus(status);
 		}
 
-		Long companyTime = (Long)attributes.get("companyTime");
+		Long userId = (Long)attributes.get("userId");
 
-		if (companyTime != null) {
-			setCompanyTime(companyTime);
+		if (userId != null) {
+			setUserId(userId);
 		}
 	}
 
@@ -155,16 +176,6 @@ public class EmployeeWrapper
 	}
 
 	/**
-	 * Returns the company time of this employee.
-	 *
-	 * @return the company time of this employee
-	 */
-	@Override
-	public long getCompanyTime() {
-		return model.getCompanyTime();
-	}
-
-	/**
 	 * Returns the create date of this employee.
 	 *
 	 * @return the create date of this employee
@@ -172,6 +183,16 @@ public class EmployeeWrapper
 	@Override
 	public Date getCreateDate() {
 		return model.getCreateDate();
+	}
+
+	/**
+	 * Returns the department of this employee.
+	 *
+	 * @return the department of this employee
+	 */
+	@Override
+	public String getDepartment() {
+		return model.getDepartment();
 	}
 
 	/**
@@ -205,6 +226,16 @@ public class EmployeeWrapper
 	}
 
 	/**
+	 * Returns the is manager of this employee.
+	 *
+	 * @return the is manager of this employee
+	 */
+	@Override
+	public boolean getIsManager() {
+		return model.getIsManager();
+	}
+
+	/**
 	 * Returns the last name of this employee.
 	 *
 	 * @return the last name of this employee
@@ -212,6 +243,16 @@ public class EmployeeWrapper
 	@Override
 	public String getLastName() {
 		return model.getLastName();
+	}
+
+	/**
+	 * Returns the level of this employee.
+	 *
+	 * @return the level of this employee
+	 */
+	@Override
+	public int getLevel() {
+		return model.getLevel();
 	}
 
 	/**
@@ -285,6 +326,26 @@ public class EmployeeWrapper
 	}
 
 	/**
+	 * Returns the user ID of this employee.
+	 *
+	 * @return the user ID of this employee
+	 */
+	@Override
+	public long getUserId() {
+		return model.getUserId();
+	}
+
+	/**
+	 * Returns the user uuid of this employee.
+	 *
+	 * @return the user uuid of this employee
+	 */
+	@Override
+	public String getUserUuid() {
+		return model.getUserUuid();
+	}
+
+	/**
 	 * Returns the uuid of this employee.
 	 *
 	 * @return the uuid of this employee
@@ -292,6 +353,16 @@ public class EmployeeWrapper
 	@Override
 	public String getUuid() {
 		return model.getUuid();
+	}
+
+	/**
+	 * Returns <code>true</code> if this employee is is manager.
+	 *
+	 * @return <code>true</code> if this employee is is manager; <code>false</code> otherwise
+	 */
+	@Override
+	public boolean isIsManager() {
+		return model.isIsManager();
 	}
 
 	@Override
@@ -310,16 +381,6 @@ public class EmployeeWrapper
 	}
 
 	/**
-	 * Sets the company time of this employee.
-	 *
-	 * @param companyTime the company time of this employee
-	 */
-	@Override
-	public void setCompanyTime(long companyTime) {
-		model.setCompanyTime(companyTime);
-	}
-
-	/**
 	 * Sets the create date of this employee.
 	 *
 	 * @param createDate the create date of this employee
@@ -327,6 +388,16 @@ public class EmployeeWrapper
 	@Override
 	public void setCreateDate(Date createDate) {
 		model.setCreateDate(createDate);
+	}
+
+	/**
+	 * Sets the department of this employee.
+	 *
+	 * @param department the department of this employee
+	 */
+	@Override
+	public void setDepartment(String department) {
+		model.setDepartment(department);
 	}
 
 	/**
@@ -360,6 +431,16 @@ public class EmployeeWrapper
 	}
 
 	/**
+	 * Sets whether this employee is is manager.
+	 *
+	 * @param isManager the is manager of this employee
+	 */
+	@Override
+	public void setIsManager(boolean isManager) {
+		model.setIsManager(isManager);
+	}
+
+	/**
 	 * Sets the last name of this employee.
 	 *
 	 * @param lastName the last name of this employee
@@ -367,6 +448,16 @@ public class EmployeeWrapper
 	@Override
 	public void setLastName(String lastName) {
 		model.setLastName(lastName);
+	}
+
+	/**
+	 * Sets the level of this employee.
+	 *
+	 * @param level the level of this employee
+	 */
+	@Override
+	public void setLevel(int level) {
+		model.setLevel(level);
 	}
 
 	/**
@@ -437,6 +528,26 @@ public class EmployeeWrapper
 	@Override
 	public void setStatus(int status) {
 		model.setStatus(status);
+	}
+
+	/**
+	 * Sets the user ID of this employee.
+	 *
+	 * @param userId the user ID of this employee
+	 */
+	@Override
+	public void setUserId(long userId) {
+		model.setUserId(userId);
+	}
+
+	/**
+	 * Sets the user uuid of this employee.
+	 *
+	 * @param userUuid the user uuid of this employee
+	 */
+	@Override
+	public void setUserUuid(String userUuid) {
+		model.setUserUuid(userUuid);
 	}
 
 	/**

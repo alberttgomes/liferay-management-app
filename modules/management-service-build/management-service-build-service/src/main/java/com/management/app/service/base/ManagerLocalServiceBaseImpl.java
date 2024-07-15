@@ -564,9 +564,6 @@ public abstract class ManagerLocalServiceBaseImpl
 		}
 	}
 
-	@Reference
-	protected EmployeePersistence employeePersistence;
-
 	protected ManagerLocalService managerLocalService;
 
 	@Reference

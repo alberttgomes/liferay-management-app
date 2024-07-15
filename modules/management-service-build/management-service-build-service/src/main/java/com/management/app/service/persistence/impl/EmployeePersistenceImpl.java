@@ -7,14 +7,7 @@ package com.management.app.service.persistence.impl;
 
 import com.liferay.petra.string.StringBundler;
 import com.liferay.portal.kernel.configuration.Configuration;
-import com.liferay.portal.kernel.dao.orm.EntityCache;
-import com.liferay.portal.kernel.dao.orm.FinderCache;
-import com.liferay.portal.kernel.dao.orm.FinderPath;
-import com.liferay.portal.kernel.dao.orm.Query;
-import com.liferay.portal.kernel.dao.orm.QueryPos;
-import com.liferay.portal.kernel.dao.orm.QueryUtil;
-import com.liferay.portal.kernel.dao.orm.Session;
-import com.liferay.portal.kernel.dao.orm.SessionFactory;
+import com.liferay.portal.kernel.dao.orm.*;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.security.auth.CompanyThreadLocal;
@@ -38,7 +31,6 @@ import com.management.app.model.impl.EmployeeImpl;
 import com.management.app.model.impl.EmployeeModelImpl;
 import com.management.app.service.persistence.EmployeePersistence;
 import com.management.app.service.persistence.EmployeeUtil;
-import com.management.app.service.persistence.impl.constants.ManagementPersistenceConstants;
 
 import java.io.Serializable;
 
@@ -51,8 +43,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
-
-import javax.sql.DataSource;
 
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
@@ -2661,6 +2651,661 @@ public class EmployeePersistenceImpl
 	private static final String _FINDER_COLUMN_C_E_EMPLOYEEID_2 =
 		"employee.employeeId = ?";
 
+	private FinderPath _finderPathWithPaginationFindByD_P_L;
+	private FinderPath _finderPathWithoutPaginationFindByD_P_L;
+	private FinderPath _finderPathCountByD_P_L;
+
+	/**
+	 * Returns all the employees where department = &#63; and position = &#63; and level = &#63;.
+	 *
+	 * @param department the department
+	 * @param position the position
+	 * @param level the level
+	 * @return the matching employees
+	 */
+	@Override
+	public List<Employee> findByD_P_L(
+		String department, String position, int level) {
+
+		return findByD_P_L(
+			department, position, level, QueryUtil.ALL_POS, QueryUtil.ALL_POS,
+			null);
+	}
+
+	/**
+	 * Returns a range of all the employees where department = &#63; and position = &#63; and level = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>EmployeeModelImpl</code>.
+	 * </p>
+	 *
+	 * @param department the department
+	 * @param position the position
+	 * @param level the level
+	 * @param start the lower bound of the range of employees
+	 * @param end the upper bound of the range of employees (not inclusive)
+	 * @return the range of matching employees
+	 */
+	@Override
+	public List<Employee> findByD_P_L(
+		String department, String position, int level, int start, int end) {
+
+		return findByD_P_L(department, position, level, start, end, null);
+	}
+
+	/**
+	 * Returns an ordered range of all the employees where department = &#63; and position = &#63; and level = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>EmployeeModelImpl</code>.
+	 * </p>
+	 *
+	 * @param department the department
+	 * @param position the position
+	 * @param level the level
+	 * @param start the lower bound of the range of employees
+	 * @param end the upper bound of the range of employees (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching employees
+	 */
+	@Override
+	public List<Employee> findByD_P_L(
+		String department, String position, int level, int start, int end,
+		OrderByComparator<Employee> orderByComparator) {
+
+		return findByD_P_L(
+			department, position, level, start, end, orderByComparator, true);
+	}
+
+	/**
+	 * Returns an ordered range of all the employees where department = &#63; and position = &#63; and level = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>EmployeeModelImpl</code>.
+	 * </p>
+	 *
+	 * @param department the department
+	 * @param position the position
+	 * @param level the level
+	 * @param start the lower bound of the range of employees
+	 * @param end the upper bound of the range of employees (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @param useFinderCache whether to use the finder cache
+	 * @return the ordered range of matching employees
+	 */
+	@Override
+	public List<Employee> findByD_P_L(
+		String department, String position, int level, int start, int end,
+		OrderByComparator<Employee> orderByComparator, boolean useFinderCache) {
+
+		department = Objects.toString(department, "");
+		position = Objects.toString(position, "");
+
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+			(orderByComparator == null)) {
+
+			if (useFinderCache) {
+				finderPath = _finderPathWithoutPaginationFindByD_P_L;
+				finderArgs = new Object[] {department, position, level};
+			}
+		}
+		else if (useFinderCache) {
+			finderPath = _finderPathWithPaginationFindByD_P_L;
+			finderArgs = new Object[] {
+				department, position, level, start, end, orderByComparator
+			};
+		}
+
+		List<Employee> list = null;
+
+		if (useFinderCache) {
+			list = (List<Employee>)finderCache.getResult(
+				finderPath, finderArgs, this);
+
+			if ((list != null) && !list.isEmpty()) {
+				for (Employee employee : list) {
+					if (!department.equals(employee.getDepartment()) ||
+						!position.equals(employee.getPosition()) ||
+						(level != employee.getLevel())) {
+
+						list = null;
+
+						break;
+					}
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler sb = null;
+
+			if (orderByComparator != null) {
+				sb = new StringBundler(
+					5 + (orderByComparator.getOrderByFields().length * 2));
+			}
+			else {
+				sb = new StringBundler(5);
+			}
+
+			sb.append(_SQL_SELECT_EMPLOYEE_WHERE);
+
+			boolean bindDepartment = false;
+
+			if (department.isEmpty()) {
+				sb.append(_FINDER_COLUMN_D_P_L_DEPARTMENT_3);
+			}
+			else {
+				bindDepartment = true;
+
+				sb.append(_FINDER_COLUMN_D_P_L_DEPARTMENT_2);
+			}
+
+			boolean bindPosition = false;
+
+			if (position.isEmpty()) {
+				sb.append(_FINDER_COLUMN_D_P_L_POSITION_3);
+			}
+			else {
+				bindPosition = true;
+
+				sb.append(_FINDER_COLUMN_D_P_L_POSITION_2);
+			}
+
+			sb.append(_FINDER_COLUMN_D_P_L_LEVEL_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(
+					sb, _ORDER_BY_ENTITY_ALIAS, orderByComparator);
+			}
+			else {
+				sb.append(EmployeeModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = sb.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query query = session.createQuery(sql);
+
+				QueryPos queryPos = QueryPos.getInstance(query);
+
+				if (bindDepartment) {
+					queryPos.add(department);
+				}
+
+				if (bindPosition) {
+					queryPos.add(position);
+				}
+
+				queryPos.add(level);
+
+				list = (List<Employee>)QueryUtil.list(
+					query, getDialect(), start, end);
+
+				cacheResult(list);
+
+				if (useFinderCache) {
+					finderCache.putResult(finderPath, finderArgs, list);
+				}
+			}
+			catch (Exception exception) {
+				throw processException(exception);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first employee in the ordered set where department = &#63; and position = &#63; and level = &#63;.
+	 *
+	 * @param department the department
+	 * @param position the position
+	 * @param level the level
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching employee
+	 * @throws NoSuchEmployeeException if a matching employee could not be found
+	 */
+	@Override
+	public Employee findByD_P_L_First(
+			String department, String position, int level,
+			OrderByComparator<Employee> orderByComparator)
+		throws NoSuchEmployeeException {
+
+		Employee employee = fetchByD_P_L_First(
+			department, position, level, orderByComparator);
+
+		if (employee != null) {
+			return employee;
+		}
+
+		StringBundler sb = new StringBundler(8);
+
+		sb.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		sb.append("department=");
+		sb.append(department);
+
+		sb.append(", position=");
+		sb.append(position);
+
+		sb.append(", level=");
+		sb.append(level);
+
+		sb.append("}");
+
+		throw new NoSuchEmployeeException(sb.toString());
+	}
+
+	/**
+	 * Returns the first employee in the ordered set where department = &#63; and position = &#63; and level = &#63;.
+	 *
+	 * @param department the department
+	 * @param position the position
+	 * @param level the level
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching employee, or <code>null</code> if a matching employee could not be found
+	 */
+	@Override
+	public Employee fetchByD_P_L_First(
+		String department, String position, int level,
+		OrderByComparator<Employee> orderByComparator) {
+
+		List<Employee> list = findByD_P_L(
+			department, position, level, 0, 1, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last employee in the ordered set where department = &#63; and position = &#63; and level = &#63;.
+	 *
+	 * @param department the department
+	 * @param position the position
+	 * @param level the level
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching employee
+	 * @throws NoSuchEmployeeException if a matching employee could not be found
+	 */
+	@Override
+	public Employee findByD_P_L_Last(
+			String department, String position, int level,
+			OrderByComparator<Employee> orderByComparator)
+		throws NoSuchEmployeeException {
+
+		Employee employee = fetchByD_P_L_Last(
+			department, position, level, orderByComparator);
+
+		if (employee != null) {
+			return employee;
+		}
+
+		StringBundler sb = new StringBundler(8);
+
+		sb.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		sb.append("department=");
+		sb.append(department);
+
+		sb.append(", position=");
+		sb.append(position);
+
+		sb.append(", level=");
+		sb.append(level);
+
+		sb.append("}");
+
+		throw new NoSuchEmployeeException(sb.toString());
+	}
+
+	/**
+	 * Returns the last employee in the ordered set where department = &#63; and position = &#63; and level = &#63;.
+	 *
+	 * @param department the department
+	 * @param position the position
+	 * @param level the level
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching employee, or <code>null</code> if a matching employee could not be found
+	 */
+	@Override
+	public Employee fetchByD_P_L_Last(
+		String department, String position, int level,
+		OrderByComparator<Employee> orderByComparator) {
+
+		int count = countByD_P_L(department, position, level);
+
+		if (count == 0) {
+			return null;
+		}
+
+		List<Employee> list = findByD_P_L(
+			department, position, level, count - 1, count, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the employees before and after the current employee in the ordered set where department = &#63; and position = &#63; and level = &#63;.
+	 *
+	 * @param employeeId the primary key of the current employee
+	 * @param department the department
+	 * @param position the position
+	 * @param level the level
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the previous, current, and next employee
+	 * @throws NoSuchEmployeeException if a employee with the primary key could not be found
+	 */
+	@Override
+	public Employee[] findByD_P_L_PrevAndNext(
+			long employeeId, String department, String position, int level,
+			OrderByComparator<Employee> orderByComparator)
+		throws NoSuchEmployeeException {
+
+		department = Objects.toString(department, "");
+		position = Objects.toString(position, "");
+
+		Employee employee = findByPrimaryKey(employeeId);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			Employee[] array = new EmployeeImpl[3];
+
+			array[0] = getByD_P_L_PrevAndNext(
+				session, employee, department, position, level,
+				orderByComparator, true);
+
+			array[1] = employee;
+
+			array[2] = getByD_P_L_PrevAndNext(
+				session, employee, department, position, level,
+				orderByComparator, false);
+
+			return array;
+		}
+		catch (Exception exception) {
+			throw processException(exception);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	protected Employee getByD_P_L_PrevAndNext(
+		Session session, Employee employee, String department, String position,
+		int level, OrderByComparator<Employee> orderByComparator,
+		boolean previous) {
+
+		StringBundler sb = null;
+
+		if (orderByComparator != null) {
+			sb = new StringBundler(
+				6 + (orderByComparator.getOrderByConditionFields().length * 3) +
+					(orderByComparator.getOrderByFields().length * 3));
+		}
+		else {
+			sb = new StringBundler(5);
+		}
+
+		sb.append(_SQL_SELECT_EMPLOYEE_WHERE);
+
+		boolean bindDepartment = false;
+
+		if (department.isEmpty()) {
+			sb.append(_FINDER_COLUMN_D_P_L_DEPARTMENT_3);
+		}
+		else {
+			bindDepartment = true;
+
+			sb.append(_FINDER_COLUMN_D_P_L_DEPARTMENT_2);
+		}
+
+		boolean bindPosition = false;
+
+		if (position.isEmpty()) {
+			sb.append(_FINDER_COLUMN_D_P_L_POSITION_3);
+		}
+		else {
+			bindPosition = true;
+
+			sb.append(_FINDER_COLUMN_D_P_L_POSITION_2);
+		}
+
+		sb.append(_FINDER_COLUMN_D_P_L_LEVEL_2);
+
+		if (orderByComparator != null) {
+			String[] orderByConditionFields =
+				orderByComparator.getOrderByConditionFields();
+
+			if (orderByConditionFields.length > 0) {
+				sb.append(WHERE_AND);
+			}
+
+			for (int i = 0; i < orderByConditionFields.length; i++) {
+				sb.append(_ORDER_BY_ENTITY_ALIAS);
+				sb.append(orderByConditionFields[i]);
+
+				if ((i + 1) < orderByConditionFields.length) {
+					if (orderByComparator.isAscending() ^ previous) {
+						sb.append(WHERE_GREATER_THAN_HAS_NEXT);
+					}
+					else {
+						sb.append(WHERE_LESSER_THAN_HAS_NEXT);
+					}
+				}
+				else {
+					if (orderByComparator.isAscending() ^ previous) {
+						sb.append(WHERE_GREATER_THAN);
+					}
+					else {
+						sb.append(WHERE_LESSER_THAN);
+					}
+				}
+			}
+
+			sb.append(ORDER_BY_CLAUSE);
+
+			String[] orderByFields = orderByComparator.getOrderByFields();
+
+			for (int i = 0; i < orderByFields.length; i++) {
+				sb.append(_ORDER_BY_ENTITY_ALIAS);
+				sb.append(orderByFields[i]);
+
+				if ((i + 1) < orderByFields.length) {
+					if (orderByComparator.isAscending() ^ previous) {
+						sb.append(ORDER_BY_ASC_HAS_NEXT);
+					}
+					else {
+						sb.append(ORDER_BY_DESC_HAS_NEXT);
+					}
+				}
+				else {
+					if (orderByComparator.isAscending() ^ previous) {
+						sb.append(ORDER_BY_ASC);
+					}
+					else {
+						sb.append(ORDER_BY_DESC);
+					}
+				}
+			}
+		}
+		else {
+			sb.append(EmployeeModelImpl.ORDER_BY_JPQL);
+		}
+
+		String sql = sb.toString();
+
+		Query query = session.createQuery(sql);
+
+		query.setFirstResult(0);
+		query.setMaxResults(2);
+
+		QueryPos queryPos = QueryPos.getInstance(query);
+
+		if (bindDepartment) {
+			queryPos.add(department);
+		}
+
+		if (bindPosition) {
+			queryPos.add(position);
+		}
+
+		queryPos.add(level);
+
+		if (orderByComparator != null) {
+			for (Object orderByConditionValue :
+					orderByComparator.getOrderByConditionValues(employee)) {
+
+				queryPos.add(orderByConditionValue);
+			}
+		}
+
+		List<Employee> list = query.list();
+
+		if (list.size() == 2) {
+			return list.get(1);
+		}
+		else {
+			return null;
+		}
+	}
+
+	/**
+	 * Removes all the employees where department = &#63; and position = &#63; and level = &#63; from the database.
+	 *
+	 * @param department the department
+	 * @param position the position
+	 * @param level the level
+	 */
+	@Override
+	public void removeByD_P_L(String department, String position, int level) {
+		for (Employee employee :
+				findByD_P_L(
+					department, position, level, QueryUtil.ALL_POS,
+					QueryUtil.ALL_POS, null)) {
+
+			remove(employee);
+		}
+	}
+
+	/**
+	 * Returns the number of employees where department = &#63; and position = &#63; and level = &#63;.
+	 *
+	 * @param department the department
+	 * @param position the position
+	 * @param level the level
+	 * @return the number of matching employees
+	 */
+	@Override
+	public int countByD_P_L(String department, String position, int level) {
+		department = Objects.toString(department, "");
+		position = Objects.toString(position, "");
+
+		FinderPath finderPath = _finderPathCountByD_P_L;
+
+		Object[] finderArgs = new Object[] {department, position, level};
+
+		Long count = (Long)finderCache.getResult(finderPath, finderArgs, this);
+
+		if (count == null) {
+			StringBundler sb = new StringBundler(4);
+
+			sb.append(_SQL_COUNT_EMPLOYEE_WHERE);
+
+			boolean bindDepartment = false;
+
+			if (department.isEmpty()) {
+				sb.append(_FINDER_COLUMN_D_P_L_DEPARTMENT_3);
+			}
+			else {
+				bindDepartment = true;
+
+				sb.append(_FINDER_COLUMN_D_P_L_DEPARTMENT_2);
+			}
+
+			boolean bindPosition = false;
+
+			if (position.isEmpty()) {
+				sb.append(_FINDER_COLUMN_D_P_L_POSITION_3);
+			}
+			else {
+				bindPosition = true;
+
+				sb.append(_FINDER_COLUMN_D_P_L_POSITION_2);
+			}
+
+			sb.append(_FINDER_COLUMN_D_P_L_LEVEL_2);
+
+			String sql = sb.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query query = session.createQuery(sql);
+
+				QueryPos queryPos = QueryPos.getInstance(query);
+
+				if (bindDepartment) {
+					queryPos.add(department);
+				}
+
+				if (bindPosition) {
+					queryPos.add(position);
+				}
+
+				queryPos.add(level);
+
+				count = (Long)query.uniqueResult();
+
+				finderCache.putResult(finderPath, finderArgs, count);
+			}
+			catch (Exception exception) {
+				throw processException(exception);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_D_P_L_DEPARTMENT_2 =
+		"employee.department = ? AND ";
+
+	private static final String _FINDER_COLUMN_D_P_L_DEPARTMENT_3 =
+		"(employee.department IS NULL OR employee.department = '') AND ";
+
+	private static final String _FINDER_COLUMN_D_P_L_POSITION_2 =
+		"employee.position = ? AND ";
+
+	private static final String _FINDER_COLUMN_D_P_L_POSITION_3 =
+		"(employee.position IS NULL OR employee.position = '') AND ";
+
+	private static final String _FINDER_COLUMN_D_P_L_LEVEL_2 =
+		"employee.level = ?";
+
 	private FinderPath _finderPathWithPaginationFindByE_S;
 	private FinderPath _finderPathWithPaginationCountByE_S;
 
@@ -3648,581 +4293,6 @@ public class EmployeePersistenceImpl
 	private static final String _FINDER_COLUMN_F_L_LASTNAME_3 =
 		"(employee.lastName IS NULL OR employee.lastName = '')";
 
-	private FinderPath _finderPathWithPaginationFindByP_L;
-	private FinderPath _finderPathWithoutPaginationFindByP_L;
-	private FinderPath _finderPathCountByP_L;
-
-	/**
-	 * Returns all the employees where position = &#63; and level = &#63;.
-	 *
-	 * @param position the position
-	 * @param level the level
-	 * @return the matching employees
-	 */
-	@Override
-	public List<Employee> findByP_L(String position, int level) {
-		return findByP_L(
-			position, level, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
-	}
-
-	/**
-	 * Returns a range of all the employees where position = &#63; and level = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>EmployeeModelImpl</code>.
-	 * </p>
-	 *
-	 * @param position the position
-	 * @param level the level
-	 * @param start the lower bound of the range of employees
-	 * @param end the upper bound of the range of employees (not inclusive)
-	 * @return the range of matching employees
-	 */
-	@Override
-	public List<Employee> findByP_L(
-		String position, int level, int start, int end) {
-
-		return findByP_L(position, level, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the employees where position = &#63; and level = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>EmployeeModelImpl</code>.
-	 * </p>
-	 *
-	 * @param position the position
-	 * @param level the level
-	 * @param start the lower bound of the range of employees
-	 * @param end the upper bound of the range of employees (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching employees
-	 */
-	@Override
-	public List<Employee> findByP_L(
-		String position, int level, int start, int end,
-		OrderByComparator<Employee> orderByComparator) {
-
-		return findByP_L(position, level, start, end, orderByComparator, true);
-	}
-
-	/**
-	 * Returns an ordered range of all the employees where position = &#63; and level = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>EmployeeModelImpl</code>.
-	 * </p>
-	 *
-	 * @param position the position
-	 * @param level the level
-	 * @param start the lower bound of the range of employees
-	 * @param end the upper bound of the range of employees (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @param useFinderCache whether to use the finder cache
-	 * @return the ordered range of matching employees
-	 */
-	@Override
-	public List<Employee> findByP_L(
-		String position, int level, int start, int end,
-		OrderByComparator<Employee> orderByComparator, boolean useFinderCache) {
-
-		position = Objects.toString(position, "");
-
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-			(orderByComparator == null)) {
-
-			if (useFinderCache) {
-				finderPath = _finderPathWithoutPaginationFindByP_L;
-				finderArgs = new Object[] {position, level};
-			}
-		}
-		else if (useFinderCache) {
-			finderPath = _finderPathWithPaginationFindByP_L;
-			finderArgs = new Object[] {
-				position, level, start, end, orderByComparator
-			};
-		}
-
-		List<Employee> list = null;
-
-		if (useFinderCache) {
-			list = (List<Employee>)finderCache.getResult(
-				finderPath, finderArgs, this);
-
-			if ((list != null) && !list.isEmpty()) {
-				for (Employee employee : list) {
-					if (!position.equals(employee.getPosition()) ||
-						(level != employee.getLevel())) {
-
-						list = null;
-
-						break;
-					}
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler sb = null;
-
-			if (orderByComparator != null) {
-				sb = new StringBundler(
-					4 + (orderByComparator.getOrderByFields().length * 2));
-			}
-			else {
-				sb = new StringBundler(4);
-			}
-
-			sb.append(_SQL_SELECT_EMPLOYEE_WHERE);
-
-			boolean bindPosition = false;
-
-			if (position.isEmpty()) {
-				sb.append(_FINDER_COLUMN_P_L_POSITION_3);
-			}
-			else {
-				bindPosition = true;
-
-				sb.append(_FINDER_COLUMN_P_L_POSITION_2);
-			}
-
-			sb.append(_FINDER_COLUMN_P_L_LEVEL_2);
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(
-					sb, _ORDER_BY_ENTITY_ALIAS, orderByComparator);
-			}
-			else {
-				sb.append(EmployeeModelImpl.ORDER_BY_JPQL);
-			}
-
-			String sql = sb.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query query = session.createQuery(sql);
-
-				QueryPos queryPos = QueryPos.getInstance(query);
-
-				if (bindPosition) {
-					queryPos.add(position);
-				}
-
-				queryPos.add(level);
-
-				list = (List<Employee>)QueryUtil.list(
-					query, getDialect(), start, end);
-
-				cacheResult(list);
-
-				if (useFinderCache) {
-					finderCache.putResult(finderPath, finderArgs, list);
-				}
-			}
-			catch (Exception exception) {
-				throw processException(exception);
-			}
-			finally {
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first employee in the ordered set where position = &#63; and level = &#63;.
-	 *
-	 * @param position the position
-	 * @param level the level
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching employee
-	 * @throws NoSuchEmployeeException if a matching employee could not be found
-	 */
-	@Override
-	public Employee findByP_L_First(
-			String position, int level,
-			OrderByComparator<Employee> orderByComparator)
-		throws NoSuchEmployeeException {
-
-		Employee employee = fetchByP_L_First(
-			position, level, orderByComparator);
-
-		if (employee != null) {
-			return employee;
-		}
-
-		StringBundler sb = new StringBundler(6);
-
-		sb.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		sb.append("position=");
-		sb.append(position);
-
-		sb.append(", level=");
-		sb.append(level);
-
-		sb.append("}");
-
-		throw new NoSuchEmployeeException(sb.toString());
-	}
-
-	/**
-	 * Returns the first employee in the ordered set where position = &#63; and level = &#63;.
-	 *
-	 * @param position the position
-	 * @param level the level
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching employee, or <code>null</code> if a matching employee could not be found
-	 */
-	@Override
-	public Employee fetchByP_L_First(
-		String position, int level,
-		OrderByComparator<Employee> orderByComparator) {
-
-		List<Employee> list = findByP_L(
-			position, level, 0, 1, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last employee in the ordered set where position = &#63; and level = &#63;.
-	 *
-	 * @param position the position
-	 * @param level the level
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching employee
-	 * @throws NoSuchEmployeeException if a matching employee could not be found
-	 */
-	@Override
-	public Employee findByP_L_Last(
-			String position, int level,
-			OrderByComparator<Employee> orderByComparator)
-		throws NoSuchEmployeeException {
-
-		Employee employee = fetchByP_L_Last(position, level, orderByComparator);
-
-		if (employee != null) {
-			return employee;
-		}
-
-		StringBundler sb = new StringBundler(6);
-
-		sb.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		sb.append("position=");
-		sb.append(position);
-
-		sb.append(", level=");
-		sb.append(level);
-
-		sb.append("}");
-
-		throw new NoSuchEmployeeException(sb.toString());
-	}
-
-	/**
-	 * Returns the last employee in the ordered set where position = &#63; and level = &#63;.
-	 *
-	 * @param position the position
-	 * @param level the level
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching employee, or <code>null</code> if a matching employee could not be found
-	 */
-	@Override
-	public Employee fetchByP_L_Last(
-		String position, int level,
-		OrderByComparator<Employee> orderByComparator) {
-
-		int count = countByP_L(position, level);
-
-		if (count == 0) {
-			return null;
-		}
-
-		List<Employee> list = findByP_L(
-			position, level, count - 1, count, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the employees before and after the current employee in the ordered set where position = &#63; and level = &#63;.
-	 *
-	 * @param employeeId the primary key of the current employee
-	 * @param position the position
-	 * @param level the level
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the previous, current, and next employee
-	 * @throws NoSuchEmployeeException if a employee with the primary key could not be found
-	 */
-	@Override
-	public Employee[] findByP_L_PrevAndNext(
-			long employeeId, String position, int level,
-			OrderByComparator<Employee> orderByComparator)
-		throws NoSuchEmployeeException {
-
-		position = Objects.toString(position, "");
-
-		Employee employee = findByPrimaryKey(employeeId);
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			Employee[] array = new EmployeeImpl[3];
-
-			array[0] = getByP_L_PrevAndNext(
-				session, employee, position, level, orderByComparator, true);
-
-			array[1] = employee;
-
-			array[2] = getByP_L_PrevAndNext(
-				session, employee, position, level, orderByComparator, false);
-
-			return array;
-		}
-		catch (Exception exception) {
-			throw processException(exception);
-		}
-		finally {
-			closeSession(session);
-		}
-	}
-
-	protected Employee getByP_L_PrevAndNext(
-		Session session, Employee employee, String position, int level,
-		OrderByComparator<Employee> orderByComparator, boolean previous) {
-
-		StringBundler sb = null;
-
-		if (orderByComparator != null) {
-			sb = new StringBundler(
-				5 + (orderByComparator.getOrderByConditionFields().length * 3) +
-					(orderByComparator.getOrderByFields().length * 3));
-		}
-		else {
-			sb = new StringBundler(4);
-		}
-
-		sb.append(_SQL_SELECT_EMPLOYEE_WHERE);
-
-		boolean bindPosition = false;
-
-		if (position.isEmpty()) {
-			sb.append(_FINDER_COLUMN_P_L_POSITION_3);
-		}
-		else {
-			bindPosition = true;
-
-			sb.append(_FINDER_COLUMN_P_L_POSITION_2);
-		}
-
-		sb.append(_FINDER_COLUMN_P_L_LEVEL_2);
-
-		if (orderByComparator != null) {
-			String[] orderByConditionFields =
-				orderByComparator.getOrderByConditionFields();
-
-			if (orderByConditionFields.length > 0) {
-				sb.append(WHERE_AND);
-			}
-
-			for (int i = 0; i < orderByConditionFields.length; i++) {
-				sb.append(_ORDER_BY_ENTITY_ALIAS);
-				sb.append(orderByConditionFields[i]);
-
-				if ((i + 1) < orderByConditionFields.length) {
-					if (orderByComparator.isAscending() ^ previous) {
-						sb.append(WHERE_GREATER_THAN_HAS_NEXT);
-					}
-					else {
-						sb.append(WHERE_LESSER_THAN_HAS_NEXT);
-					}
-				}
-				else {
-					if (orderByComparator.isAscending() ^ previous) {
-						sb.append(WHERE_GREATER_THAN);
-					}
-					else {
-						sb.append(WHERE_LESSER_THAN);
-					}
-				}
-			}
-
-			sb.append(ORDER_BY_CLAUSE);
-
-			String[] orderByFields = orderByComparator.getOrderByFields();
-
-			for (int i = 0; i < orderByFields.length; i++) {
-				sb.append(_ORDER_BY_ENTITY_ALIAS);
-				sb.append(orderByFields[i]);
-
-				if ((i + 1) < orderByFields.length) {
-					if (orderByComparator.isAscending() ^ previous) {
-						sb.append(ORDER_BY_ASC_HAS_NEXT);
-					}
-					else {
-						sb.append(ORDER_BY_DESC_HAS_NEXT);
-					}
-				}
-				else {
-					if (orderByComparator.isAscending() ^ previous) {
-						sb.append(ORDER_BY_ASC);
-					}
-					else {
-						sb.append(ORDER_BY_DESC);
-					}
-				}
-			}
-		}
-		else {
-			sb.append(EmployeeModelImpl.ORDER_BY_JPQL);
-		}
-
-		String sql = sb.toString();
-
-		Query query = session.createQuery(sql);
-
-		query.setFirstResult(0);
-		query.setMaxResults(2);
-
-		QueryPos queryPos = QueryPos.getInstance(query);
-
-		if (bindPosition) {
-			queryPos.add(position);
-		}
-
-		queryPos.add(level);
-
-		if (orderByComparator != null) {
-			for (Object orderByConditionValue :
-					orderByComparator.getOrderByConditionValues(employee)) {
-
-				queryPos.add(orderByConditionValue);
-			}
-		}
-
-		List<Employee> list = query.list();
-
-		if (list.size() == 2) {
-			return list.get(1);
-		}
-		else {
-			return null;
-		}
-	}
-
-	/**
-	 * Removes all the employees where position = &#63; and level = &#63; from the database.
-	 *
-	 * @param position the position
-	 * @param level the level
-	 */
-	@Override
-	public void removeByP_L(String position, int level) {
-		for (Employee employee :
-				findByP_L(
-					position, level, QueryUtil.ALL_POS, QueryUtil.ALL_POS,
-					null)) {
-
-			remove(employee);
-		}
-	}
-
-	/**
-	 * Returns the number of employees where position = &#63; and level = &#63;.
-	 *
-	 * @param position the position
-	 * @param level the level
-	 * @return the number of matching employees
-	 */
-	@Override
-	public int countByP_L(String position, int level) {
-		position = Objects.toString(position, "");
-
-		FinderPath finderPath = _finderPathCountByP_L;
-
-		Object[] finderArgs = new Object[] {position, level};
-
-		Long count = (Long)finderCache.getResult(finderPath, finderArgs, this);
-
-		if (count == null) {
-			StringBundler sb = new StringBundler(3);
-
-			sb.append(_SQL_COUNT_EMPLOYEE_WHERE);
-
-			boolean bindPosition = false;
-
-			if (position.isEmpty()) {
-				sb.append(_FINDER_COLUMN_P_L_POSITION_3);
-			}
-			else {
-				bindPosition = true;
-
-				sb.append(_FINDER_COLUMN_P_L_POSITION_2);
-			}
-
-			sb.append(_FINDER_COLUMN_P_L_LEVEL_2);
-
-			String sql = sb.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query query = session.createQuery(sql);
-
-				QueryPos queryPos = QueryPos.getInstance(query);
-
-				if (bindPosition) {
-					queryPos.add(position);
-				}
-
-				queryPos.add(level);
-
-				count = (Long)query.uniqueResult();
-
-				finderCache.putResult(finderPath, finderArgs, count);
-			}
-			catch (Exception exception) {
-				throw processException(exception);
-			}
-			finally {
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	private static final String _FINDER_COLUMN_P_L_POSITION_2 =
-		"employee.position = ? AND ";
-
-	private static final String _FINDER_COLUMN_P_L_POSITION_3 =
-		"(employee.position IS NULL OR employee.position = '') AND ";
-
-	private static final String _FINDER_COLUMN_P_L_LEVEL_2 =
-		"employee.level = ?";
-
 	private FinderPath _finderPathFetchByM_S;
 	private FinderPath _finderPathCountByM_S;
 
@@ -5143,6 +5213,31 @@ public class EmployeePersistenceImpl
 			new String[] {Long.class.getName(), Long.class.getName()},
 			new String[] {"companyId", "employeeId"}, false);
 
+		_finderPathWithPaginationFindByD_P_L = new FinderPath(
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByD_P_L",
+			new String[] {
+				String.class.getName(), String.class.getName(),
+				Integer.class.getName(), Integer.class.getName(),
+				Integer.class.getName(), OrderByComparator.class.getName()
+			},
+			new String[] {"department", "position", "level"}, true);
+
+		_finderPathWithoutPaginationFindByD_P_L = new FinderPath(
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByD_P_L",
+			new String[] {
+				String.class.getName(), String.class.getName(),
+				Integer.class.getName()
+			},
+			new String[] {"department", "position", "level"}, true);
+
+		_finderPathCountByD_P_L = new FinderPath(
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByD_P_L",
+			new String[] {
+				String.class.getName(), String.class.getName(),
+				Integer.class.getName()
+			},
+			new String[] {"department", "position", "level"}, false);
+
 		_finderPathWithPaginationFindByE_S = new FinderPath(
 			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByE_S",
 			new String[] {
@@ -5176,25 +5271,6 @@ public class EmployeePersistenceImpl
 			new String[] {String.class.getName(), String.class.getName()},
 			new String[] {"firstName", "lastName"}, false);
 
-		_finderPathWithPaginationFindByP_L = new FinderPath(
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByP_L",
-			new String[] {
-				String.class.getName(), Integer.class.getName(),
-				Integer.class.getName(), Integer.class.getName(),
-				OrderByComparator.class.getName()
-			},
-			new String[] {"position", "level"}, true);
-
-		_finderPathWithoutPaginationFindByP_L = new FinderPath(
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByP_L",
-			new String[] {String.class.getName(), Integer.class.getName()},
-			new String[] {"position", "level"}, true);
-
-		_finderPathCountByP_L = new FinderPath(
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByP_L",
-			new String[] {String.class.getName(), Integer.class.getName()},
-			new String[] {"position", "level"}, false);
-
 		_finderPathFetchByM_S = new FinderPath(
 			FINDER_CLASS_NAME_ENTITY, "fetchByM_S",
 			new String[] {Long.class.getName(), Integer.class.getName()},
@@ -5213,32 +5289,6 @@ public class EmployeePersistenceImpl
 		EmployeeUtil.setPersistence(null);
 
 		entityCache.removeCache(EmployeeImpl.class.getName());
-	}
-
-	@Override
-	@Reference(
-		target = ManagementPersistenceConstants.SERVICE_CONFIGURATION_FILTER,
-		unbind = "-"
-	)
-	public void setConfiguration(Configuration configuration) {
-	}
-
-	@Override
-	@Reference(
-		target = ManagementPersistenceConstants.ORIGIN_BUNDLE_SYMBOLIC_NAME_FILTER,
-		unbind = "-"
-	)
-	public void setDataSource(DataSource dataSource) {
-		super.setDataSource(dataSource);
-	}
-
-	@Override
-	@Reference(
-		target = ManagementPersistenceConstants.ORIGIN_BUNDLE_SYMBOLIC_NAME_FILTER,
-		unbind = "-"
-	)
-	public void setSessionFactory(SessionFactory sessionFactory) {
-		super.setSessionFactory(sessionFactory);
 	}
 
 	@Reference
