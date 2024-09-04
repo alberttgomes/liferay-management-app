@@ -1,7 +1,7 @@
 services:
 
   database:
-    image: "mysql:latest"
+    image: "mysql:8.0"
     container_name: "management-database"
     command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
     environment:
@@ -32,5 +32,5 @@ services:
       - "8000:8000"
     user: root:root
     volumes:
-      - ./bundles/osgi/modules/:/opt/liferay/osgi/modules
+#      - ./bundles/osgi/modules/:/opt/liferay/deploy/
       - ./docker-compose/liferay/files/:/mnt/liferay/files/
