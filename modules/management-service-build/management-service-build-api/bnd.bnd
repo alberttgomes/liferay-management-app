@@ -1,8 +1,0 @@
-Bundle-Name: management-service-build-api
-Bundle-SymbolicName: management.service.build.api
-Bundle-Version: 1.0.0
-Export-Package:\
-    com.management.app.*
--check: EXPORTS
--includeresource: META-INF/service.xml=../management-service-build-service/service.xml
--dsannotations-options: inherit

@@ -1,0 +1,14 @@
+dependencies {
+	api project(":modules:management-service-build:management-service-build-api")
+
+	compileOnly group: "com.liferay.portal", name: "release.dxp.api"
+
+	compileOnly group: "org.hibernate", name: "hibernate-core", version: "5.4.32.Final"
+	compileOnly group: "org.hibernate", name: "hibernate-annotations", version: "5.4.32.Final"
+}
+
+buildService {
+	apiDir = "../management-service-build-api/src/main/java"
+}
+
+group = "management.service.build"
