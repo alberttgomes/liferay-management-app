@@ -5,7 +5,7 @@ dependencies {
 
 	restBuilder group: "com.liferay", name: "com.liferay.portal.tools.rest.builder", version: "1.0.222"
 
-	compileOnly project(path: ":modules:management-service-build:management-service-build-service")
+	compileOnly project(path: ":modules:management-rest:management-api")
 }
 
 group = "management"
