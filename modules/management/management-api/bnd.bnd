@@ -1,9 +1,9 @@
-Bundle-Name: management-service-api
-Bundle-SymbolicName: management.service.api
+Bundle-Name: management-api
+Bundle-SymbolicName: management.api
 Bundle-Version: 1.0.0
 Export-Package:\
     com.management.app.model,\
     com.management.app.exception,\
-    com.management.app.service.*
+    com.management.app.service.*,\
 -check: EXPORTS
 -includeresource: META-INF/service.xml=../management-service/service.xml

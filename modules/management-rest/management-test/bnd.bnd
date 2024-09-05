@@ -1,4 +1,4 @@
-Bundle-Name: management-test
+Bundle-Name: management-rest-test
 Bundle-SymbolicName: management.test
 Bundle-Version: 1.0.0
 -includeresource: management.client.jar=../management-client/build/libs/management.client-1.0.0.jar;lib:=true

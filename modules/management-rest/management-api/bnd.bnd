@@ -1,6 +1,6 @@
-Bundle-Name: management-api
-Bundle-SymbolicName: management.api
+Bundle-Name: management-rest-api
+Bundle-SymbolicName: management.rest.api
 Bundle-Version: 1.0.0
 Export-Package:\
 	management.dto.v1_0,\
-	management.resource.v1_0
+	management.resource.v1_0,\
