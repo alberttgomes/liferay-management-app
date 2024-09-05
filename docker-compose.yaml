@@ -32,5 +32,5 @@ services:
       - "8000:8000"
     user: root:root
     volumes:
-#      - ./bundles/osgi/modules/:/opt/liferay/deploy/
+      - ./bundles/osgi/modules/:/opt/liferay/deploy/
       - ./docker-compose/liferay/files/:/mnt/liferay/files/
