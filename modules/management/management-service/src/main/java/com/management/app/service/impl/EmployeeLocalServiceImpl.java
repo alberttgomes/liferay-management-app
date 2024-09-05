@@ -209,7 +209,6 @@ public class EmployeeLocalServiceImpl extends EmployeeLocalServiceBaseImpl {
 		employee.setGroupId(user.getGroupId());
 		employee.setUserId(user.getUserId());
 
-		employee.setCompanyId(companyId);
 		employee.setMvccVersion(0);
 
 		if (isManager) {

@@ -55,18 +55,12 @@ public class EmployeeResourceImpl extends BaseEmployeeResourceImpl {
 	@Override
 	public Employee getEmployeeById(Integer employeeId) throws Exception {
 		return _employeeResourceDTOConverter.toDTO(
-				_employeeLocalService.fetchEmployee(employeeId));
+				_employeeLocalService.getEmployee(employeeId));
 	}
 
 	@Override
 	public Employee postEmployee(Employee employee) throws Exception {
 		User user = PortalUtil.getUser(contextHttpServletRequest);
-
-		ThemeDisplay themeDisplay = (ThemeDisplay)
-				contextHttpServletRequest.getAttribute(
-						WebKeys.THEME_DISPLAY);
-
-		long companyId = themeDisplay.getCompanyId();
 
 		int status = Math.toIntExact(employee.getStatus());
 		int level = Math.toIntExact(employee.getLevel());
@@ -76,7 +70,7 @@ public class EmployeeResourceImpl extends BaseEmployeeResourceImpl {
 						employee.getFirstName(), employee.getLastName(),
 						employee.getDepartment(), employee.getPosition(),
 						level, employee.getStateCode(), status,
-						0, employee.getIsManager(), user, companyId));
+						0, employee.getIsManager(), user, 0));
 	}
 
 	@Override
