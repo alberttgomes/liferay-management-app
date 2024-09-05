@@ -12,7 +12,7 @@ package com.management.app.service.persistence.impl.constants;
 public class ManagementPersistenceConstants {
 
 	public static final String BUNDLE_SYMBOLIC_NAME =
-		"com.management.app.service";
+		"com.management.service";
 
 	public static final String ORIGIN_BUNDLE_SYMBOLIC_NAME_FILTER =
 		"(origin.bundle.symbolic.name=" + BUNDLE_SYMBOLIC_NAME + ")";
