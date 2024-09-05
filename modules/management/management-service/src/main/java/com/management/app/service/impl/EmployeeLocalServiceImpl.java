@@ -224,8 +224,7 @@ public class EmployeeLocalServiceImpl extends EmployeeLocalServiceBaseImpl {
 
 	private void _createManager(
 			long companyId, long employeeId, long groupId) {
-		_log.debug("Employee also is a manager %s"
-				.formatted(employeeId));
+		_log.debug("Employee also is a manager %s" + employeeId);
 
 		Manager manager = _managerLocalService.createManager(
 				CounterLocalServiceUtil.increment());
