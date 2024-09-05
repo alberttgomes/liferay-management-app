@@ -2,5 +2,8 @@ Bundle-Name: management-api
 Bundle-SymbolicName: management.api
 Bundle-Version: 1.0.0
 Export-Package:\
-	management.dto.v1_0,\
-	management.resource.v1_0
+    com.management.app.model,\
+    com.management.app.exception,\
+    com.management.app.service.*,\
+-check: EXPORTS
+-includeresource: META-INF/service.xml=../management-service/service.xml

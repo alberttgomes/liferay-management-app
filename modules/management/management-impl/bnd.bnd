@@ -1,4 +1,0 @@
-Bundle-Name: management-impl
-Bundle-SymbolicName: management.impl
-Bundle-Version: 1.0.0
--dsannotations-options: inherit
