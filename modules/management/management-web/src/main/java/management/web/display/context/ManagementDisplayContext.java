@@ -15,6 +15,10 @@ public class ManagementDisplayContext {
         this._httpServletResponse = httpServletResponse;
     }
 
+    public String getName() {
+        return "ManagementDisplayContext";
+    }
+
     private final HttpServletRequest _httpServletRequest;
     private final HttpServletResponse _httpServletResponse;
 

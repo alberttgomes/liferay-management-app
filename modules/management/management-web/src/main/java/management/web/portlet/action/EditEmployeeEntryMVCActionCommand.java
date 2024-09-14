@@ -1,6 +1,8 @@
 package management.web.portlet.action;
 
 import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.portlet.bridges.mvc.BaseMVCActionCommand;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCActionCommand;
@@ -15,12 +17,13 @@ import com.management.app.service.EmployeeLocalService;
 
 import management.web.constants.ManagementPortletKeys;
 
-import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.Reference;
-
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
+
 import java.util.Locale;
+
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
 
 /**
  * @author Albert Cabral
@@ -28,11 +31,11 @@ import java.util.Locale;
 @Component(
         property = {
             "javax.portlet.name=" + ManagementPortletKeys.MANAGEMENT_WEB,
-            "mvc.command.name=/management/add_employee_entry"
+            "mvc.command.name=/management/edit_employee_management"
         },
         service = MVCActionCommand.class
 )
-public class AddEmployeeEntryMVCActionCommand extends BaseMVCActionCommand {
+public class EditEmployeeEntryMVCActionCommand extends BaseMVCActionCommand {
 
     @Override
     protected void doProcessAction(
@@ -43,10 +46,25 @@ public class AddEmployeeEntryMVCActionCommand extends BaseMVCActionCommand {
 
         try {
             if (cmd.equals(Constants.ADD)) {
-                if (_addEmployee(actionRequest) == null) {
-                    throw new Exception(
-                            "Unable to create employee");
+                Employee employee = _addEmployee(actionRequest);
+
+                if (employee != null) {
+                    _log.debug("Employee entry was completed with success " +
+                            employee);
                 }
+                else {
+                    _log.error("An error occurred during " +
+                            EditEmployeeEntryMVCActionCommand.class + " mvc action.");
+                }
+            }
+            else if (cmd.equals(Constants.DELETE)) {
+                long employeeId = ParamUtil.getLong(
+                        actionRequest, "employeeId");
+
+                _employeeLocalService.deleteEmployee(employeeId);
+            }
+            else {
+                throw new Exception("Unknown command: " + cmd);
             }
         }
         catch (Exception exception) {
@@ -60,11 +78,11 @@ public class AddEmployeeEntryMVCActionCommand extends BaseMVCActionCommand {
 
         String department = ParamUtil.getString(actionRequest, "department");
         String firstName = ParamUtil.getString(actionRequest, "firstName");
-        String lastName = ParamUtil.getString(actionRequest, "lastName");
         boolean isManager = ParamUtil.getBoolean(actionRequest, "isManager");
-        String position = ParamUtil.getString(actionRequest, "position");
+        String lastName = ParamUtil.getString(actionRequest, "lastName");
         int level = ParamUtil.getInteger(actionRequest, "level");
         long managerIdPK = ParamUtil.getInteger(actionRequest, "managerIdPK");
+        String position = ParamUtil.getString(actionRequest, "position");
 
         Locale locale = actionRequest.getLocale();
 
@@ -75,6 +93,9 @@ public class AddEmployeeEntryMVCActionCommand extends BaseMVCActionCommand {
                 level, locale.getCountry(), WorkflowConstants.STATUS_APPROVED,
                 managerIdPK, isManager, user, CompanyThreadLocal.getCompanyId());
     }
+
+    private static final Log _log = LogFactoryUtil.getLog(
+            EditEmployeeEntryMVCActionCommand.class);
 
     @Reference
     private EmployeeLocalService _employeeLocalService;

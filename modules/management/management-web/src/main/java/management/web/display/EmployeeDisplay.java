@@ -10,6 +10,9 @@ import com.management.app.service.EmployeeLocalServiceUtil;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
+/**
+ * @author Albert Cabral
+ */
 public class EmployeeDisplay {
 
     public static EmployeeDisplay of(Employee employee) {
