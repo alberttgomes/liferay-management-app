@@ -12,10 +12,11 @@ import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.json.JSONUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.model.Address;
 import com.liferay.portal.kernel.model.User;
-import com.liferay.portal.kernel.util.ArrayUtil;
-import com.liferay.portal.kernel.util.HashMapBuilder;
-import com.liferay.portal.kernel.util.StringBundler;
+import com.liferay.portal.kernel.search.*;
+import com.liferay.portal.kernel.service.ClassNameLocalServiceUtil;
+import com.liferay.portal.kernel.util.*;
 
 import com.management.app.exception.NoSuchEmployeeException;
 import com.management.app.exception.NoSuchManagerException;
@@ -25,6 +26,7 @@ import com.management.app.service.ManagerLocalService;
 import com.management.app.service.base.EmployeeLocalServiceBaseImpl;
 import com.management.app.service.util.EmployeeStatusConstant;
 
+import java.io.Serializable;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -187,6 +189,113 @@ public class EmployeeLocalServiceImpl extends EmployeeLocalServiceBaseImpl {
 							employeeId, runtimeException);
 		}
 
+	}
+
+	@Override
+	public BaseModelSearchResult<Employee> searchEmployees(
+			long companyId, String className, long classPK, String keywords,
+			LinkedHashMap<String, Object> params, int start, int end, Sort sort)
+		throws PortalException {
+
+		SearchContext searchContext = buildSearchContext(
+				companyId, className, classPK, keywords, params, start, end, sort);
+
+		return searchEmployees(searchContext);
+	}
+
+	protected SearchContext buildSearchContext(
+			long companyId, String className, long classPK, String keywords,
+			LinkedHashMap<String, Object> params, int start, int end, Sort sort) {
+
+		SearchContext searchContext = new SearchContext();
+
+
+		searchContext.setAttributes(
+				HashMapBuilder.<String, Serializable>put(
+						Field.CLASS_NAME_ID,
+						ClassNameLocalServiceUtil.getClassNameId(className)
+				).put(
+						Field.CLASS_PK, classPK
+				).put(
+						Field.NAME, keywords
+				).put(
+						"department", keywords
+				).put(
+						"name", params
+				).put(
+						"position", keywords
+				).put(
+						"screenName", keywords
+				).build());
+		searchContext.setCompanyId(companyId);
+		searchContext.setEnd(end);
+
+		if (Validator.isNotNull(keywords)) {
+			searchContext.setKeywords(keywords);
+		}
+
+		if (sort != null) {
+			searchContext.setSorts(sort);
+		}
+
+		searchContext.setStart(start);
+
+		QueryConfig queryConfig = searchContext.getQueryConfig();
+
+		queryConfig.setHighlightEnabled(false);
+		queryConfig.setScoreEnabled(false);
+
+		return searchContext;
+	}
+
+	protected List<Employee> getEmployees(Hits hits) throws PortalException {
+		List<Document> documents = hits.toList();
+
+		List<Employee> employees = new ArrayList<>(documents.size());
+
+		for (Document document : documents) {
+			long addressId = GetterUtil.getLong(
+					document.get(Field.ENTRY_CLASS_PK));
+
+			Employee employee = fetchEmployee(addressId);
+
+			if (employee == null) {
+				employees = null;
+
+				Indexer<Address> indexer = IndexerRegistryUtil.getIndexer(
+						Address.class);
+
+				long companyId = GetterUtil.getLong(
+						document.get(Field.COMPANY_ID));
+
+				indexer.delete(companyId, document.getUID());
+			}
+			else if (employees != null) {
+				employees.add(employee);
+			}
+		}
+
+		return employees;
+	}
+
+	protected BaseModelSearchResult<Employee> searchEmployees(SearchContext searchContext)
+		throws PortalException {
+
+		Indexer<Employee> indexer = IndexerRegistryUtil.nullSafeGetIndexer(
+				Employee.class);
+
+		for (int i = 0; i < 10; i++) {
+			Hits hits = indexer.search(searchContext);
+
+			List<Employee> employees = getEmployees(hits);
+
+			if (employees != null) {
+				return new BaseModelSearchResult<>(employees, hits.getLength());
+			}
+		}
+
+		throw new SearchException(
+				"Unable to find any employees");
 	}
 
 	private Employee _addEmployee(

@@ -11,6 +11,7 @@ import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.model.PersistedModel;
 import com.liferay.portal.kernel.util.OrderByComparator;
 
+import com.management.app.exception.NoSuchEmployeeException;
 import com.management.app.model.Employee;
 
 import java.io.Serializable;
@@ -364,6 +365,17 @@ public class EmployeeLocalServiceUtil {
 		throws PortalException {
 
 		return getService().getPersistedModel(primaryKeyObj);
+	}
+
+	public static com.liferay.portal.kernel.search.BaseModelSearchResult
+			<Employee> searchAddresses(
+			long companyId, String className, long classPK, String keywords,
+			java.util.LinkedHashMap<String, Object> params, int start,
+			int end, com.liferay.portal.kernel.search.Sort sort)
+		throws PortalException {
+
+		return getService().searchEmployees(
+				companyId, className, classPK, keywords, params, start, end, sort);
 	}
 
 	/**
