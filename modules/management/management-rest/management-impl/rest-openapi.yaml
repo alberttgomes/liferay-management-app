@@ -7,16 +7,10 @@ components:
                 employeeId:
                     format: int64
                     type: integer
-                companyId:
-                    format: int64
-                    type: integer
                 department:
                     type: string
                 firstName:
                     type: string
-                groupId:
-                    format: int64
-                    type: integer
                 lastName:
                     type: string
                 position:
@@ -32,9 +26,6 @@ components:
                 stateCode:
                     type: string
                 status:
-                    format: int64
-                    type: integer
-                userId:
                     format: int64
                     type: integer
             type: object
