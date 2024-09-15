@@ -68,8 +68,8 @@ public class ManagerLocalServiceUtil {
 		throws com.management.app.exception.NoSuchEmployeeException {
 
 		return getService().createManager(
-			groupId, companyId, employeeIdPK, modifiedDate, createDate,
-			mvccVersion);
+			groupId, companyId, employeeIdPK,
+                mvccVersion);
 	}
 
 	/**

@@ -75,8 +75,8 @@ public interface EmployeeLocalService
 	public Employee addEmployee(
 			String firstName, String lastName, String department,
 			String position, int level, String stateCode, int status,
-			long managerIdPK, boolean isManager, User user, long companyId)
-		throws NoSuchManagerException;
+			long managerIdPK, boolean isManager, User user)
+            throws PortalException;
 
 	/**
 	 * Creates a new employee with the primary key. Does not add the employee to the database.

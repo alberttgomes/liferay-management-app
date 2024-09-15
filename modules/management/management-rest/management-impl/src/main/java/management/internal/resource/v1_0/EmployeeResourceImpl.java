@@ -71,7 +71,7 @@ public class EmployeeResourceImpl extends BaseEmployeeResourceImpl {
 						employee.getFirstName(), employee.getLastName(),
 						employee.getDepartment(), employee.getPosition(),
 						level, employee.getStateCode(), status,
-						0, employee.getIsManager(), user, 0));
+						0, employee.getIsManager(), user));
 	}
 
 	@Override

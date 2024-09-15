@@ -6,6 +6,7 @@
 package com.management.app.service;
 
 import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.search.BaseModelSearchResult;
 import com.liferay.portal.kernel.search.Sort;
 import com.liferay.portal.kernel.service.ServiceWrapper;
@@ -56,13 +57,12 @@ public class EmployeeLocalServiceWrapper
     public com.management.app.model.Employee addEmployee(
             String firstName, String lastName, String department,
             String position, int level, String stateCode, int status,
-            long managerIdPK, boolean isManager,
-            com.liferay.portal.kernel.model.User user, long companyId)
-            throws com.management.app.exception.NoSuchManagerException {
+            long managerIdPK, boolean isManager, User user)
+        throws PortalException {
 
         return _employeeLocalService.addEmployee(
                 firstName, lastName, department, position, level, stateCode, status,
-                managerIdPK, isManager, user, companyId);
+                managerIdPK, isManager, user);
     }
 
     /**
