@@ -39,25 +39,18 @@ public class ManagerLocalServiceImpl extends ManagerLocalServiceBaseImpl {
 			long groupId, long companyId, long employeeIdPK, long mvccVersion)
 		throws NoSuchEmployeeException {
 
-        try {
-			long managerId = CounterLocalServiceUtil.increment();
+		long managerId = CounterLocalServiceUtil.increment();
 
-			_validate(employeeIdPK);
+		Manager manager = managerPersistence.create(managerId);
 
-			Manager manager = managerPersistence.create(managerId);
+		manager.setEmployeeIdPK(employeeIdPK);
+		manager.setGroupId(groupId);
+		manager.setCompanyId(companyId);
+		manager.setMvccVersion(mvccVersion);
+		manager.setCreateDate(new Date());
+		manager.setModifiedDate(new Date());
 
-			manager.setEmployeeIdPK(employeeIdPK);
-			manager.setGroupId(groupId);
-			manager.setCompanyId(companyId);
-			manager.setMvccVersion(mvccVersion);
-			manager.setCreateDate(new Date());
-			manager.setModifiedDate(new Date());
-
-			return managerPersistence.update(manager);
-        }
-		catch (PortalException portalException) {
-            throw new NoSuchEmployeeException(portalException);
-        }
+		return managerPersistence.update(manager);
 
 	}
 
