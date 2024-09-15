@@ -6,7 +6,6 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.portlet.bridges.mvc.BaseMVCActionCommand;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCActionCommand;
-import com.liferay.portal.kernel.security.auth.CompanyThreadLocal;
 import com.liferay.portal.kernel.util.Constants;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.PortalUtil;
@@ -91,7 +90,7 @@ public class EditEmployeeEntryMVCActionCommand extends BaseMVCActionCommand {
         return _employeeLocalService.addEmployee(
                 firstName, lastName, department, position,
                 level, locale.getCountry(), WorkflowConstants.STATUS_APPROVED,
-                managerIdPK, isManager, user, CompanyThreadLocal.getCompanyId());
+                managerIdPK, isManager, user);
     }
 
     private static final Log _log = LogFactoryUtil.getLog(

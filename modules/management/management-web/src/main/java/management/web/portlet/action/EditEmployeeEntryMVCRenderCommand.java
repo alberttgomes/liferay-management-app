@@ -40,7 +40,7 @@ public class EditEmployeeEntryMVCRenderCommand implements MVCRenderCommand {
             return "/error.jsp";
         }
 
-        return "/management/edit_employee_entry.jsp";
+        return "/management/employee_entry.jsp";
     }
 
 }
