@@ -17,12 +17,12 @@ services:
       - ./docker-compose/database/dump/*.sql:/docker-entrypoint
 
   elasticsearch:
-    image: elasticsearch/7.17.17
+    image: elasticsearch:7.17.17
     container_name: "management_elasticsearch"
     environment:
       cluster-name: "LiferayManagementCluster"
     ports:
-      - "92000:92000"
+      - "9200:9200"
 
   liferay:
     build:
