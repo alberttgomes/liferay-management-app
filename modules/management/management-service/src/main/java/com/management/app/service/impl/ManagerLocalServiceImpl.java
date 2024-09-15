@@ -12,15 +12,13 @@ import com.liferay.portal.aop.AopService;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.security.auth.CompanyThreadLocal;
 import com.management.app.exception.NoSuchEmployeeException;
 import com.management.app.model.Employee;
 import com.management.app.model.Manager;
 import com.management.app.service.EmployeeLocalService;
-import com.management.app.service.EmployeeService;
+import com.management.app.service.EmployeeLocalServiceUtil;
 import com.management.app.service.base.ManagerLocalServiceBaseImpl;
 
-import com.management.app.service.persistence.ManagerPersistence;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
@@ -38,14 +36,13 @@ public class ManagerLocalServiceImpl extends ManagerLocalServiceBaseImpl {
 
 	@Override
 	public Manager createManager(
-			long groupId, long companyId, long employeeIdPK, Date modifiedDate,
-			Date createDate, long mvccVersion)
+			long groupId, long companyId, long employeeIdPK, long mvccVersion)
 		throws NoSuchEmployeeException {
 
         try {
 			long managerId = CounterLocalServiceUtil.increment();
 
-			_validate(employeeIdPK, groupId);
+			_validate(employeeIdPK);
 
 			Manager manager = managerPersistence.create(managerId);
 
@@ -67,49 +64,43 @@ public class ManagerLocalServiceImpl extends ManagerLocalServiceBaseImpl {
 	@Override
 	public Manager fetchManagerByFirstNameAndLastName(
 			String firstName, String lastName) throws Exception {
-//		List<Employee> employees = _employeeLocalService.getEmployees(-1, -1);
-//
-//		if (employees.isEmpty()) {
-//			return null;
-//		}
-//
-//		Manager manager = null;
-//
-//		for (Employee employee : employees) {
-//			if (firstName.equals(employee.getFirstName()) &&
-//					lastName.equals(employee.getLastName())) {
-//
-//				_log.debug("Returning manager by full name " +
-//						employee.getFirstName() + StringPool.SPACE + employee.getLastName());
-//
-//				manager = managerPersistence.fetchBymanagerId(
-//						employee.getManagerIdPK(), employee.getCompanyId());
-//
-//			}
-//		}
+		List<Employee> employees = EmployeeLocalServiceUtil.getEmployees(-1, -1);
+
+		if (employees.isEmpty()) {
+			return null;
+		}
+
+		for (Employee employee : employees) {
+			if (firstName.equals(employee.getFirstName()) &&
+					lastName.equals(employee.getLastName())) {
+
+				_log.debug("Returning manager by full name " +
+						employee.getFirstName() + StringPool.SPACE + employee.getLastName());
+
+				return managerPersistence.fetchByE_M(
+						employee.getEmployeeId(), employee.getCompanyId());
+
+			}
+		}
 
 		return null;
 	}
 
-	private void _validate(long employeeId, long managerId)
-		throws PortalException {
+	private void _validate(long employeeId) throws PortalException {
+		try {
+			Employee employee = EmployeeLocalServiceUtil.fetchEmployee(employeeId);
 
-//		try {
-//			if (_employeeService.) == null) {
-//				throw new NoSuchEmployeeException(
-//						"No such employee with the primary key " + employeeId);
-//			}
-//		}
-//		catch (PortalException portalException) {
-//			throw new NoSuchEmployeeException(portalException.getMessage());
-//		}
-
+			if (employee == null) {
+				throw new NoSuchEmployeeException(
+						"No such employee with the primary key " + employeeId);
+			}
+		}
+		catch (PortalException portalException) {
+			throw new NoSuchEmployeeException(portalException.getMessage());
+		}
 	}
 
 	private static final Log _log = LogFactoryUtil.getLog(
 			ManagerLocalServiceImpl.class);
-
-//	@Reference
-//	private EmployeeService _employeeService;
 
 }

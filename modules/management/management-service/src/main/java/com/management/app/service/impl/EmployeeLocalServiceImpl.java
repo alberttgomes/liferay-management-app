@@ -5,7 +5,10 @@
 
 package com.management.app.service.impl;
 
+import com.liferay.account.constants.AccountConstants;
+import com.liferay.account.service.AccountEntryLocalServiceUtil;
 import com.liferay.counter.kernel.service.CounterLocalServiceUtil;
+import com.liferay.petra.string.StringPool;
 import com.liferay.portal.aop.AopService;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.json.JSONObject;
@@ -18,6 +21,7 @@ import com.liferay.portal.kernel.search.*;
 import com.liferay.portal.kernel.service.ClassNameLocalServiceUtil;
 import com.liferay.portal.kernel.util.*;
 
+import com.liferay.portal.kernel.workflow.WorkflowConstants;
 import com.management.app.exception.NoSuchEmployeeException;
 import com.management.app.exception.NoSuchManagerException;
 import com.management.app.model.Employee;
@@ -47,8 +51,8 @@ public class EmployeeLocalServiceImpl extends EmployeeLocalServiceBaseImpl {
 	public Employee addEmployee(
 			String firstName, String lastName, String department, String position,
 			int level, String stateCode, int status, long managerIdPK,
-			boolean isManager, User user, long companyId)
-		throws NoSuchManagerException {
+			boolean isManager, User user)
+    	throws PortalException {
 
 		long employeeId = CounterLocalServiceUtil.increment();
 
@@ -56,7 +60,7 @@ public class EmployeeLocalServiceImpl extends EmployeeLocalServiceBaseImpl {
 
 		return _addEmployee(
 				firstName, lastName, department, position, level, stateCode,
-				managerIdPK, employeeId, isManager, user, companyId);
+				managerIdPK, employeeId, isManager, user);
 	}
 
 	@Override
@@ -171,17 +175,25 @@ public class EmployeeLocalServiceImpl extends EmployeeLocalServiceBaseImpl {
 
 			employee.setIsManager(isManager);
 
-			if (isManager) {
-				_createManager(employee.getCompanyId(),
-						employee.getEmployeeId(), user.getGroupId());
-			}
-
 			employee.setDepartment(department);
 			employee.setLevel(level);
 			employee.setPosition(position);
 			employee.setModifiedDate(new Date());
 
-			return employeePersistence.update(employee);
+			employee = employeePersistence.update(employee);
+
+			if (isManager) {
+				long managerIdFK =
+						_createManager(
+								employee.getCompanyId(),
+								employee.getEmployeeId(),
+								employee.getGroupId(),
+								employee.getMvccVersion());
+
+				employee.setManagerIdFK(managerIdFK);
+			}
+
+			return employee;
 		}
 		catch (RuntimeException runtimeException) {
 			throw new NoSuchEmployeeException(
@@ -227,6 +239,7 @@ public class EmployeeLocalServiceImpl extends EmployeeLocalServiceBaseImpl {
 				).put(
 						"screenName", keywords
 				).build());
+
 		searchContext.setCompanyId(companyId);
 		searchContext.setEnd(end);
 
@@ -301,7 +314,8 @@ public class EmployeeLocalServiceImpl extends EmployeeLocalServiceBaseImpl {
 	private Employee _addEmployee(
 			String firstName, String lastName, String department, String position,
 			int level, String stateCode, long managerIdPK, long employeeId,
-			boolean isManager, User user, long companyId) {
+			boolean isManager, User user)
+   		throws PortalException {
 
 		Employee employee = employeePersistence.create(employeeId);
 
@@ -310,7 +324,6 @@ public class EmployeeLocalServiceImpl extends EmployeeLocalServiceBaseImpl {
 		employee.setLastName(lastName);
 		employee.setDepartment(department);
 		employee.setLevel(level);
-		employee.setManagerIdFK(managerIdPK);
 		employee.setPosition(position);
 		employee.setPrimaryKey(employeeId);
 		employee.setStateCode(stateCode);
@@ -321,30 +334,51 @@ public class EmployeeLocalServiceImpl extends EmployeeLocalServiceBaseImpl {
 		employee.setMvccVersion(0);
 
 		if (isManager) {
-			_createManager(employee.getCompanyId(),
-					employee.getEmployeeId(), user.getGroupId());
+			long managerIdFK =
+					_createManager(
+							employee.getCompanyId(),
+							employee.getEmployeeId(),
+							employee.getGroupId(),
+							employee.getMvccVersion());
+
+			employee.setManagerIdFK(managerIdFK);
 		}
+
+		employee = employeePersistence.update(employee);
 
 		_log.info("Create employee " + employee.getFirstName());
 
-		return employeePersistence.update(employee);
+		String accountEntryName =
+				employee.getFirstName() + StringPool.SPACE +
+						employee.getLastName();
+
+		String emailAddress = _createEmailAddressDomain(
+				employee.getFirstName(), employee.getLastName(), "company.com");
+
+		 AccountEntryLocalServiceUtil.addAccountEntry(
+				 user.getUserId(), employeeId, accountEntryName, StringPool.BLANK,
+				null, emailAddress, null, null,
+				 AccountConstants.ACCOUNT_ENTRY_TYPE_BUSINESS,
+				 WorkflowConstants.STATUS_APPROVED, null);
+
+		return employee;
+
 	}
 
-	private void _createManager(
-			long companyId, long employeeId, long groupId) {
-		_log.debug("Employee also is a manager %s" + employeeId);
+	private long _createManager(
+			long companyId, long employeeId, long groupId, long mvccVersion)
+		throws NoSuchEmployeeException {
 
 		Manager manager = _managerLocalService.createManager(
-				CounterLocalServiceUtil.increment());
+				groupId, companyId, employeeId, mvccVersion);
 
-		manager.setCompanyId(companyId);
-		manager.setEmployeeIdPK(employeeId);
-		manager.setGroupId(groupId);
-		manager.setMvccVersion(0);
-		manager.setCreateDate(new Date());
-		manager.setModifiedDate(new Date());
+		return manager.getManagerId();
+	}
 
-		_managerLocalService.updateManager(manager);
+	private String _createEmailAddressDomain(
+			String firstName, String lastName, String domain) {
+
+		return firstName.toLowerCase() + "." + lastName.toLowerCase() + "@" + domain;
 	}
 
 	private void _validate(
@@ -393,6 +427,9 @@ public class EmployeeLocalServiceImpl extends EmployeeLocalServiceBaseImpl {
 
 				for (int l : levels) {
 					if (l == level) {
+						_log.debug("The level " + level + " to job position " +
+								position + " it's available on");
+
 						available = true;
 
 						break;
@@ -401,6 +438,14 @@ public class EmployeeLocalServiceImpl extends EmployeeLocalServiceBaseImpl {
 
 				if (!available) {
 					throw new RuntimeException("No available level " + level);
+				}
+
+				if (employeePersistence.fetchByF_L_First(
+						firstName, lastName, null) != null) {
+
+					throw new NoSuchManagerException(
+							"Employee with the first " + firstName + " and last " +
+									lastName + " name already exists");
 				}
 			}
 		}
