@@ -9,7 +9,10 @@ taglib uri="http://liferay.com/tld/ui" prefix="liferay-ui" %><%@
 taglib uri="http://liferay.com/tld/clay" prefix="clay" %>
 
 <%@page import="com.liferay.portal.kernel.util.ParamUtil" %><%@
-page import="com.liferay.portal.kernel.util.Constants" %>
+page import="com.liferay.portal.kernel.util.Constants" %><%@
+page import="com.liferay.petra.string.StringPool" %><%@
+page import="com.management.app.model.Manager" %>
+<%@ page import="com.management.app.service.ManagerLocalServiceUtil" %>
 
 <liferay-theme:defineObjects />
 

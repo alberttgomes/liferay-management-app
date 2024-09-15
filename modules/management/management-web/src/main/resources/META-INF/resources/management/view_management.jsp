@@ -5,7 +5,7 @@
 <%@ page import="com.liferay.portal.kernel.dao.search.SearchContainer" %>
 <%@ page import="management.web.internal.dao.search.ManagementDisplaySearchContainerFactory" %>
 <%@ page import="management.web.display.context.ViewEmployeesManagementToolbarDisplayContext" %>
-<%@ include file="init.jsp" %>
+<%@ include file="../init.jsp" %>
 
 <%
     ManagementDisplayContext managementDisplayContext = (ManagementDisplayContext)request.getAttribute(ManagementPortletKeys.MANAGEMENT_DISPLAY_CONTEXT);

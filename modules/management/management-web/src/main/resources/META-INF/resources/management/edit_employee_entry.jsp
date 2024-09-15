@@ -1,5 +1,4 @@
-<%@ page import="com.management.app.model.Manager" %>
-<%@ page import="com.management.app.service.ManagerLocalServiceUtil" %>
+
 <%@ include file="../init.jsp" %>
 
 <%
