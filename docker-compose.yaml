@@ -41,6 +41,7 @@ services:
     ports:
       - "8080:8080"
       - "8000:8000"
+      - "11311:11311"
     user: root:root
     volumes:
       - ./bundles/osgi/modules/:/opt/liferay/deploy/
