@@ -9,6 +9,8 @@ public class ManagementPortletKeys {
 		"management_web_ManagementPortlet";
 
 	public static final String MANAGEMENT_DISPLAY_CONTEXT =
-			"management_web_ManagementDisplayContext";
+			"MANAGEMENT_DISPLAY_CONTEXT";
+
+	public static final String EMPLOYEE_DISPLAY = "EMPLOYEE_DISPLAY";
 
 }
