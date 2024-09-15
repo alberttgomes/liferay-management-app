@@ -29,7 +29,6 @@ import com.management.app.model.Manager;
 
 import java.io.Serializable;
 
-import java.util.Date;
 import java.util.List;
 
 import org.osgi.annotation.versioning.ProviderType;
@@ -81,8 +80,8 @@ public interface ManagerLocalService
 	public Manager createManager(long managerId);
 
 	public Manager createManager(
-			long groupId, long companyId, long employeeIdPK, Date modifiedDate,
-			Date createDate, long mvccVersion)
+			long groupId, long companyId, long employeeIdPK,
+			long mvccVersion)
 		throws NoSuchEmployeeException;
 
 	/**

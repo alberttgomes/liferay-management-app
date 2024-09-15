@@ -56,12 +56,11 @@ public class EmployeeLocalServiceUtil {
 			String firstName, String lastName, String department,
 			String position, int level, String stateCode, int status,
 			long managerIdPK, boolean isManager,
-			com.liferay.portal.kernel.model.User user, long companyId)
-		throws com.management.app.exception.NoSuchManagerException {
+			com.liferay.portal.kernel.model.User user) throws PortalException {
 
 		return getService().addEmployee(
 			firstName, lastName, department, position, level, stateCode, status,
-			managerIdPK, isManager, user, companyId);
+			managerIdPK, isManager, user);
 	}
 
 	/**
