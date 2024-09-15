@@ -100,7 +100,7 @@ public class EditEmployeeEntryMVCActionCommand extends BaseMVCActionCommand {
         return _employeeLocalService.addEmployee(
                 firstName, lastName, department, position,
                 level, locale.getCountry(), WorkflowConstants.STATUS_APPROVED,
-                managerIdPK, isManager, user, 0);
+                managerIdPK, isManager, user);
     }
 
     private static final Log _log = LogFactoryUtil.getLog(
