@@ -21,6 +21,7 @@ import javax.portlet.ActionResponse;
 
 import java.util.Locale;
 
+import management.web.display.EmployeeDisplay;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
@@ -41,19 +42,28 @@ public class EditEmployeeEntryMVCActionCommand extends BaseMVCActionCommand {
             ActionRequest actionRequest, ActionResponse actionResponse)
         throws Exception {
 
-        String cmd = ParamUtil.getString(actionRequest, Constants.CMD);
-
         try {
+            String cmd = ParamUtil.getString(actionRequest, Constants.CMD);
+
             if (cmd.equals(Constants.ADD)) {
                 Employee employee = _addEmployee(actionRequest);
 
                 if (employee != null) {
-                    _log.debug("Employee entry was completed with success " +
+                    EmployeeDisplay employeeDisplay = EmployeeDisplay.of(
                             employee);
+
+                    actionRequest.setAttribute(
+                            ManagementPortletKeys.EMPLOYEE_DISPLAY,
+                            employeeDisplay);
+
+                    _log.info("Set attributes to  employee display view " +
+                            employeeDisplay);
                 }
                 else {
-                    _log.error("An error occurred during " +
-                            EditEmployeeEntryMVCActionCommand.class + " mvc action.");
+                    throw new RuntimeException(
+                            "An error occurred during " +
+                                    EditEmployeeEntryMVCActionCommand.class +
+                                    " mvc action.");
                 }
             }
             else if (cmd.equals(Constants.DELETE)) {
@@ -63,11 +73,11 @@ public class EditEmployeeEntryMVCActionCommand extends BaseMVCActionCommand {
                 _employeeLocalService.deleteEmployee(employeeId);
             }
             else {
-                throw new Exception("Unknown command: " + cmd);
+                throw new RuntimeException("Unknown command: " + cmd);
             }
         }
-        catch (Exception exception) {
-            throw new Exception(exception.getCause());
+        catch (RuntimeException runtimeException) {
+            throw new RuntimeException(runtimeException.getCause());
         }
 
     }
@@ -90,7 +100,7 @@ public class EditEmployeeEntryMVCActionCommand extends BaseMVCActionCommand {
         return _employeeLocalService.addEmployee(
                 firstName, lastName, department, position,
                 level, locale.getCountry(), WorkflowConstants.STATUS_APPROVED,
-                managerIdPK, isManager, user);
+                managerIdPK, isManager, user, 0);
     }
 
     private static final Log _log = LogFactoryUtil.getLog(

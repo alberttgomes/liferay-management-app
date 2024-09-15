@@ -1,12 +1,13 @@
 package management.web.portlet.action;
 
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCRenderCommand;
-
 import com.liferay.portal.kernel.security.auth.PrincipalException;
 import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.WebKeys;
+
 import management.web.constants.ManagementPortletKeys;
+import management.web.display.EmployeeDisplay;
 
 import javax.portlet.PortletException;
 import javax.portlet.RenderRequest;
@@ -40,7 +41,20 @@ public class EditEmployeeEntryMVCRenderCommand implements MVCRenderCommand {
             return "/error.jsp";
         }
 
+        renderRequest.setAttribute(
+                "description",
+                "Welcome to the Employee Management Portal");
+
+        EmployeeDisplay employeeDisplay = (EmployeeDisplay)
+                renderRequest.getAttribute(
+                        ManagementPortletKeys.EMPLOYEE_DISPLAY);
+
+        renderRequest.setAttribute(
+                ManagementPortletKeys.EMPLOYEE_DISPLAY,
+                employeeDisplay);
+
         return "/management/employee_entry.jsp";
+
     }
 
 }
