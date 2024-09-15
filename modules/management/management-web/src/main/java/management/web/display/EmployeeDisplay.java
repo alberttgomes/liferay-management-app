@@ -35,8 +35,8 @@ public class EmployeeDisplay {
         return _department;
     }
 
-    public String getName() {
-        return _name;
+    public String getFullName() {
+        return _fullName;
     }
 
     public String getPosition() {
@@ -60,7 +60,7 @@ public class EmployeeDisplay {
     private EmployeeDisplay() {
         _employeeId = 0;
         _department = StringPool.BLANK;
-        _name = StringPool.BLANK;
+        _fullName = StringPool.BLANK;
         _position = StringPool.BLANK;
         _screenName = StringPool.BLANK;
     }
@@ -68,20 +68,25 @@ public class EmployeeDisplay {
     private EmployeeDisplay(Employee employee) {
         _employeeId = employee.getEmployeeId();
         _department = employee.getDepartment();
-        _name = employee.getFirstName() + StringPool.SPACE + employee.getLastName();
+        _fullName = employee.getFirstName() + StringPool.SPACE + employee.getLastName();
         _position = employee.getPosition();
-        _screenName = _buildScreenName(_name, _employeeId);
+        _screenName = _buildScreenName(
+                employee.getFirstName(), employee.getLastName(), _employeeId);
     }
 
-    private String _buildScreenName(String screenName, long employeeId) {
-        return screenName.toLowerCase() + StringPool.UNDERLINE + employeeId;
+    private String _buildScreenName(
+            String firstName, String lastName, long employeeId) {
+        String screeNameFormated = firstName + lastName +
+                StringPool.UNDERLINE + employeeId;
+
+        return screeNameFormated.toLowerCase();
     }
 
     private static final EmployeeDisplay _EMPTY_INSTANCE = new EmployeeDisplay();
 
     private final long _employeeId;
     private final String _department;
-    private final String _name;
+    private final String _fullName;
     private final String _position;
     private final String _screenName;
 
