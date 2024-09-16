@@ -5,10 +5,8 @@
 
 package com.management.app.service.impl;
 
-import com.liferay.account.constants.AccountConstants;
 import com.liferay.account.model.AccountEntry;
 import com.liferay.account.service.AccountEntryLocalService;
-import com.liferay.account.service.AccountEntryLocalServiceUtil;
 import com.liferay.counter.kernel.service.CounterLocalServiceUtil;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.aop.AopService;
@@ -61,8 +59,8 @@ public class EmployeeLocalServiceImpl extends EmployeeLocalServiceBaseImpl {
 		_validate(firstName, lastName, position, level, department);
 
 		return _addEmployee(
-				firstName, lastName, department, position, level, stateCode,
-				managerIdPK, employeeId, isManager, user);
+				firstName, lastName, department, position,
+				level, stateCode, employeeId, isManager, user);
 	}
 
 	@Override
@@ -315,8 +313,8 @@ public class EmployeeLocalServiceImpl extends EmployeeLocalServiceBaseImpl {
 
 	private Employee _addEmployee(
 			String firstName, String lastName, String department, String position,
-			int level, String stateCode, long managerIdPK, long employeeId,
-			boolean isManager, User user)
+			int level, String stateCode, long employeeId, boolean isManager,
+			User user)
    		throws PortalException {
 
 		Employee employee = employeePersistence.create(employeeId);
@@ -369,6 +367,12 @@ public class EmployeeLocalServiceImpl extends EmployeeLocalServiceBaseImpl {
 		return employee;
 	}
 
+	private String _createEmailAddressDomain(
+			String firstName, String lastName, String domain) {
+
+		return firstName.toLowerCase() + "." + lastName.toLowerCase() + "@" + domain;
+	}
+
 	private long _createManager(
 			long companyId, long employeeId, long groupId, long mvccVersion)
 		throws NoSuchEmployeeException {
@@ -377,12 +381,6 @@ public class EmployeeLocalServiceImpl extends EmployeeLocalServiceBaseImpl {
 				groupId, companyId, employeeId, mvccVersion);
 
 		return manager.getManagerId();
-	}
-
-	private String _createEmailAddressDomain(
-			String firstName, String lastName, String domain) {
-
-		return firstName.toLowerCase() + "." + lastName.toLowerCase() + "@" + domain;
 	}
 
 	private void _validate(
