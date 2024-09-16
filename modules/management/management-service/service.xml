@@ -26,7 +26,7 @@
 
 		<!-- Other fields -->
 
-		<column name="createByUserId" type="long" />
+		<column name="accountEntryId" type="long" />
 		<column name="department" type="String" />
 		<column name="firstName" type="String" />
 		<column name="lastName" type="String" />
@@ -47,6 +47,10 @@
 
 		<!-- Finder methods -->
 
+		<finder name="A_E" return-type="Collection">
+			<finder-column name="accountEntryId" />
+			<finder-column name="employeeId" />
+		</finder>
 		<finder name="CompanyId" return-type="Collection">
 			<finder-column name="companyId" />
 		</finder>
