@@ -1,8 +1,6 @@
 package management.web.portlet.action;
 
 import com.liferay.portal.kernel.exception.PortalException;
-import com.liferay.portal.kernel.log.Log;
-import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.portlet.bridges.mvc.BaseMVCActionCommand;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCActionCommand;
@@ -45,7 +43,34 @@ public class EditEmployeeEntryMVCActionCommand extends BaseMVCActionCommand {
         try {
             String cmd = ParamUtil.getString(actionRequest, Constants.CMD);
 
-            if (cmd.equals(Constants.ADD)) {
+            String redirectURL = ParamUtil.getString(
+                    actionRequest, "redirect");
+
+            if (!cmd.equals(Constants.ADD)) {
+                if (cmd.equals(Constants.EDIT) || cmd.equals(Constants.UPDATE)) {
+                    Employee employee = _updateEmployee(actionRequest);
+
+                    if (employee != null) {
+                        EmployeeDisplay employeeDisplay = EmployeeDisplay.of(employee);
+
+                        actionRequest.setAttribute(
+                                ManagementPortletKeys.EMPLOYEE_DISPLAY,
+                                employeeDisplay);
+
+                        sendRedirect(actionRequest, actionResponse, redirectURL);
+                    }
+                }
+                else if (cmd.equals(Constants.DELETE)) {
+                    long employeeId = ParamUtil.getLong(
+                            actionRequest, "employeeId");
+
+                    _employeeLocalService.deleteEmployee(employeeId);
+                }
+                else {
+                    throw new RuntimeException("Unknown command: " + cmd);
+                }
+            }
+            else {
                 Employee employee = _addEmployee(actionRequest);
 
                 if (employee != null) {
@@ -56,8 +81,7 @@ public class EditEmployeeEntryMVCActionCommand extends BaseMVCActionCommand {
                             ManagementPortletKeys.EMPLOYEE_DISPLAY,
                             employeeDisplay);
 
-                    _log.info("Set attributes to  employee display view " +
-                            employeeDisplay);
+                    sendRedirect(actionRequest, actionResponse, redirectURL);
                 }
                 else {
                     throw new RuntimeException(
@@ -65,15 +89,6 @@ public class EditEmployeeEntryMVCActionCommand extends BaseMVCActionCommand {
                                     EditEmployeeEntryMVCActionCommand.class +
                                     " mvc action.");
                 }
-            }
-            else if (cmd.equals(Constants.DELETE)) {
-                long employeeId = ParamUtil.getLong(
-                        actionRequest, "employeeId");
-
-                _employeeLocalService.deleteEmployee(employeeId);
-            }
-            else {
-                throw new RuntimeException("Unknown command: " + cmd);
             }
         }
         catch (RuntimeException runtimeException) {
@@ -103,8 +118,51 @@ public class EditEmployeeEntryMVCActionCommand extends BaseMVCActionCommand {
                 managerIdPK, isManager, user);
     }
 
-    private static final Log _log = LogFactoryUtil.getLog(
-            EditEmployeeEntryMVCActionCommand.class);
+    private Employee _updateEmployee(ActionRequest actionRequest)
+        throws PortalException {
+
+        long employeeId = ParamUtil.getLong(
+                actionRequest, "employeeId");
+
+        Employee employee =
+                _employeeLocalService.fetchEmployee(employeeId);
+
+        String department = ParamUtil.getString(
+                actionRequest, "department");
+        String firstName = ParamUtil.getString(
+                actionRequest, "firstName");
+        String lastName = ParamUtil.getString(
+                actionRequest, "lastName");
+        boolean isManager = ParamUtil.getBoolean(
+                actionRequest, "isManager");
+        int level = ParamUtil.getInteger(
+                actionRequest, "level");
+        long managerIdPK = ParamUtil.getLong(
+                actionRequest, "managerIdPK");
+        String position = ParamUtil.getString(
+                actionRequest, "position");
+
+        employee.setDepartment(
+                department == null || department.isEmpty() ?
+                        employee.getDepartment() : department);
+        employee.setFirstName(
+                firstName == null || firstName.isEmpty() ?
+                        employee.getFirstName() : firstName);
+        employee.setLastName(
+                lastName == null || lastName.isEmpty() ?
+                        employee.getLastName() : lastName);
+        employee.setIsManager(
+                isManager || employee.getIsManager());
+        employee.setLevel(
+                level > 0 ? level : employee.getLevel());
+        employee.setManagerIdFK(
+                managerIdPK > 0 ? managerIdPK : employee.getManagerIdFK());
+        employee.setPosition(
+                position == null || position.isEmpty() ?
+                        employee.getPosition() : position);
+
+        return _employeeLocalService.updateEmployee(employee);
+    }
 
     @Reference
     private EmployeeLocalService _employeeLocalService;
