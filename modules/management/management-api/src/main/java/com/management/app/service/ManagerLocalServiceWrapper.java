@@ -56,13 +56,11 @@ public class ManagerLocalServiceWrapper
 
 	@Override
 	public com.management.app.model.Manager createManager(
-			long groupId, long companyId, long employeeIdPK,
-			long mvccVersion)
+			long groupId, long companyId, long employeeIdPK, long mvccVersion)
 		throws com.management.app.exception.NoSuchEmployeeException {
 
 		return _managerLocalService.createManager(
-			groupId, companyId, employeeIdPK,
-				mvccVersion);
+			groupId, companyId, employeeIdPK, mvccVersion);
 	}
 
 	/**

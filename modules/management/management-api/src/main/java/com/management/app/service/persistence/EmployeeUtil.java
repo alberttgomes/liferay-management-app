@@ -519,6 +519,174 @@ public class EmployeeUtil {
 	}
 
 	/**
+	 * Returns all the employees where accountEntryId = &#63; and employeeId = &#63;.
+	 *
+	 * @param accountEntryId the account entry ID
+	 * @param employeeId the employee ID
+	 * @return the matching employees
+	 */
+	public static List<Employee> findByA_E(
+		long accountEntryId, long employeeId) {
+
+		return getPersistence().findByA_E(accountEntryId, employeeId);
+	}
+
+	/**
+	 * Returns a range of all the employees where accountEntryId = &#63; and employeeId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>EmployeeModelImpl</code>.
+	 * </p>
+	 *
+	 * @param accountEntryId the account entry ID
+	 * @param employeeId the employee ID
+	 * @param start the lower bound of the range of employees
+	 * @param end the upper bound of the range of employees (not inclusive)
+	 * @return the range of matching employees
+	 */
+	public static List<Employee> findByA_E(
+		long accountEntryId, long employeeId, int start, int end) {
+
+		return getPersistence().findByA_E(
+			accountEntryId, employeeId, start, end);
+	}
+
+	/**
+	 * Returns an ordered range of all the employees where accountEntryId = &#63; and employeeId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>EmployeeModelImpl</code>.
+	 * </p>
+	 *
+	 * @param accountEntryId the account entry ID
+	 * @param employeeId the employee ID
+	 * @param start the lower bound of the range of employees
+	 * @param end the upper bound of the range of employees (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching employees
+	 */
+	public static List<Employee> findByA_E(
+		long accountEntryId, long employeeId, int start, int end,
+		OrderByComparator<Employee> orderByComparator) {
+
+		return getPersistence().findByA_E(
+			accountEntryId, employeeId, start, end, orderByComparator);
+	}
+
+	/**
+	 * Returns an ordered range of all the employees where accountEntryId = &#63; and employeeId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>EmployeeModelImpl</code>.
+	 * </p>
+	 *
+	 * @param accountEntryId the account entry ID
+	 * @param employeeId the employee ID
+	 * @param start the lower bound of the range of employees
+	 * @param end the upper bound of the range of employees (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @param useFinderCache whether to use the finder cache
+	 * @return the ordered range of matching employees
+	 */
+	public static List<Employee> findByA_E(
+		long accountEntryId, long employeeId, int start, int end,
+		OrderByComparator<Employee> orderByComparator, boolean useFinderCache) {
+
+		return getPersistence().findByA_E(
+			accountEntryId, employeeId, start, end, orderByComparator,
+			useFinderCache);
+	}
+
+	/**
+	 * Returns the first employee in the ordered set where accountEntryId = &#63; and employeeId = &#63;.
+	 *
+	 * @param accountEntryId the account entry ID
+	 * @param employeeId the employee ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching employee
+	 * @throws NoSuchEmployeeException if a matching employee could not be found
+	 */
+	public static Employee findByA_E_First(
+			long accountEntryId, long employeeId,
+			OrderByComparator<Employee> orderByComparator)
+		throws com.management.app.exception.NoSuchEmployeeException {
+
+		return getPersistence().findByA_E_First(
+			accountEntryId, employeeId, orderByComparator);
+	}
+
+	/**
+	 * Returns the first employee in the ordered set where accountEntryId = &#63; and employeeId = &#63;.
+	 *
+	 * @param accountEntryId the account entry ID
+	 * @param employeeId the employee ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching employee, or <code>null</code> if a matching employee could not be found
+	 */
+	public static Employee fetchByA_E_First(
+		long accountEntryId, long employeeId,
+		OrderByComparator<Employee> orderByComparator) {
+
+		return getPersistence().fetchByA_E_First(
+			accountEntryId, employeeId, orderByComparator);
+	}
+
+	/**
+	 * Returns the last employee in the ordered set where accountEntryId = &#63; and employeeId = &#63;.
+	 *
+	 * @param accountEntryId the account entry ID
+	 * @param employeeId the employee ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching employee
+	 * @throws NoSuchEmployeeException if a matching employee could not be found
+	 */
+	public static Employee findByA_E_Last(
+			long accountEntryId, long employeeId,
+			OrderByComparator<Employee> orderByComparator)
+		throws com.management.app.exception.NoSuchEmployeeException {
+
+		return getPersistence().findByA_E_Last(
+			accountEntryId, employeeId, orderByComparator);
+	}
+
+	/**
+	 * Returns the last employee in the ordered set where accountEntryId = &#63; and employeeId = &#63;.
+	 *
+	 * @param accountEntryId the account entry ID
+	 * @param employeeId the employee ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching employee, or <code>null</code> if a matching employee could not be found
+	 */
+	public static Employee fetchByA_E_Last(
+		long accountEntryId, long employeeId,
+		OrderByComparator<Employee> orderByComparator) {
+
+		return getPersistence().fetchByA_E_Last(
+			accountEntryId, employeeId, orderByComparator);
+	}
+
+	/**
+	 * Removes all the employees where accountEntryId = &#63; and employeeId = &#63; from the database.
+	 *
+	 * @param accountEntryId the account entry ID
+	 * @param employeeId the employee ID
+	 */
+	public static void removeByA_E(long accountEntryId, long employeeId) {
+		getPersistence().removeByA_E(accountEntryId, employeeId);
+	}
+
+	/**
+	 * Returns the number of employees where accountEntryId = &#63; and employeeId = &#63;.
+	 *
+	 * @param accountEntryId the account entry ID
+	 * @param employeeId the employee ID
+	 * @return the number of matching employees
+	 */
+	public static int countByA_E(long accountEntryId, long employeeId) {
+		return getPersistence().countByA_E(accountEntryId, employeeId);
+	}
+
+	/**
 	 * Returns all the employees where companyId = &#63;.
 	 *
 	 * @param companyId the company ID

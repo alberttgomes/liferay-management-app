@@ -160,32 +160,18 @@ public interface EmployeeModel
 	public void setModifiedDate(Date modifiedDate);
 
 	/**
-	 * Returns the create by user ID of this employee.
+	 * Returns the account entry ID of this employee.
 	 *
-	 * @return the create by user ID of this employee
+	 * @return the account entry ID of this employee
 	 */
-	public long getCreateByUserId();
+	public long getAccountEntryId();
 
 	/**
-	 * Sets the create by user ID of this employee.
+	 * Sets the account entry ID of this employee.
 	 *
-	 * @param createByUserId the create by user ID of this employee
+	 * @param accountEntryId the account entry ID of this employee
 	 */
-	public void setCreateByUserId(long createByUserId);
-
-	/**
-	 * Returns the create by user uuid of this employee.
-	 *
-	 * @return the create by user uuid of this employee
-	 */
-	public String getCreateByUserUuid();
-
-	/**
-	 * Sets the create by user uuid of this employee.
-	 *
-	 * @param createByUserUuid the create by user uuid of this employee
-	 */
-	public void setCreateByUserUuid(String createByUserUuid);
+	public void setAccountEntryId(long accountEntryId);
 
 	/**
 	 * Returns the department of this employee.

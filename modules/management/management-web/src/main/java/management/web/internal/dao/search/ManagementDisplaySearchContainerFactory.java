@@ -81,7 +81,7 @@ public class ManagementDisplaySearchContainerFactory {
                         WebKeys.THEME_DISPLAY);
 
         BaseModelSearchResult<Employee> baseModelSearchResult =
-                EmployeeLocalServiceUtil.searchAddresses(
+                EmployeeLocalServiceUtil.searchEmployees(
                         themeDisplay.getCompanyId(), AccountEntry.class.getName(),
                         ParamUtil.getLong(liferayPortletRequest, "employeeId"),
                         keywords, params, searchContainer.getStart(),
