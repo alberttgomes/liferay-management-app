@@ -1443,6 +1443,387 @@ public class EmployeePersistenceImpl
 	private static final String _FINDER_COLUMN_UUID_C_COMPANYID_2 =
 		"employee.companyId = ?";
 
+	private FinderPath _finderPathWithPaginationFindByA_E;
+	private FinderPath _finderPathWithoutPaginationFindByA_E;
+	private FinderPath _finderPathCountByA_E;
+
+	/**
+	 * Returns all the employees where accountEntryId = &#63; and employeeId = &#63;.
+	 *
+	 * @param accountEntryId the account entry ID
+	 * @param employeeId the employee ID
+	 * @return the matching employees
+	 */
+	@Override
+	public List<Employee> findByA_E(long accountEntryId, long employeeId) {
+		return findByA_E(
+			accountEntryId, employeeId, QueryUtil.ALL_POS, QueryUtil.ALL_POS,
+			null);
+	}
+
+	/**
+	 * Returns a range of all the employees where accountEntryId = &#63; and employeeId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>EmployeeModelImpl</code>.
+	 * </p>
+	 *
+	 * @param accountEntryId the account entry ID
+	 * @param employeeId the employee ID
+	 * @param start the lower bound of the range of employees
+	 * @param end the upper bound of the range of employees (not inclusive)
+	 * @return the range of matching employees
+	 */
+	@Override
+	public List<Employee> findByA_E(
+		long accountEntryId, long employeeId, int start, int end) {
+
+		return findByA_E(accountEntryId, employeeId, start, end, null);
+	}
+
+	/**
+	 * Returns an ordered range of all the employees where accountEntryId = &#63; and employeeId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>EmployeeModelImpl</code>.
+	 * </p>
+	 *
+	 * @param accountEntryId the account entry ID
+	 * @param employeeId the employee ID
+	 * @param start the lower bound of the range of employees
+	 * @param end the upper bound of the range of employees (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching employees
+	 */
+	@Override
+	public List<Employee> findByA_E(
+		long accountEntryId, long employeeId, int start, int end,
+		OrderByComparator<Employee> orderByComparator) {
+
+		return findByA_E(
+			accountEntryId, employeeId, start, end, orderByComparator, true);
+	}
+
+	/**
+	 * Returns an ordered range of all the employees where accountEntryId = &#63; and employeeId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent, then the query will include the default ORDER BY logic from <code>EmployeeModelImpl</code>.
+	 * </p>
+	 *
+	 * @param accountEntryId the account entry ID
+	 * @param employeeId the employee ID
+	 * @param start the lower bound of the range of employees
+	 * @param end the upper bound of the range of employees (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @param useFinderCache whether to use the finder cache
+	 * @return the ordered range of matching employees
+	 */
+	@Override
+	public List<Employee> findByA_E(
+		long accountEntryId, long employeeId, int start, int end,
+		OrderByComparator<Employee> orderByComparator, boolean useFinderCache) {
+
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+			(orderByComparator == null)) {
+
+			if (useFinderCache) {
+				finderPath = _finderPathWithoutPaginationFindByA_E;
+				finderArgs = new Object[] {accountEntryId, employeeId};
+			}
+		}
+		else if (useFinderCache) {
+			finderPath = _finderPathWithPaginationFindByA_E;
+			finderArgs = new Object[] {
+				accountEntryId, employeeId, start, end, orderByComparator
+			};
+		}
+
+		List<Employee> list = null;
+
+		if (useFinderCache) {
+			list = (List<Employee>)finderCache.getResult(
+				finderPath, finderArgs, this);
+
+			if ((list != null) && !list.isEmpty()) {
+				for (Employee employee : list) {
+					if ((accountEntryId != employee.getAccountEntryId()) ||
+						(employeeId != employee.getEmployeeId())) {
+
+						list = null;
+
+						break;
+					}
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler sb = null;
+
+			if (orderByComparator != null) {
+				sb = new StringBundler(
+					4 + (orderByComparator.getOrderByFields().length * 2));
+			}
+			else {
+				sb = new StringBundler(4);
+			}
+
+			sb.append(_SQL_SELECT_EMPLOYEE_WHERE);
+
+			sb.append(_FINDER_COLUMN_A_E_ACCOUNTENTRYID_2);
+
+			sb.append(_FINDER_COLUMN_A_E_EMPLOYEEID_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(
+					sb, _ORDER_BY_ENTITY_ALIAS, orderByComparator);
+			}
+			else {
+				sb.append(EmployeeModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = sb.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query query = session.createQuery(sql);
+
+				QueryPos queryPos = QueryPos.getInstance(query);
+
+				queryPos.add(accountEntryId);
+
+				queryPos.add(employeeId);
+
+				list = (List<Employee>)QueryUtil.list(
+					query, getDialect(), start, end);
+
+				cacheResult(list);
+
+				if (useFinderCache) {
+					finderCache.putResult(finderPath, finderArgs, list);
+				}
+			}
+			catch (Exception exception) {
+				throw processException(exception);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first employee in the ordered set where accountEntryId = &#63; and employeeId = &#63;.
+	 *
+	 * @param accountEntryId the account entry ID
+	 * @param employeeId the employee ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching employee
+	 * @throws NoSuchEmployeeException if a matching employee could not be found
+	 */
+	@Override
+	public Employee findByA_E_First(
+			long accountEntryId, long employeeId,
+			OrderByComparator<Employee> orderByComparator)
+		throws NoSuchEmployeeException {
+
+		Employee employee = fetchByA_E_First(
+			accountEntryId, employeeId, orderByComparator);
+
+		if (employee != null) {
+			return employee;
+		}
+
+		StringBundler sb = new StringBundler(6);
+
+		sb.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		sb.append("accountEntryId=");
+		sb.append(accountEntryId);
+
+		sb.append(", employeeId=");
+		sb.append(employeeId);
+
+		sb.append("}");
+
+		throw new NoSuchEmployeeException(sb.toString());
+	}
+
+	/**
+	 * Returns the first employee in the ordered set where accountEntryId = &#63; and employeeId = &#63;.
+	 *
+	 * @param accountEntryId the account entry ID
+	 * @param employeeId the employee ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching employee, or <code>null</code> if a matching employee could not be found
+	 */
+	@Override
+	public Employee fetchByA_E_First(
+		long accountEntryId, long employeeId,
+		OrderByComparator<Employee> orderByComparator) {
+
+		List<Employee> list = findByA_E(
+			accountEntryId, employeeId, 0, 1, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last employee in the ordered set where accountEntryId = &#63; and employeeId = &#63;.
+	 *
+	 * @param accountEntryId the account entry ID
+	 * @param employeeId the employee ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching employee
+	 * @throws NoSuchEmployeeException if a matching employee could not be found
+	 */
+	@Override
+	public Employee findByA_E_Last(
+			long accountEntryId, long employeeId,
+			OrderByComparator<Employee> orderByComparator)
+		throws NoSuchEmployeeException {
+
+		Employee employee = fetchByA_E_Last(
+			accountEntryId, employeeId, orderByComparator);
+
+		if (employee != null) {
+			return employee;
+		}
+
+		StringBundler sb = new StringBundler(6);
+
+		sb.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		sb.append("accountEntryId=");
+		sb.append(accountEntryId);
+
+		sb.append(", employeeId=");
+		sb.append(employeeId);
+
+		sb.append("}");
+
+		throw new NoSuchEmployeeException(sb.toString());
+	}
+
+	/**
+	 * Returns the last employee in the ordered set where accountEntryId = &#63; and employeeId = &#63;.
+	 *
+	 * @param accountEntryId the account entry ID
+	 * @param employeeId the employee ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching employee, or <code>null</code> if a matching employee could not be found
+	 */
+	@Override
+	public Employee fetchByA_E_Last(
+		long accountEntryId, long employeeId,
+		OrderByComparator<Employee> orderByComparator) {
+
+		int count = countByA_E(accountEntryId, employeeId);
+
+		if (count == 0) {
+			return null;
+		}
+
+		List<Employee> list = findByA_E(
+			accountEntryId, employeeId, count - 1, count, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Removes all the employees where accountEntryId = &#63; and employeeId = &#63; from the database.
+	 *
+	 * @param accountEntryId the account entry ID
+	 * @param employeeId the employee ID
+	 */
+	@Override
+	public void removeByA_E(long accountEntryId, long employeeId) {
+		for (Employee employee :
+				findByA_E(
+					accountEntryId, employeeId, QueryUtil.ALL_POS,
+					QueryUtil.ALL_POS, null)) {
+
+			remove(employee);
+		}
+	}
+
+	/**
+	 * Returns the number of employees where accountEntryId = &#63; and employeeId = &#63;.
+	 *
+	 * @param accountEntryId the account entry ID
+	 * @param employeeId the employee ID
+	 * @return the number of matching employees
+	 */
+	@Override
+	public int countByA_E(long accountEntryId, long employeeId) {
+		FinderPath finderPath = _finderPathCountByA_E;
+
+		Object[] finderArgs = new Object[] {accountEntryId, employeeId};
+
+		Long count = (Long)finderCache.getResult(finderPath, finderArgs, this);
+
+		if (count == null) {
+			StringBundler sb = new StringBundler(3);
+
+			sb.append(_SQL_COUNT_EMPLOYEE_WHERE);
+
+			sb.append(_FINDER_COLUMN_A_E_ACCOUNTENTRYID_2);
+
+			sb.append(_FINDER_COLUMN_A_E_EMPLOYEEID_2);
+
+			String sql = sb.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query query = session.createQuery(sql);
+
+				QueryPos queryPos = QueryPos.getInstance(query);
+
+				queryPos.add(accountEntryId);
+
+				queryPos.add(employeeId);
+
+				count = (Long)query.uniqueResult();
+
+				finderCache.putResult(finderPath, finderArgs, count);
+			}
+			catch (Exception exception) {
+				throw processException(exception);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_A_E_ACCOUNTENTRYID_2 =
+		"employee.accountEntryId = ? AND ";
+
+	private static final String _FINDER_COLUMN_A_E_EMPLOYEEID_2 =
+		"employee.employeeId = ?";
+
 	private FinderPath _finderPathWithPaginationFindByCompanyId;
 	private FinderPath _finderPathWithoutPaginationFindByCompanyId;
 	private FinderPath _finderPathCountByCompanyId;
@@ -5167,6 +5548,25 @@ public class EmployeePersistenceImpl
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByUuid_C",
 			new String[] {String.class.getName(), Long.class.getName()},
 			new String[] {"uuid_", "companyId"}, false);
+
+		_finderPathWithPaginationFindByA_E = new FinderPath(
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByA_E",
+			new String[] {
+				Long.class.getName(), Long.class.getName(),
+				Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
+			},
+			new String[] {"accountEntryId", "employeeId"}, true);
+
+		_finderPathWithoutPaginationFindByA_E = new FinderPath(
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByA_E",
+			new String[] {Long.class.getName(), Long.class.getName()},
+			new String[] {"accountEntryId", "employeeId"}, true);
+
+		_finderPathCountByA_E = new FinderPath(
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByA_E",
+			new String[] {Long.class.getName(), Long.class.getName()},
+			new String[] {"accountEntryId", "employeeId"}, false);
 
 		_finderPathWithPaginationFindByCompanyId = new FinderPath(
 			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByCompanyId",

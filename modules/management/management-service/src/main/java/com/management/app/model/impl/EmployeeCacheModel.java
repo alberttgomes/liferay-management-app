@@ -84,8 +84,8 @@ public class EmployeeCacheModel
 		sb.append(createDate);
 		sb.append(", modifiedDate=");
 		sb.append(modifiedDate);
-		sb.append(", createByUserId=");
-		sb.append(createByUserId);
+		sb.append(", accountEntryId=");
+		sb.append(accountEntryId);
 		sb.append(", department=");
 		sb.append(department);
 		sb.append(", firstName=");
@@ -142,7 +142,7 @@ public class EmployeeCacheModel
 			employeeImpl.setModifiedDate(new Date(modifiedDate));
 		}
 
-		employeeImpl.setCreateByUserId(createByUserId);
+		employeeImpl.setAccountEntryId(accountEntryId);
 
 		if (department == null) {
 			employeeImpl.setDepartment("");
@@ -204,7 +204,7 @@ public class EmployeeCacheModel
 		createDate = objectInput.readLong();
 		modifiedDate = objectInput.readLong();
 
-		createByUserId = objectInput.readLong();
+		accountEntryId = objectInput.readLong();
 		department = objectInput.readUTF();
 		firstName = objectInput.readUTF();
 		lastName = objectInput.readUTF();
@@ -241,7 +241,7 @@ public class EmployeeCacheModel
 		objectOutput.writeLong(createDate);
 		objectOutput.writeLong(modifiedDate);
 
-		objectOutput.writeLong(createByUserId);
+		objectOutput.writeLong(accountEntryId);
 
 		if (department == null) {
 			objectOutput.writeUTF("");
@@ -296,7 +296,7 @@ public class EmployeeCacheModel
 	public long companyId;
 	public long createDate;
 	public long modifiedDate;
-	public long createByUserId;
+	public long accountEntryId;
 	public String department;
 	public String firstName;
 	public String lastName;

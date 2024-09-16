@@ -9,6 +9,8 @@ import com.liferay.petra.sql.dsl.query.DSLQuery;
 import com.liferay.portal.kernel.dao.orm.DynamicQuery;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.model.PersistedModel;
+import com.liferay.portal.kernel.search.BaseModelSearchResult;
+import com.liferay.portal.kernel.search.Sort;
 import com.liferay.portal.kernel.util.OrderByComparator;
 
 import com.management.app.exception.NoSuchEmployeeException;
@@ -56,7 +58,8 @@ public class EmployeeLocalServiceUtil {
 			String firstName, String lastName, String department,
 			String position, int level, String stateCode, int status,
 			long managerIdPK, boolean isManager,
-			com.liferay.portal.kernel.model.User user) throws PortalException {
+			com.liferay.portal.kernel.model.User user)
+		throws PortalException {
 
 		return getService().addEmployee(
 			firstName, lastName, department, position, level, stateCode, status,
@@ -366,16 +369,18 @@ public class EmployeeLocalServiceUtil {
 		return getService().getPersistedModel(primaryKeyObj);
 	}
 
-	public static com.liferay.portal.kernel.search.BaseModelSearchResult
-			<Employee> searchAddresses(
+	public static BaseModelSearchResult<Employee> searchEmployees(
 			long companyId, String className, long classPK, String keywords,
-			java.util.LinkedHashMap<String, Object> params, int start,
-			int end, com.liferay.portal.kernel.search.Sort sort)
+			java.util.LinkedHashMap<String, Object> params, int start, int end,
+			Sort sort)
 		throws PortalException {
 
 		return getService().searchEmployees(
-				companyId, className, classPK, keywords, params, start, end, sort);
+			companyId, className, classPK, keywords, params, start, end, sort);
 	}
+
+
+
 
 	/**
 	 * Updates the employee in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.

@@ -68,7 +68,7 @@ public class EmployeeModelImpl
 		{"mvccVersion", Types.BIGINT}, {"uuid_", Types.VARCHAR},
 		{"employeeId", Types.BIGINT}, {"groupId", Types.BIGINT},
 		{"companyId", Types.BIGINT}, {"createDate", Types.TIMESTAMP},
-		{"modifiedDate", Types.TIMESTAMP}, {"createByUserId", Types.BIGINT},
+		{"modifiedDate", Types.TIMESTAMP}, {"accountEntryId", Types.BIGINT},
 		{"department", Types.VARCHAR}, {"firstName", Types.VARCHAR},
 		{"lastName", Types.VARCHAR}, {"position", Types.VARCHAR},
 		{"isManager", Types.BOOLEAN}, {"level", Types.INTEGER},
@@ -87,7 +87,7 @@ public class EmployeeModelImpl
 		TABLE_COLUMNS_MAP.put("companyId", Types.BIGINT);
 		TABLE_COLUMNS_MAP.put("createDate", Types.TIMESTAMP);
 		TABLE_COLUMNS_MAP.put("modifiedDate", Types.TIMESTAMP);
-		TABLE_COLUMNS_MAP.put("createByUserId", Types.BIGINT);
+		TABLE_COLUMNS_MAP.put("accountEntryId", Types.BIGINT);
 		TABLE_COLUMNS_MAP.put("department", Types.VARCHAR);
 		TABLE_COLUMNS_MAP.put("firstName", Types.VARCHAR);
 		TABLE_COLUMNS_MAP.put("lastName", Types.VARCHAR);
@@ -101,7 +101,7 @@ public class EmployeeModelImpl
 	}
 
 	public static final String TABLE_SQL_CREATE =
-		"create table Management_Employee (mvccVersion LONG default 0 not null,uuid_ VARCHAR(75) null,employeeId LONG not null primary key,groupId LONG,companyId LONG,createDate DATE null,modifiedDate DATE null,createByUserId LONG,department VARCHAR(75) null,firstName VARCHAR(75) null,lastName VARCHAR(75) null,position VARCHAR(75) null,isManager BOOLEAN,level INTEGER,managerIdFK LONG,stateCode VARCHAR(75) null,status INTEGER,userId LONG)";
+		"create table Management_Employee (mvccVersion LONG default 0 not null,uuid_ VARCHAR(75) null,employeeId LONG not null primary key,groupId LONG,companyId LONG,createDate DATE null,modifiedDate DATE null,accountEntryId LONG,department VARCHAR(75) null,firstName VARCHAR(75) null,lastName VARCHAR(75) null,position VARCHAR(75) null,isManager BOOLEAN,level INTEGER,managerIdFK LONG,stateCode VARCHAR(75) null,status INTEGER,userId LONG)";
 
 	public static final String TABLE_SQL_DROP =
 		"drop table Management_Employee";
@@ -122,67 +122,73 @@ public class EmployeeModelImpl
 	 * @deprecated As of Athanasius (7.3.x), replaced by {@link #getColumnBitmask(String)}
 	 */
 	@Deprecated
-	public static final long COMPANYID_COLUMN_BITMASK = 1L;
+	public static final long ACCOUNTENTRYID_COLUMN_BITMASK = 1L;
 
 	/**
 	 * @deprecated As of Athanasius (7.3.x), replaced by {@link #getColumnBitmask(String)}
 	 */
 	@Deprecated
-	public static final long DEPARTMENT_COLUMN_BITMASK = 2L;
+	public static final long COMPANYID_COLUMN_BITMASK = 2L;
 
 	/**
 	 * @deprecated As of Athanasius (7.3.x), replaced by {@link #getColumnBitmask(String)}
 	 */
 	@Deprecated
-	public static final long EMPLOYEEID_COLUMN_BITMASK = 4L;
+	public static final long DEPARTMENT_COLUMN_BITMASK = 4L;
 
 	/**
 	 * @deprecated As of Athanasius (7.3.x), replaced by {@link #getColumnBitmask(String)}
 	 */
 	@Deprecated
-	public static final long FIRSTNAME_COLUMN_BITMASK = 8L;
+	public static final long EMPLOYEEID_COLUMN_BITMASK = 8L;
 
 	/**
 	 * @deprecated As of Athanasius (7.3.x), replaced by {@link #getColumnBitmask(String)}
 	 */
 	@Deprecated
-	public static final long GROUPID_COLUMN_BITMASK = 16L;
+	public static final long FIRSTNAME_COLUMN_BITMASK = 16L;
 
 	/**
 	 * @deprecated As of Athanasius (7.3.x), replaced by {@link #getColumnBitmask(String)}
 	 */
 	@Deprecated
-	public static final long LASTNAME_COLUMN_BITMASK = 32L;
+	public static final long GROUPID_COLUMN_BITMASK = 32L;
 
 	/**
 	 * @deprecated As of Athanasius (7.3.x), replaced by {@link #getColumnBitmask(String)}
 	 */
 	@Deprecated
-	public static final long LEVEL_COLUMN_BITMASK = 64L;
+	public static final long LASTNAME_COLUMN_BITMASK = 64L;
 
 	/**
 	 * @deprecated As of Athanasius (7.3.x), replaced by {@link #getColumnBitmask(String)}
 	 */
 	@Deprecated
-	public static final long MANAGERIDFK_COLUMN_BITMASK = 128L;
+	public static final long LEVEL_COLUMN_BITMASK = 128L;
 
 	/**
 	 * @deprecated As of Athanasius (7.3.x), replaced by {@link #getColumnBitmask(String)}
 	 */
 	@Deprecated
-	public static final long POSITION_COLUMN_BITMASK = 256L;
+	public static final long MANAGERIDFK_COLUMN_BITMASK = 256L;
 
 	/**
 	 * @deprecated As of Athanasius (7.3.x), replaced by {@link #getColumnBitmask(String)}
 	 */
 	@Deprecated
-	public static final long STATUS_COLUMN_BITMASK = 512L;
+	public static final long POSITION_COLUMN_BITMASK = 512L;
 
 	/**
 	 * @deprecated As of Athanasius (7.3.x), replaced by {@link #getColumnBitmask(String)}
 	 */
 	@Deprecated
-	public static final long UUID_COLUMN_BITMASK = 1024L;
+	public static final long STATUS_COLUMN_BITMASK = 1024L;
+
+	/**
+	 * @deprecated As of Athanasius (7.3.x), replaced by {@link #getColumnBitmask(String)}
+	 */
+	@Deprecated
+	public static final long UUID_COLUMN_BITMASK = 2048L;
 
 	/**
 	 * @deprecated As of Athanasius (7.3.x), with no direct replacement
@@ -301,7 +307,7 @@ public class EmployeeModelImpl
 			attributeGetterFunctions.put(
 				"modifiedDate", Employee::getModifiedDate);
 			attributeGetterFunctions.put(
-				"createByUserId", Employee::getCreateByUserId);
+				"accountEntryId", Employee::getAccountEntryId);
 			attributeGetterFunctions.put("department", Employee::getDepartment);
 			attributeGetterFunctions.put("firstName", Employee::getFirstName);
 			attributeGetterFunctions.put("lastName", Employee::getLastName);
@@ -349,8 +355,8 @@ public class EmployeeModelImpl
 				"modifiedDate",
 				(BiConsumer<Employee, Date>)Employee::setModifiedDate);
 			attributeSetterBiConsumers.put(
-				"createByUserId",
-				(BiConsumer<Employee, Long>)Employee::setCreateByUserId);
+				"accountEntryId",
+				(BiConsumer<Employee, Long>)Employee::setAccountEntryId);
 			attributeSetterBiConsumers.put(
 				"department",
 				(BiConsumer<Employee, String>)Employee::setDepartment);
@@ -541,33 +547,27 @@ public class EmployeeModelImpl
 
 	@JSON
 	@Override
-	public long getCreateByUserId() {
-		return _createByUserId;
+	public long getAccountEntryId() {
+		return _accountEntryId;
 	}
 
 	@Override
-	public void setCreateByUserId(long createByUserId) {
+	public void setAccountEntryId(long accountEntryId) {
 		if (_columnOriginalValues == Collections.EMPTY_MAP) {
 			_setColumnOriginalValues();
 		}
 
-		_createByUserId = createByUserId;
+		_accountEntryId = accountEntryId;
 	}
 
-	@Override
-	public String getCreateByUserUuid() {
-		try {
-			User user = UserLocalServiceUtil.getUserById(getCreateByUserId());
-
-			return user.getUuid();
-		}
-		catch (PortalException portalException) {
-			return "";
-		}
-	}
-
-	@Override
-	public void setCreateByUserUuid(String createByUserUuid) {
+	/**
+	 * @deprecated As of Athanasius (7.3.x), replaced by {@link
+	 *             #getColumnOriginalValue(String)}
+	 */
+	@Deprecated
+	public long getOriginalAccountEntryId() {
+		return GetterUtil.getLong(
+			this.<Long>getColumnOriginalValue("accountEntryId"));
 	}
 
 	@JSON
@@ -902,7 +902,7 @@ public class EmployeeModelImpl
 		employeeImpl.setCompanyId(getCompanyId());
 		employeeImpl.setCreateDate(getCreateDate());
 		employeeImpl.setModifiedDate(getModifiedDate());
-		employeeImpl.setCreateByUserId(getCreateByUserId());
+		employeeImpl.setAccountEntryId(getAccountEntryId());
 		employeeImpl.setDepartment(getDepartment());
 		employeeImpl.setFirstName(getFirstName());
 		employeeImpl.setLastName(getLastName());
@@ -935,8 +935,8 @@ public class EmployeeModelImpl
 			this.<Date>getColumnOriginalValue("createDate"));
 		employeeImpl.setModifiedDate(
 			this.<Date>getColumnOriginalValue("modifiedDate"));
-		employeeImpl.setCreateByUserId(
-			this.<Long>getColumnOriginalValue("createByUserId"));
+		employeeImpl.setAccountEntryId(
+			this.<Long>getColumnOriginalValue("accountEntryId"));
 		employeeImpl.setDepartment(
 			this.<String>getColumnOriginalValue("department"));
 		employeeImpl.setFirstName(
@@ -1069,7 +1069,7 @@ public class EmployeeModelImpl
 			employeeCacheModel.modifiedDate = Long.MIN_VALUE;
 		}
 
-		employeeCacheModel.createByUserId = getCreateByUserId();
+		employeeCacheModel.accountEntryId = getAccountEntryId();
 
 		employeeCacheModel.department = getDepartment();
 
@@ -1190,7 +1190,7 @@ public class EmployeeModelImpl
 	private Date _createDate;
 	private Date _modifiedDate;
 	private boolean _setModifiedDate;
-	private long _createByUserId;
+	private long _accountEntryId;
 	private String _department;
 	private String _firstName;
 	private String _lastName;
@@ -1239,7 +1239,7 @@ public class EmployeeModelImpl
 		_columnOriginalValues.put("companyId", _companyId);
 		_columnOriginalValues.put("createDate", _createDate);
 		_columnOriginalValues.put("modifiedDate", _modifiedDate);
-		_columnOriginalValues.put("createByUserId", _createByUserId);
+		_columnOriginalValues.put("accountEntryId", _accountEntryId);
 		_columnOriginalValues.put("department", _department);
 		_columnOriginalValues.put("firstName", _firstName);
 		_columnOriginalValues.put("lastName", _lastName);
@@ -1287,7 +1287,7 @@ public class EmployeeModelImpl
 
 		columnBitmasks.put("modifiedDate", 64L);
 
-		columnBitmasks.put("createByUserId", 128L);
+		columnBitmasks.put("accountEntryId", 128L);
 
 		columnBitmasks.put("department", 256L);
 

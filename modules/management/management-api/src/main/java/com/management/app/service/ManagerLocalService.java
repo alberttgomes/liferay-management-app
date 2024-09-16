@@ -80,8 +80,7 @@ public interface ManagerLocalService
 	public Manager createManager(long managerId);
 
 	public Manager createManager(
-			long groupId, long companyId, long employeeIdPK,
-			long mvccVersion)
+			long groupId, long companyId, long employeeIdPK, long mvccVersion)
 		throws NoSuchEmployeeException;
 
 	/**

@@ -41,7 +41,7 @@ public class EmployeeWrapper
 		attributes.put("companyId", getCompanyId());
 		attributes.put("createDate", getCreateDate());
 		attributes.put("modifiedDate", getModifiedDate());
-		attributes.put("createByUserId", getCreateByUserId());
+		attributes.put("accountEntryId", getAccountEntryId());
 		attributes.put("department", getDepartment());
 		attributes.put("firstName", getFirstName());
 		attributes.put("lastName", getLastName());
@@ -100,10 +100,10 @@ public class EmployeeWrapper
 			setModifiedDate(modifiedDate);
 		}
 
-		Long createByUserId = (Long)attributes.get("createByUserId");
+		Long accountEntryId = (Long)attributes.get("accountEntryId");
 
-		if (createByUserId != null) {
-			setCreateByUserId(createByUserId);
+		if (accountEntryId != null) {
+			setAccountEntryId(accountEntryId);
 		}
 
 		String department = (String)attributes.get("department");
@@ -173,6 +173,16 @@ public class EmployeeWrapper
 	}
 
 	/**
+	 * Returns the account entry ID of this employee.
+	 *
+	 * @return the account entry ID of this employee
+	 */
+	@Override
+	public long getAccountEntryId() {
+		return model.getAccountEntryId();
+	}
+
+	/**
 	 * Returns the company ID of this employee.
 	 *
 	 * @return the company ID of this employee
@@ -180,26 +190,6 @@ public class EmployeeWrapper
 	@Override
 	public long getCompanyId() {
 		return model.getCompanyId();
-	}
-
-	/**
-	 * Returns the create by user ID of this employee.
-	 *
-	 * @return the create by user ID of this employee
-	 */
-	@Override
-	public long getCreateByUserId() {
-		return model.getCreateByUserId();
-	}
-
-	/**
-	 * Returns the create by user uuid of this employee.
-	 *
-	 * @return the create by user uuid of this employee
-	 */
-	@Override
-	public String getCreateByUserUuid() {
-		return model.getCreateByUserUuid();
 	}
 
 	/**
@@ -398,6 +388,16 @@ public class EmployeeWrapper
 	}
 
 	/**
+	 * Sets the account entry ID of this employee.
+	 *
+	 * @param accountEntryId the account entry ID of this employee
+	 */
+	@Override
+	public void setAccountEntryId(long accountEntryId) {
+		model.setAccountEntryId(accountEntryId);
+	}
+
+	/**
 	 * Sets the company ID of this employee.
 	 *
 	 * @param companyId the company ID of this employee
@@ -405,26 +405,6 @@ public class EmployeeWrapper
 	@Override
 	public void setCompanyId(long companyId) {
 		model.setCompanyId(companyId);
-	}
-
-	/**
-	 * Sets the create by user ID of this employee.
-	 *
-	 * @param createByUserId the create by user ID of this employee
-	 */
-	@Override
-	public void setCreateByUserId(long createByUserId) {
-		model.setCreateByUserId(createByUserId);
-	}
-
-	/**
-	 * Sets the create by user uuid of this employee.
-	 *
-	 * @param createByUserUuid the create by user uuid of this employee
-	 */
-	@Override
-	public void setCreateByUserUuid(String createByUserUuid) {
-		model.setCreateByUserUuid(createByUserUuid);
 	}
 
 	/**
