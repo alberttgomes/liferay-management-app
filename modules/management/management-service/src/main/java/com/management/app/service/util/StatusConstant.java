@@ -3,9 +3,9 @@ package com.management.app.service.util;
 /**
  * @author Albert Cabral
  */
-public class EmployeeStatusConstant {
+public class StatusConstant {
 
-    public static int[] getStatus() {
+    public static int[] getStatusConstants() {
         return _STATUS;
     }
 
@@ -17,6 +17,8 @@ public class EmployeeStatusConstant {
 
     public static final int PAUSED = 3;
 
-    private static final int[] _STATUS = {ACTIVE, INACTIVE, DELETED, PAUSED};
+    private static final int[] _STATUS = {
+            ACTIVE, INACTIVE, DELETED, PAUSED
+    };
 
 }
