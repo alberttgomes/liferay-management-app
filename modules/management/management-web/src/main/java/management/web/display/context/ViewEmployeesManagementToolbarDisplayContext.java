@@ -37,32 +37,6 @@ public class ViewEmployeesManagementToolbarDisplayContext
     }
 
     @Override
-    public List<DropdownItem> getActionDropdownItems() {
-        return DropdownItemList.of(
-                DropdownItemBuilder.putData(
-                        "action", "deleteAccountEntryAddresses"
-                ).putData(
-                        "deleteAccountEntryAddressesURL",
-                        PortletURLBuilder.createActionURL(
-                                liferayPortletResponse
-                        ).setActionName(
-                                "/management/edit_employee_management"
-                        ).setRedirect(
-                                currentURLObj
-                        ).setParameter(
-                                "employeeId",
-                                ParamUtil.getLong(liferayPortletRequest, "employeeId")
-                        ).buildString()
-                ).setIcon(
-                        "times-circle"
-                ).setLabel(
-                        LanguageUtil.get(httpServletRequest, "delete")
-                ).setQuickAction(
-                        true
-                ).build());
-    }
-
-    @Override
     public String getClearResultsURL() {
         return PortletURLBuilder.create(
                 getPortletURL()
@@ -142,7 +116,7 @@ public class ViewEmployeesManagementToolbarDisplayContext
 
     @Override
     protected String[] getNavigationKeys() {
-        return new String[] {"all", "billing", "shipping"};
+        return new String[] {"all", "departments", "managers"};
     }
 
     @Override
