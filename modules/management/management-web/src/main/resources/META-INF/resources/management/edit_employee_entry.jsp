@@ -1,11 +1,8 @@
-
 <%@ include file="../init.jsp" %>
 
-<%
-    String redirect = ParamUtil.getString(request, "redirect");
-//    Manager manager = ManagerLocalServiceUtil.fetchManager(0);
-//    long managerIdFK = manager.getManagerId();
-%>
+<portlet:renderURL var="redirectToWelcomeScreenPageURL">
+    <portlet:param name="mvcPath" value="/management/employee_entry.jsp" />
+</portlet:renderURL>
 
 <portlet:actionURL name="/management/edit_employee_management" var="addEmployeeURL">
     <portlet:param name="mvcRenderCommandName" value="/management/edit_employee_management" />
@@ -13,9 +10,6 @@
 </portlet:actionURL>
 
 <aui:form action="<%= addEmployeeURL %>" method="post" name="fm">
-    <aui:input name="redirect" type="hidden" value="<%= redirect %>" />
-<%--    <aui:input name="managerIdFK" type="hidden" value="<%= managerIdFK %>" />--%>
-
     <clay:sheet>
         <clay:sheet-section>
             <h3 class="sheet-subtitle"><liferay-ui:message key="add-new-employee" /></h3>
