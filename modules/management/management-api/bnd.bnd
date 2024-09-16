@@ -5,5 +5,9 @@ Export-Package:\
     com.management.app.model,\
     com.management.app.exception,\
     com.management.app.service.*,\
+Import-Package:\
+    !org.apache.commons.lang3.*,\
+	\
+	*
 -check: EXPORTS
 -includeresource: META-INF/service.xml=../management-service/service.xml
