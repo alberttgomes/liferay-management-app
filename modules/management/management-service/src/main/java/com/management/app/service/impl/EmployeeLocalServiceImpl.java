@@ -6,6 +6,8 @@
 package com.management.app.service.impl;
 
 import com.liferay.account.constants.AccountConstants;
+import com.liferay.account.model.AccountEntry;
+import com.liferay.account.service.AccountEntryLocalService;
 import com.liferay.account.service.AccountEntryLocalServiceUtil;
 import com.liferay.counter.kernel.service.CounterLocalServiceUtil;
 import com.liferay.petra.string.StringPool;
@@ -28,7 +30,7 @@ import com.management.app.model.Employee;
 import com.management.app.model.Manager;
 import com.management.app.service.ManagerLocalService;
 import com.management.app.service.base.EmployeeLocalServiceBaseImpl;
-import com.management.app.service.util.EmployeeStatusConstant;
+import com.management.app.service.util.StatusConstant;
 
 import java.io.Serializable;
 import java.util.*;
@@ -327,7 +329,7 @@ public class EmployeeLocalServiceImpl extends EmployeeLocalServiceBaseImpl {
 		employee.setPosition(position);
 		employee.setPrimaryKey(employeeId);
 		employee.setStateCode(stateCode);
-		employee.setStatus(EmployeeStatusConstant.ACTIVE);
+		employee.setStatus(StatusConstant.ACTIVE);
 		employee.setGroupId(user.getGroupId());
 		employee.setUserId(user.getUserId());
 
@@ -344,25 +346,27 @@ public class EmployeeLocalServiceImpl extends EmployeeLocalServiceBaseImpl {
 			employee.setManagerIdFK(managerIdFK);
 		}
 
+		AccountEntry accountEntry = _accountEntryLocalService.createAccountEntry(
+				employee.getEmployeeId());
+
+		String emailAddress = _createEmailAddressDomain(
+				employee.getFirstName(), employee.getLastName(),
+				"company.com");
+
+		accountEntry.setCreateDate(new Date());
+		accountEntry.setEmailAddress(emailAddress);
+		accountEntry.setExpandoBridgeAttributes(employee);
+		accountEntry.setMvccVersion(employee.getMvccVersion());
+		accountEntry.setStatus(WorkflowConstants.STATUS_APPROVED);
+		accountEntry.setUserId(user.getUserId());
+		accountEntry.setUserName(firstName + StringPool.SPACE + lastName);
+		accountEntry.setUserUuid(user.getUserUuid());
+
 		employee = employeePersistence.update(employee);
 
 		_log.info("Create employee " + employee.getFirstName());
 
-		String accountEntryName =
-				employee.getFirstName() + StringPool.SPACE +
-						employee.getLastName();
-
-		String emailAddress = _createEmailAddressDomain(
-				employee.getFirstName(), employee.getLastName(), "company.com");
-
-		 AccountEntryLocalServiceUtil.addAccountEntry(
-				 user.getUserId(), employeeId, accountEntryName, StringPool.BLANK,
-				null, emailAddress, null, null,
-				 AccountConstants.ACCOUNT_ENTRY_TYPE_BUSINESS,
-				 WorkflowConstants.STATUS_APPROVED, null);
-
 		return employee;
-
 	}
 
 	private long _createManager(
@@ -529,6 +533,9 @@ public class EmployeeLocalServiceImpl extends EmployeeLocalServiceBaseImpl {
 
 	private static final Log _log = LogFactoryUtil.getLog(
 			EmployeeLocalServiceImpl.class);
+
+	@Reference
+	private AccountEntryLocalService _accountEntryLocalService;
 
 	@Reference
 	private ManagerLocalService _managerLocalService;
