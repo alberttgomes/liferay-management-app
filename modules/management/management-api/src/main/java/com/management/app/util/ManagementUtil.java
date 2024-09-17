@@ -1,6 +1,6 @@
 package com.management.app.util;
 
-import org.apache.commons.lang3.RandomStringUtils;
+import java.util.Random;
 
 /**
  * @author Albert Cabral
@@ -8,12 +8,7 @@ import org.apache.commons.lang3.RandomStringUtils;
 public class ManagementUtil {
 
     public static String generateRandomPassword() {
-        int length = 32;
-        boolean useLetters = true;
-        boolean useNumbers = true;
-
-        return RandomStringUtils.random(
-                length, useLetters, useNumbers);
+        return new Random().doubles().toString();
 
     }
 
