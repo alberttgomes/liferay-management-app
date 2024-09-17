@@ -221,7 +221,6 @@ public class EmployeeLocalServiceImpl extends EmployeeLocalServiceBaseImpl {
 
 		SearchContext searchContext = new SearchContext();
 
-
 		searchContext.setAttributes(
 				HashMapBuilder.<String, Serializable>put(
 						Field.CLASS_NAME_ID,
@@ -344,8 +343,9 @@ public class EmployeeLocalServiceImpl extends EmployeeLocalServiceBaseImpl {
 			employee.setManagerIdFK(managerIdFK);
 		}
 
-		AccountEntry accountEntry = _accountEntryLocalService.createAccountEntry(
-				employee.getEmployeeId());
+		AccountEntry accountEntry =
+				_accountEntryLocalService.createAccountEntry(
+						employee.getEmployeeId());
 
 		String emailAddress = _createEmailAddressDomain(
 				employee.getFirstName(), employee.getLastName(),
