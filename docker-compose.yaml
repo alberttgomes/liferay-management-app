@@ -46,4 +46,3 @@ services:
     volumes:
       - ./bundles/osgi/modules/:/opt/liferay/deploy/
       - ./docker-compose/liferay/files/:/mnt/liferay/files/
-      - ./docker-compose/liferay/license:/mnt/liferay/deploy/
