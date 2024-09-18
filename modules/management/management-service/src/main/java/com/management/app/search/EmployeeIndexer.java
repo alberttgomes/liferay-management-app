@@ -2,6 +2,7 @@ package com.management.app.search;
 
 import com.liferay.portal.kernel.dao.orm.IndexableActionableDynamicQuery;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
+import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.search.*;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.ListUtil;
@@ -110,7 +111,7 @@ public class EmployeeIndexer extends BaseIndexer<Employee> {
                 Employee::getEmployeeId);
     }
 
-    private void _reindexEmployees(long companyId) {
+    private void _reindexEmployees(long companyId) throws PortalException {
         IndexableActionableDynamicQuery indexableActionableDynamicQuery =
                 _employeeLocalService.getIndexableActionableDynamicQuery();
 
@@ -121,6 +122,8 @@ public class EmployeeIndexer extends BaseIndexer<Employee> {
                     indexableActionableDynamicQuery.addDocuments(
                             getDocument(employee));
                 });
+
+        indexableActionableDynamicQuery.performActions();
     }
 
     @Reference
