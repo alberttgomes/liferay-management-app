@@ -1,9 +1,5 @@
 <%@ include file="../init.jsp" %>
 
-<portlet:renderURL var="redirectToWelcomeScreenPageURL">
-    <portlet:param name="mvcPath" value="/management/employee_entry.jsp" />
-</portlet:renderURL>
-
 <portlet:actionURL name="/management/edit_employee_management" var="addEmployeeURL">
     <portlet:param name="mvcRenderCommandName" value="/management/edit_employee_management" />
     <portlet:param name="<%= Constants.CMD %>" value="<%= Constants.ADD %>" />

@@ -7,8 +7,12 @@ taglib uri="http://liferay.com/tld/ui" prefix="liferay-ui" %><%@
 taglib uri="http://liferay.com/tld/clay" prefix="clay" %>
 
 <%@ page import="com.liferay.portal.kernel.util.Constants" %><%@
-page import="management.web.constants.ManagementPortletKeys" %>
-<%@ page import="com.liferay.portal.kernel.util.ParamUtil" %>
+page import="management.web.constants.ManagementPortletKeys" %><%@
+page import="com.liferay.portal.kernel.util.ParamUtil" %><%@
+page import="management.web.display.EmployeeDisplay" %><%@
+page import="com.liferay.portal.kernel.dao.search.SearchContainer" %><%@
+page import="management.web.internal.dao.search.ManagementDisplaySearchContainerFactory" %><%@
+page import="management.web.display.context.ViewEmployeesManagementToolbarDisplayContext" %>
 
 <liferay-theme:defineObjects />
 
