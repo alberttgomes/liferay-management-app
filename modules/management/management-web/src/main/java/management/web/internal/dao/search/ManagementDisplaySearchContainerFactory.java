@@ -1,6 +1,5 @@
 package management.web.internal.dao.search;
 
-import com.liferay.account.model.AccountEntry;
 import com.liferay.petra.function.transform.TransformUtil;
 import com.liferay.portal.kernel.dao.search.EmptyOnClickRowChecker;
 import com.liferay.portal.kernel.dao.search.SearchContainer;
@@ -41,15 +40,15 @@ public class ManagementDisplaySearchContainerFactory {
                         liferayPortletRequest, liferayPortletResponse),
                 null, "no-employee-were-found");
 
-        searchContainer.setId("employeeId");
+        searchContainer.setId("employeeSearchContainerId");
         searchContainer.setOrderByCol(
                 SearchOrderByUtil.getOrderByCol(
                         liferayPortletRequest, ManagementPortletKeys.MANAGEMENT_WEB,
-                        "employee-order-by-col", "name"));
+                        "order-by-col", "name"));
         searchContainer.setOrderByType(
                 SearchOrderByUtil.getOrderByType(
                         liferayPortletRequest, ManagementPortletKeys.MANAGEMENT_WEB,
-                        "employee-order-by-type", "asc"));
+                        "order-by-type", "asc"));
 
         String keywords = ParamUtil.getString(
                 liferayPortletRequest, "keywords");
@@ -82,7 +81,7 @@ public class ManagementDisplaySearchContainerFactory {
 
         BaseModelSearchResult<Employee> baseModelSearchResult =
                 EmployeeLocalServiceUtil.searchEmployees(
-                        themeDisplay.getCompanyId(), AccountEntry.class.getName(),
+                        themeDisplay.getCompanyId(), Employee.class.getName(),
                         ParamUtil.getLong(liferayPortletRequest, "employeeId"),
                         keywords, params, searchContainer.getStart(),
                         searchContainer.getEnd(),
