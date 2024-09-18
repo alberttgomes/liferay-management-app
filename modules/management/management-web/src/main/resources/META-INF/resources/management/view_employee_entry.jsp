@@ -1,7 +1,3 @@
-<%@ page import="management.web.display.EmployeeDisplay" %>
-<%@ page import="com.liferay.portal.kernel.dao.search.SearchContainer" %>
-<%@ page import="management.web.internal.dao.search.ManagementDisplaySearchContainerFactory" %>
-<%@ page import="management.web.display.context.ViewEmployeesManagementToolbarDisplayContext" %>
 <%@ include file="../init.jsp" %>
 
 <%
@@ -15,7 +11,9 @@
 
 <clay:container-fluid>
     <liferay-ui:search-container
+            id="employeeSearchContainerId"
             searchContainer="<%= employeeEntryDisplaySearchContainer %>"
+            total="<%= employeeEntryDisplaySearchContainer.getTotal() %>"
     >
         <liferay-ui:search-container-row
                 className="management.web.display.EmployeeDisplay"
