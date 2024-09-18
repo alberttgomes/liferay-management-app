@@ -24,7 +24,6 @@ import com.liferay.portal.kernel.service.PersistedModelLocalService;
 import com.liferay.portal.kernel.transaction.Isolation;
 import com.liferay.portal.kernel.transaction.Propagation;
 import com.liferay.portal.kernel.transaction.Transactional;
-import com.liferay.portal.kernel.util.*;
 import com.liferay.portal.kernel.util.OrderByComparator;
 
 import com.management.app.exception.NoSuchEmployeeException;
@@ -262,7 +261,7 @@ public interface EmployeeLocalService
 	public List<Employee> getEmployees(int start, int end);
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public List<Employee> getEmployeesByManagerIdAndPermission(
+	public List<Employee> getAllManagersEmployee(
 			long managerIdPK, long companyId, boolean hasPermission)
 		throws NoSuchEmployeeException, NoSuchManagerException;
 
