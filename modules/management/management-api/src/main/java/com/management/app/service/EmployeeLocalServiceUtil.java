@@ -287,12 +287,12 @@ public class EmployeeLocalServiceUtil {
 		return getService().getEmployees(start, end);
 	}
 
-	public static List<Employee> getEmployeesByManagerIdAndPermission(
+	public static List<Employee> getAllManagersEmployee(
 			long managerIdPK, long companyId, boolean hasPermission)
 		throws com.management.app.exception.NoSuchEmployeeException,
 			   com.management.app.exception.NoSuchManagerException {
 
-		return getService().getEmployeesByManagerIdAndPermission(
+		return getService().getAllManagersEmployee(
 			managerIdPK, companyId, hasPermission);
 	}
 
