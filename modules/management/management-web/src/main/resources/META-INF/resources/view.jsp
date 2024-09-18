@@ -1,17 +1,11 @@
 <%@ include file="/init.jsp" %>
 
-<%
-String currentURL = themeDisplay.getURLCurrent();
-%>
-
 <portlet:renderURL var="editEmployeeEntryRequestURL">
     <portlet:param name="mvcPath" value="/management/edit_employee_entry.jsp" />
-    <portlet:param name="redirect" value="<%= currentURL %>" />
 </portlet:renderURL>
 
 <portlet:renderURL var="viewEmployeeEntryRequestURL">
     <portlet:param name="mvcPath" value="/management/view_employee_entry.jsp" />
-    <portlet:param name="redirect" value="<%= currentURL %>" />
 </portlet:renderURL>
 
 <c:choose>
