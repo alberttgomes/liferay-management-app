@@ -1,6 +1,8 @@
 package com.management.app.util;
 
-import java.util.Random;
+import com.liferay.portal.kernel.security.SecureRandomUtil;
+
+import java.util.UUID;
 
 /**
  * @author Albert Cabral
@@ -8,8 +10,10 @@ import java.util.Random;
 public class ManagementUtil {
 
     public static String generateRandomPassword() {
-        return new Random().doubles().toString();
+        UUID uuid = new UUID(
+                SecureRandomUtil.nextLong(), SecureRandomUtil.nextLong());
 
+        return uuid.toString();
     }
 
 }
