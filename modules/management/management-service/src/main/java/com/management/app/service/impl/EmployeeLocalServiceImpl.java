@@ -8,6 +8,7 @@ package com.management.app.service.impl;
 import com.liferay.account.model.AccountEntry;
 import com.liferay.account.service.AccountEntryLocalService;
 import com.liferay.counter.kernel.service.CounterLocalServiceUtil;
+import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.aop.AopService;
 import com.liferay.portal.kernel.exception.PortalException;
@@ -22,6 +23,7 @@ import com.liferay.portal.kernel.service.ClassNameLocalServiceUtil;
 import com.liferay.portal.kernel.util.*;
 
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
+import com.management.app.constants.ManagementConstants;
 import com.management.app.exception.NoSuchEmployeeException;
 import com.management.app.exception.NoSuchManagerException;
 import com.management.app.model.Employee;
@@ -47,6 +49,7 @@ import org.osgi.service.component.annotations.Reference;
 )
 public class EmployeeLocalServiceImpl extends EmployeeLocalServiceBaseImpl {
 
+	@Indexable(type = IndexableType.REINDEX)
 	@Override
 	public Employee addEmployee(
 			String firstName, String lastName, String department, String position,
@@ -63,10 +66,12 @@ public class EmployeeLocalServiceImpl extends EmployeeLocalServiceBaseImpl {
 				level, stateCode, employeeId, isManager, user);
 	}
 
+	@Indexable(type = IndexableType.REINDEX)
 	@Override
 	public Employee deleteEmployee(long employeeId) throws NoSuchEmployeeException {
 		if (employeePersistence.findByEmployeeId(employeeId).isEmpty() ||
 				employeePersistence.findByEmployeeId(employeeId) == null) {
+
 			throw new NoSuchEmployeeException(
 					"No such employee with id: " + employeeId);
 		}
@@ -80,8 +85,7 @@ public class EmployeeLocalServiceImpl extends EmployeeLocalServiceBaseImpl {
 	@Override
 	public Employee getEmployee(long employeeId) {
 		if (employeePersistence.fetchByPrimaryKey(employeeId) == null) {
-			_log.error("No employee found with the primary key " +
-					employeeId);
+			_log.error("No employee found with the primary key " + employeeId);
 
 			return null;
 		}
@@ -89,20 +93,13 @@ public class EmployeeLocalServiceImpl extends EmployeeLocalServiceBaseImpl {
 		return employeePersistence.fetchByPrimaryKey(employeeId);
 	}
 
+	@Indexable(type = IndexableType.REINDEX)
 	@Override
-	public List<Employee> getEmployeesByManagerIdAndPermission(
+	public List<Employee> getAllManagersEmployee(
 			long managerIdPK, long companyId, boolean hasPermission)
 		throws NoSuchEmployeeException, NoSuchManagerException {
 
 		try {
-			if (managerIdPK <= -1) {
-				_log.warn(StringBundler.concat(
-						"Invalid input for the manager id ",
-						String.valueOf(managerIdPK), " put a valid manager id"));
-
-				return null;
-			}
-
 			Manager manager = _managerLocalService.getManager(managerIdPK);
 
 			if (manager == null) {
@@ -112,17 +109,20 @@ public class EmployeeLocalServiceImpl extends EmployeeLocalServiceBaseImpl {
 
 			List<Employee> employees = employeePersistence.findAll();
 
+			List<Employee> associatedEmployees = new ArrayList<>();
+
 			if (employees.isEmpty()) {
 				throw new NoSuchEmployeeException(
-						"No found employee associated to the manager id: " +
-								managerIdPK);
+						"Associated employees list is empty");
 			}
 
-			List<Employee> associatedEmployees = new ArrayList<>();
+			_log.debug("All employees there are managers \n");
 
 			for (Employee employee : employees) {
 				if (employee.getManagerIdFK() == managerIdPK) {
-					_log.debug("Find employee " + employee.getFirstName());
+					_log.debug(StringBundler.concat(
+							"Employee: ", employee.getFirstName(),
+							StringPool.SPACE, employee.getLastName()));
 
 					associatedEmployees.add(employee);
 				}
@@ -266,16 +266,16 @@ public class EmployeeLocalServiceImpl extends EmployeeLocalServiceBaseImpl {
 		List<Employee> employees = new ArrayList<>(documents.size());
 
 		for (Document document : documents) {
-			long addressId = GetterUtil.getLong(
+			long employeeId = GetterUtil.getLong(
 					document.get(Field.ENTRY_CLASS_PK));
 
-			Employee employee = fetchEmployee(addressId);
+			Employee employee = fetchEmployee(employeeId);
 
 			if (employee == null) {
 				employees = null;
 
-				Indexer<Address> indexer = IndexerRegistryUtil.getIndexer(
-						Address.class);
+				Indexer<Employee> indexer = IndexerRegistryUtil.getIndexer(
+						Employee.class);
 
 				long companyId = GetterUtil.getLong(
 						document.get(Field.COMPANY_ID));
@@ -349,7 +349,7 @@ public class EmployeeLocalServiceImpl extends EmployeeLocalServiceBaseImpl {
 
 		String emailAddress = _createEmailAddressDomain(
 				employee.getFirstName(), employee.getLastName(),
-				"company.com");
+				ManagementConstants.MANAGEMENT_DOMAIN);
 
 		accountEntry.setCreateDate(new Date());
 		accountEntry.setEmailAddress(emailAddress);
@@ -359,6 +359,12 @@ public class EmployeeLocalServiceImpl extends EmployeeLocalServiceBaseImpl {
 		accountEntry.setUserId(user.getUserId());
 		accountEntry.setUserName(firstName + StringPool.SPACE + lastName);
 		accountEntry.setUserUuid(user.getUserUuid());
+
+		accountEntry =
+				_accountEntryLocalService.updateAccountEntry(
+						accountEntry);
+
+		employee.setAccountEntryId(accountEntry.getAccountEntryId());
 
 		employee = employeePersistence.update(employee);
 
