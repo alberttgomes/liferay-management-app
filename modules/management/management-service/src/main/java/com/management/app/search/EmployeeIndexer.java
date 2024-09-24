@@ -1,12 +1,16 @@
 package com.management.app.search;
 
+import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.dao.orm.IndexableActionableDynamicQuery;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.search.*;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.ListUtil;
 
+import com.liferay.portal.kernel.util.StringBundler;
 import com.management.app.model.Employee;
 import com.management.app.service.EmployeeLocalService;
 
@@ -45,19 +49,15 @@ public class EmployeeIndexer extends BaseIndexer<Employee> {
         document.addKeyword(
                 Field.STATUS, employee.getStatus());
         document.addKeyword(
-                "isManager", employee.isIsManager());
-        document.addKeyword(
-                "employeeId", employee.getEmployeeId());
-        document.addKeyword(
                 "employeeIds", _getAllEmployees());
         document.addKeyword(
                 "accountEntryId", employee.getAccountEntryId());
         document.addKeyword(
-                "employeeDepartment", employee.getDepartment());
+                "engineer", employee.getDepartment());
         document.addKeyword(
-                "employeePosition", employee.getPosition());
+                "general", employee.getDepartment());
         document.addKeyword(
-                "managerId", employee.getManagerIdFK());
+                "position", employee.getPosition());
 
         return document;
     }
@@ -116,15 +116,21 @@ public class EmployeeIndexer extends BaseIndexer<Employee> {
                 _employeeLocalService.getIndexableActionableDynamicQuery();
 
         indexableActionableDynamicQuery.setCompanyId(companyId);
-
         indexableActionableDynamicQuery.setPerformActionMethod(
                 (Employee employee) -> {
+                    if (_log.isDebugEnabled()) {
+                        _log.debug(StringBundler.concat("Indexing employee",
+                                StringPool.SPACE, employee.getFirstName()));
+                    }
+
                     indexableActionableDynamicQuery.addDocuments(
                             getDocument(employee));
                 });
 
         indexableActionableDynamicQuery.performActions();
     }
+
+    private static final Log _log = LogFactoryUtil.getLog(EmployeeIndexer.class);
 
     @Reference
     private EmployeeLocalService _employeeLocalService;
