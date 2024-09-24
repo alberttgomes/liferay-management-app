@@ -5,17 +5,13 @@ package com.management.app.constants;
  */
 public class EmployeeListTypeConstants {
 
-    public static final String EMPLOYEE = "employee";
-
     public static final String EMPLOYEE_ENTRY_DEPARTMENT =
-            "employee-entry-department";
+            "department";
 
     public static final String EMPLOYEE_ENTRY_MANAGERS =
-            "employee-entry-managers";
+            "managers";
 
     public static final String EMPLOYEE_ENTRY_POSITION =
-            "employee-entry-position";
-
-    public static final String MANAGER = "manager";
+            "position";
 
 }
