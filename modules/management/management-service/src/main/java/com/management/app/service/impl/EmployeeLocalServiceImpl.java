@@ -16,13 +16,13 @@ import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.json.JSONUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.model.Address;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.search.*;
 import com.liferay.portal.kernel.service.ClassNameLocalServiceUtil;
 import com.liferay.portal.kernel.util.*;
 
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
+
 import com.management.app.constants.ManagementConstants;
 import com.management.app.exception.NoSuchEmployeeException;
 import com.management.app.exception.NoSuchManagerException;
@@ -157,7 +157,7 @@ public class EmployeeLocalServiceImpl extends EmployeeLocalServiceBaseImpl {
 
 			if (user == null || !user.isActive()) {
 				throw new RuntimeException(
-						"No user available with the user id " + userId);
+						"Operation not allowed by the user id " + userId);
 			}
 
 			_log.debug("Are promoting by " + user.getFullName());
@@ -170,11 +170,11 @@ public class EmployeeLocalServiceImpl extends EmployeeLocalServiceBaseImpl {
 				return null;
 			}
 
-			_validate(employee.getFirstName(), employee.getLastName(),
+			_validate(
+					employee.getFirstName(), employee.getLastName(),
 					position, level, department);
 
 			employee.setIsManager(isManager);
-
 			employee.setDepartment(department);
 			employee.setLevel(level);
 			employee.setPosition(position);
@@ -209,112 +209,17 @@ public class EmployeeLocalServiceImpl extends EmployeeLocalServiceBaseImpl {
 			LinkedHashMap<String, Object> params, int start, int end, Sort sort)
 		throws PortalException {
 
-		SearchContext searchContext = buildSearchContext(
+		SearchContext searchContext = _buildSearchContext(
 				companyId, className, classPK, keywords, params, start, end, sort);
 
-		return searchEmployees(searchContext);
-	}
-
-	protected SearchContext buildSearchContext(
-			long companyId, String className, long classPK, String keywords,
-			LinkedHashMap<String, Object> params, int start, int end, Sort sort) {
-
-		SearchContext searchContext = new SearchContext();
-
-		searchContext.setAttributes(
-				HashMapBuilder.<String, Serializable>put(
-						Field.CLASS_NAME_ID,
-						ClassNameLocalServiceUtil.getClassNameId(className)
-				).put(
-						Field.CLASS_PK, classPK
-				).put(
-						Field.NAME, keywords
-				).put(
-						"department", keywords
-				).put(
-						"name", params
-				).put(
-						"position", keywords
-				).put(
-						"screenName", keywords
-				).build());
-
-		searchContext.setCompanyId(companyId);
-		searchContext.setEnd(end);
-
-		if (Validator.isNotNull(keywords)) {
-			searchContext.setKeywords(keywords);
-		}
-
-		if (sort != null) {
-			searchContext.setSorts(sort);
-		}
-
-		searchContext.setStart(start);
-
-		QueryConfig queryConfig = searchContext.getQueryConfig();
-
-		queryConfig.setHighlightEnabled(false);
-		queryConfig.setScoreEnabled(false);
-
-		return searchContext;
-	}
-
-	protected List<Employee> getEmployees(Hits hits) throws PortalException {
-		List<Document> documents = hits.toList();
-
-		List<Employee> employees = new ArrayList<>(documents.size());
-
-		for (Document document : documents) {
-			long employeeId = GetterUtil.getLong(
-					document.get(Field.ENTRY_CLASS_PK));
-
-			Employee employee = fetchEmployee(employeeId);
-
-			if (employee == null) {
-				employees = null;
-
-				Indexer<Employee> indexer = IndexerRegistryUtil.getIndexer(
-						Employee.class);
-
-				long companyId = GetterUtil.getLong(
-						document.get(Field.COMPANY_ID));
-
-				indexer.delete(companyId, document.getUID());
-			}
-			else if (employees != null) {
-				employees.add(employee);
-			}
-		}
-
-		return employees;
-	}
-
-	protected BaseModelSearchResult<Employee> searchEmployees(SearchContext searchContext)
-		throws PortalException {
-
-		Indexer<Employee> indexer = IndexerRegistryUtil.nullSafeGetIndexer(
-				Employee.class);
-
-		for (int i = 0; i < 10; i++) {
-			Hits hits = indexer.search(searchContext);
-
-			List<Employee> employees = getEmployees(hits);
-
-			if (employees != null) {
-				return new BaseModelSearchResult<>(employees, hits.getLength());
-			}
-		}
-
-		throw new SearchException(
-				"Unable to find any employees");
+		return _searchEmployees(searchContext);
 	}
 
 	private Employee _addEmployee(
 			String firstName, String lastName, String department, String position,
 			int level, String stateCode, long employeeId, boolean isManager,
 			User user)
-   		throws PortalException {
+			throws PortalException {
 
 		Employee employee = employeePersistence.create(employeeId);
 
@@ -373,6 +278,51 @@ public class EmployeeLocalServiceImpl extends EmployeeLocalServiceBaseImpl {
 		return employee;
 	}
 
+	private SearchContext _buildSearchContext(
+			long companyId, String className, long classPK, String keywords,
+			LinkedHashMap<String, Object> params, int start, int end, Sort sort) {
+
+		SearchContext searchContext = new SearchContext();
+
+		searchContext.setAttributes(
+				HashMapBuilder.<String, Serializable>put(
+						Field.CLASS_NAME_ID,
+						ClassNameLocalServiceUtil.getClassNameId(className)
+				).put(
+						Field.CLASS_PK, classPK
+				).put(
+						Field.NAME, keywords
+				).put(
+						"department", keywords
+				).put(
+						"name", params
+				).put(
+						"position", keywords
+				).put(
+						"screenName", keywords
+				).build());
+
+		searchContext.setCompanyId(companyId);
+		searchContext.setEnd(end);
+
+		if (Validator.isNotNull(keywords)) {
+			searchContext.setKeywords(keywords);
+		}
+
+		if (sort != null) {
+			searchContext.setSorts(sort);
+		}
+
+		searchContext.setStart(start);
+
+		QueryConfig queryConfig = searchContext.getQueryConfig();
+
+		queryConfig.setHighlightEnabled(false);
+		queryConfig.setScoreEnabled(false);
+
+		return searchContext;
+	}
+
 	private String _createEmailAddressDomain(
 			String firstName, String lastName, String domain) {
 
@@ -387,6 +337,57 @@ public class EmployeeLocalServiceImpl extends EmployeeLocalServiceBaseImpl {
 				groupId, companyId, employeeId, mvccVersion);
 
 		return manager.getManagerId();
+	}
+
+	private List<Employee> _getEmployees(Hits hits) throws PortalException {
+		List<Document> documents = hits.toList();
+
+		List<Employee> employees = new ArrayList<>(documents.size());
+
+		for (Document document : documents) {
+			long employeeId = GetterUtil.getLong(
+					document.get(Field.ENTRY_CLASS_PK));
+
+			Employee employee = fetchEmployee(employeeId);
+
+			if (employee == null) {
+				employees = null;
+
+				Indexer<Employee> indexer = IndexerRegistryUtil.getIndexer(
+						Employee.class);
+
+				long companyId = GetterUtil.getLong(
+						document.get(Field.COMPANY_ID));
+
+				indexer.delete(companyId, document.getUID());
+			}
+			else if (employees != null) {
+				employees.add(employee);
+			}
+		}
+
+		return employees;
+	}
+
+	private BaseModelSearchResult<Employee> _searchEmployees(
+			SearchContext searchContext)
+		throws PortalException {
+
+		Indexer<Employee> indexer = IndexerRegistryUtil.nullSafeGetIndexer(
+				Employee.class);
+
+		for (int i = 0; i < 10; i++) {
+			Hits hits = indexer.search(searchContext);
+
+			List<Employee> employees = _getEmployees(hits);
+
+			if (employees != null) {
+				return new BaseModelSearchResult<>(employees, hits.getLength());
+			}
+		}
+
+		throw new SearchException(
+				"Unable to find any employees");
 	}
 
 	private void _validate(
@@ -406,18 +407,24 @@ public class EmployeeLocalServiceImpl extends EmployeeLocalServiceBaseImpl {
 								department);
 			}
 			else {
-				// Validate job available positions
 
 				Map<String, String> departmentMap = HashMapBuilder.put(
 						"department", department).build();
 
-				if (departmentMap.isEmpty()) {
-					throw new RuntimeException(
-							"No available department identifier " +
-									department);
+                // Validate job available positions
+
+				if (EmployeeStructure.DEPARTMENT_ENGINEER.equals(department) ||
+						EmployeeStructure.DEPARTMENT_GENERAL.equals(department)) {
+
+					if (_log.isDebugEnabled()) {
+						_log.debug("Department valid " + department);
+					}
+				}
+				else {
+					throw new RuntimeException("");
 				}
 
-				JSONObject jsonObject = _departmentsJSONObject();
+				JSONObject jsonObject = _departmentsJSONObject(null);
 
 				jsonObject = (JSONObject)
 						jsonObject.get(departmentMap.get("department"));
@@ -463,7 +470,9 @@ public class EmployeeLocalServiceImpl extends EmployeeLocalServiceBaseImpl {
 
 	}
 
-	private JSONObject _departmentsJSONObject() {
+	private JSONObject _departmentsJSONObject(Properties properties) {
+		properties.getProperty("Assoc Software Engineer");
+
 		return JSONUtil.put(
 				"engineer",
 				JSONUtil.put(
