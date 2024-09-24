@@ -12,10 +12,12 @@ import com.liferay.portal.kernel.portlet.LiferayPortletResponse;
 import com.liferay.portal.kernel.portlet.PortletURLUtil;
 import com.liferay.portal.kernel.portlet.url.builder.PortletURLBuilder;
 import com.liferay.portal.kernel.util.ParamUtil;
+
 import management.web.display.EmployeeDisplay;
 
 import javax.portlet.PortletURL;
 import javax.servlet.http.HttpServletRequest;
+
 import java.util.List;
 import java.util.Objects;
 
@@ -116,7 +118,7 @@ public class ViewEmployeesManagementToolbarDisplayContext
 
     @Override
     protected String[] getNavigationKeys() {
-        return new String[] {"all", "departments", "managers"};
+        return new String[] {"all", "engineer", "Software Engineer"};
     }
 
     @Override
