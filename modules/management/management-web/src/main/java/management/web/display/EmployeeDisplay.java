@@ -84,8 +84,8 @@ public class EmployeeDisplay {
 
     private static final EmployeeDisplay _EMPTY_INSTANCE = new EmployeeDisplay();
 
-    private final long _employeeId;
     private final String _department;
+    private final long _employeeId;
     private final String _fullName;
     private final String _position;
     private final String _screenName;
