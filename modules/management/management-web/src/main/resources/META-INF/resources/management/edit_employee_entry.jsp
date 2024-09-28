@@ -8,7 +8,7 @@
 <aui:form action="<%= addEmployeeURL %>" method="post" name="fm">
     <clay:sheet>
         <clay:sheet-section>
-            <h3 class="sheet-subtitle"><liferay-ui:message key="add-new-employee" /></h3>
+            <h3 class="sheet-subtitle">Create a new employee</h3>
 
             <div class="form-group">
                 <clay:row>

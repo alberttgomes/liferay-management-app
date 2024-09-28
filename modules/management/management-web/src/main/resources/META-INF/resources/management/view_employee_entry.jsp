@@ -3,15 +3,20 @@
 <%
     SearchContainer<EmployeeDisplay> employeeEntryDisplaySearchContainer = ManagementDisplaySearchContainerFactory.create(liferayPortletRequest, liferayPortletResponse);
     ViewEmployeesManagementToolbarDisplayContext viewEmployeesManagementToolbarDisplayContext = new ViewEmployeesManagementToolbarDisplayContext(request, liferayPortletRequest, liferayPortletResponse, employeeEntryDisplaySearchContainer);
+    String searchContainerId = "employeeSearchContainerId";
 %>
 
 <clay:management-toolbar
-        managementToolbarDisplayContext="<%= viewEmployeesManagementToolbarDisplayContext %>"
+        searchContainerId="<%= searchContainerId %>"
+        searchFormName="fm"
+        searchActionURL="<%= viewEmployeesManagementToolbarDisplayContext.getPortletURLActionURL() %>"
+        itemsTotal="<%= viewEmployeesManagementToolbarDisplayContext.getItemsTotal() %>"
+        filterDropdownItems="<%= viewEmployeesManagementToolbarDisplayContext.getFilterDropdownItems() %>"
 />
 
 <clay:container-fluid>
     <liferay-ui:search-container
-            id="employeeSearchContainerId"
+            id="<%=searchContainerId%>"
             searchContainer="<%= employeeEntryDisplaySearchContainer %>"
             total="<%= employeeEntryDisplaySearchContainer.getTotal() %>"
     >
@@ -52,6 +57,5 @@
         <liferay-ui:search-iterator
                 markupView="lexicon"
         />
-
     </liferay-ui:search-container>
 </clay:container-fluid>
