@@ -6,7 +6,6 @@ import com.liferay.frontend.data.set.provider.search.FDSPagination;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.search.Sort;
-
 import com.liferay.portal.kernel.service.UserLocalServiceUtil;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.WebKeys;
@@ -14,12 +13,12 @@ import com.liferay.portal.kernel.util.WebKeys;
 import com.management.app.model.Employee;
 import com.management.app.model.Manager;
 import com.management.app.service.EmployeeLocalService;
+import com.management.app.service.ManagerLocalService;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.management.app.service.ManagerLocalService;
 import management.web.constants.EmployeeDetailsFDSNames;
 import management.web.model.EmployeeDetails;
 
@@ -60,11 +59,12 @@ public class EmployeeDetailsFDSDataProvider
             User user = UserLocalServiceUtil.getUser(
                     employee.getUserId());
 
+            String name = user.getFullName();
+
             employeeDetails.add(
                     new EmployeeDetails(
                             employee.getDepartment(), user.getEmailAddress(),
-                            employee.getEmployeeId(), user.getFullName(),
-                            employee.getPosition()));
+                            employee.getEmployeeId(), name, employee.getPosition()));
         }
 
         return employeeDetails;

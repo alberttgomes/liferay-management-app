@@ -32,7 +32,7 @@ public class EmployeeDetailsTableFDSView extends BaseTableFDSView {
         ).add(
                 "email", "Email"
         ).add(
-                "name", "Name"
+                "fullName", "Name"
         ).add(
                 "position", "Position"
         ).build();
