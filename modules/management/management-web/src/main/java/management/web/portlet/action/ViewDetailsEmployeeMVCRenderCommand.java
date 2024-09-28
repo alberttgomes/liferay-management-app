@@ -7,7 +7,6 @@ import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 
 import management.web.constants.ManagementPortletKeys;
-import management.web.display.EmployeeDisplay;
 
 import org.osgi.service.component.annotations.Component;
 
@@ -28,16 +27,7 @@ public class ViewDetailsEmployeeMVCRenderCommand implements MVCRenderCommand {
             RenderRequest renderRequest, RenderResponse renderResponse)
         throws PortletException {
 
-        EmployeeDisplay employeeDisplay = (EmployeeDisplay)
-                renderRequest.getAttribute(
-                        ManagementPortletKeys.EMPLOYEE_DISPLAY);
-
-        renderRequest.setAttribute(
-                ManagementPortletKeys.EMPLOYEE_DISPLAY,
-                employeeDisplay);
-
         return "/management/view_details_employee.jsp";
-
     }
 
 }
