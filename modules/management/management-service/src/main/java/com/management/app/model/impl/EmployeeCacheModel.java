@@ -68,7 +68,7 @@ public class EmployeeCacheModel
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(37);
+		StringBundler sb = new StringBundler(35);
 
 		sb.append("{mvccVersion=");
 		sb.append(mvccVersion);
@@ -84,8 +84,6 @@ public class EmployeeCacheModel
 		sb.append(createDate);
 		sb.append(", modifiedDate=");
 		sb.append(modifiedDate);
-		sb.append(", accountEntryId=");
-		sb.append(accountEntryId);
 		sb.append(", department=");
 		sb.append(department);
 		sb.append(", firstName=");
@@ -141,8 +139,6 @@ public class EmployeeCacheModel
 		else {
 			employeeImpl.setModifiedDate(new Date(modifiedDate));
 		}
-
-		employeeImpl.setAccountEntryId(accountEntryId);
 
 		if (department == null) {
 			employeeImpl.setDepartment("");
@@ -203,8 +199,6 @@ public class EmployeeCacheModel
 		companyId = objectInput.readLong();
 		createDate = objectInput.readLong();
 		modifiedDate = objectInput.readLong();
-
-		accountEntryId = objectInput.readLong();
 		department = objectInput.readUTF();
 		firstName = objectInput.readUTF();
 		lastName = objectInput.readUTF();
@@ -240,8 +234,6 @@ public class EmployeeCacheModel
 		objectOutput.writeLong(companyId);
 		objectOutput.writeLong(createDate);
 		objectOutput.writeLong(modifiedDate);
-
-		objectOutput.writeLong(accountEntryId);
 
 		if (department == null) {
 			objectOutput.writeUTF("");
@@ -296,7 +288,6 @@ public class EmployeeCacheModel
 	public long companyId;
 	public long createDate;
 	public long modifiedDate;
-	public long accountEntryId;
 	public String department;
 	public String firstName;
 	public String lastName;

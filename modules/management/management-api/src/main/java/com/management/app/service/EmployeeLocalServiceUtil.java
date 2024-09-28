@@ -227,6 +227,10 @@ public class EmployeeLocalServiceUtil {
 		return getService().fetchEmployee(employeeId);
 	}
 
+	public static Employee fetchEmployeeByUserId(long companyId, long userId) {
+		return getService().fetchEmployeeByUserId(companyId, userId);
+	}
+
 	/**
 	 * Returns the employee matching the UUID and group.
 	 *
@@ -244,6 +248,15 @@ public class EmployeeLocalServiceUtil {
 		getActionableDynamicQuery() {
 
 		return getService().getActionableDynamicQuery();
+	}
+
+	public static List<Employee> getAllEmployeeByManager(
+			long managerIdPK, long companyId, boolean hasPermission)
+		throws com.management.app.exception.NoSuchEmployeeException,
+			   com.management.app.exception.NoSuchManagerException {
+
+		return getService().getAllEmployeeByManager(
+			managerIdPK, companyId, hasPermission);
 	}
 
 	/**
@@ -285,15 +298,6 @@ public class EmployeeLocalServiceUtil {
 	 */
 	public static List<Employee> getEmployees(int start, int end) {
 		return getService().getEmployees(start, end);
-	}
-
-	public static List<Employee> getAllManagersEmployee(
-			long managerIdPK, long companyId, boolean hasPermission)
-		throws com.management.app.exception.NoSuchEmployeeException,
-			   com.management.app.exception.NoSuchManagerException {
-
-		return getService().getAllManagersEmployee(
-			managerIdPK, companyId, hasPermission);
 	}
 
 	/**
@@ -378,9 +382,6 @@ public class EmployeeLocalServiceUtil {
 		return getService().searchEmployees(
 			companyId, className, classPK, keywords, params, start, end, sort);
 	}
-
-
-
 
 	/**
 	 * Updates the employee in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.

@@ -77,7 +77,8 @@ public class EmployeeResourceImpl extends BaseEmployeeResourceImpl {
 	@Override
 	public Employee promotingEmployee(
 			String position, String department, int level, long employeeId,
-			boolean isManager) throws Exception {
+			boolean isManager)
+		throws Exception {
 
 		ThemeDisplay themeDisplay = (ThemeDisplay)
 				contextHttpServletRequest.getAttribute(

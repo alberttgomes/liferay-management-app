@@ -160,20 +160,6 @@ public interface EmployeeModel
 	public void setModifiedDate(Date modifiedDate);
 
 	/**
-	 * Returns the account entry ID of this employee.
-	 *
-	 * @return the account entry ID of this employee
-	 */
-	public long getAccountEntryId();
-
-	/**
-	 * Sets the account entry ID of this employee.
-	 *
-	 * @param accountEntryId the account entry ID of this employee
-	 */
-	public void setAccountEntryId(long accountEntryId);
-
-	/**
 	 * Returns the department of this employee.
 	 *
 	 * @return the department of this employee
