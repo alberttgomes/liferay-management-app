@@ -16,6 +16,7 @@
 .gradle
 .idea
 /bundles
+/docker-compose/database/dump/
 /gradle-*.properties
 /plugins-sdk/**/classes
 /plugins-sdk/**/ivy.xml.MD5
@@ -25,3 +26,4 @@
 /plugins-sdk/dist
 /plugins-sdk/lib
 test-results
+
