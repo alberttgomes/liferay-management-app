@@ -51,7 +51,7 @@ public class EmployeeIndexer extends BaseIndexer<Employee> {
         document.addKeyword(
                 "employeeIds", _getAllEmployees());
         document.addKeyword(
-                "accountEntryId", employee.getAccountEntryId());
+                "userId", employee.getUserId());
         document.addKeyword(
                 "engineer", employee.getDepartment());
         document.addKeyword(
