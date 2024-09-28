@@ -26,7 +26,6 @@
 
 		<!-- Other fields -->
 
-		<column name="accountEntryId" type="long" />
 		<column name="department" type="String" />
 		<column name="firstName" type="String" />
 		<column name="lastName" type="String" />
@@ -47,15 +46,8 @@
 
 		<!-- Finder methods -->
 
-		<finder name="A_E" return-type="Collection">
-			<finder-column name="accountEntryId" />
-			<finder-column name="employeeId" />
-		</finder>
 		<finder name="CompanyId" return-type="Collection">
 			<finder-column name="companyId" />
-		</finder>
-		<finder name="EmployeeId" return-type="Collection">
-			<finder-column name="employeeId" />
 		</finder>
 		<finder name="C_E" return-type="Collection">
 			<finder-column name="companyId" />
@@ -66,9 +58,16 @@
 			<finder-column name="position" />
 			<finder-column name="level" />
 		</finder>
+		<finder name="EmployeeId" return-type="Collection">
+			<finder-column name="employeeId" />
+		</finder>
 		<finder name="E_S" return-type="Collection">
 			<finder-column name="employeeId" />
 			<finder-column comparator="!=" name="status" />
+		</finder>
+		<finder name="E_U" return-type="Collection">
+			<finder-column name="employeeId" />
+			<finder-column name="userId" />
 		</finder>
 		<finder name="F_L" return-type="Collection">
 			<finder-column name="firstName" />
@@ -77,6 +76,10 @@
 		<finder name="M_S" return-type="">
 			<finder-column name="managerIdFK" />
 			<finder-column name="status" />
+		</finder>
+		<finder name="C_U" return-type="">
+			<finder-column name="companyId" />
+			<finder-column name="userId" />
 		</finder>
 
 	</entity>

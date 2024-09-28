@@ -9,7 +9,6 @@
 		<field name="companyId" type="long" />
 		<field name="createDate" type="Date" />
 		<field name="modifiedDate" type="Date" />
-		<field name="accountEntryId" type="long" />
 		<field name="department" type="String" />
 		<field name="firstName" type="String" />
 		<field name="lastName" type="String" />

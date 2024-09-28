@@ -37,8 +37,6 @@ public class EmployeeTable extends BaseTable<EmployeeTable> {
 		"createDate", Date.class, Types.TIMESTAMP, Column.FLAG_DEFAULT);
 	public final Column<EmployeeTable, Date> modifiedDate = createColumn(
 		"modifiedDate", Date.class, Types.TIMESTAMP, Column.FLAG_DEFAULT);
-	public final Column<EmployeeTable, Long> accountEntryId = createColumn(
-		"accountEntryId", Long.class, Types.BIGINT, Column.FLAG_DEFAULT);
 	public final Column<EmployeeTable, String> department = createColumn(
 		"department", String.class, Types.VARCHAR, Column.FLAG_DEFAULT);
 	public final Column<EmployeeTable, String> firstName = createColumn(

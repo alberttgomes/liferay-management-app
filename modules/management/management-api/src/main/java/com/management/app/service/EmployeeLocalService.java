@@ -32,7 +32,6 @@ import com.management.app.model.Employee;
 
 import java.io.Serializable;
 
-import java.util.*;
 import java.util.List;
 
 import org.osgi.annotation.versioning.ProviderType;
@@ -74,6 +73,7 @@ public interface EmployeeLocalService
 	@Indexable(type = IndexableType.REINDEX)
 	public Employee addEmployee(Employee employee);
 
+	@Indexable(type = IndexableType.REINDEX)
 	public Employee addEmployee(
 			String firstName, String lastName, String department,
 			String position, int level, String stateCode, int status,
@@ -211,6 +211,9 @@ public interface EmployeeLocalService
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public Employee fetchEmployee(long employeeId);
 
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public Employee fetchEmployeeByUserId(long companyId, long userId);
+
 	/**
 	 * Returns the employee matching the UUID and group.
 	 *
@@ -223,6 +226,12 @@ public interface EmployeeLocalService
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public ActionableDynamicQuery getActionableDynamicQuery();
+
+	@Indexable(type = IndexableType.REINDEX)
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public List<Employee> getAllEmployeeByManager(
+			long managerIdPK, long companyId, boolean hasPermission)
+		throws NoSuchEmployeeException, NoSuchManagerException;
 
 	/**
 	 * Returns the employee with the primary key.
@@ -259,11 +268,6 @@ public interface EmployeeLocalService
 	 */
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public List<Employee> getEmployees(int start, int end);
-
-	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public List<Employee> getAllManagersEmployee(
-			long managerIdPK, long companyId, boolean hasPermission)
-		throws NoSuchEmployeeException, NoSuchManagerException;
 
 	/**
 	 * Returns all the employees matching the UUID and company.
@@ -324,7 +328,8 @@ public interface EmployeeLocalService
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public BaseModelSearchResult<Employee> searchEmployees(
 			long companyId, String className, long classPK, String keywords,
-			LinkedHashMap<String, Object> params, int start, int end, Sort sort)
+			java.util.LinkedHashMap<String, Object> params, int start, int end,
+			Sort sort)
 		throws PortalException;
 
 	/**

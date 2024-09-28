@@ -41,7 +41,6 @@ public class EmployeeWrapper
 		attributes.put("companyId", getCompanyId());
 		attributes.put("createDate", getCreateDate());
 		attributes.put("modifiedDate", getModifiedDate());
-		attributes.put("accountEntryId", getAccountEntryId());
 		attributes.put("department", getDepartment());
 		attributes.put("firstName", getFirstName());
 		attributes.put("lastName", getLastName());
@@ -98,12 +97,6 @@ public class EmployeeWrapper
 
 		if (modifiedDate != null) {
 			setModifiedDate(modifiedDate);
-		}
-
-		Long accountEntryId = (Long)attributes.get("accountEntryId");
-
-		if (accountEntryId != null) {
-			setAccountEntryId(accountEntryId);
 		}
 
 		String department = (String)attributes.get("department");
@@ -170,16 +163,6 @@ public class EmployeeWrapper
 	@Override
 	public Employee cloneWithOriginalValues() {
 		return wrap(model.cloneWithOriginalValues());
-	}
-
-	/**
-	 * Returns the account entry ID of this employee.
-	 *
-	 * @return the account entry ID of this employee
-	 */
-	@Override
-	public long getAccountEntryId() {
-		return model.getAccountEntryId();
 	}
 
 	/**
@@ -385,16 +368,6 @@ public class EmployeeWrapper
 	@Override
 	public void persist() {
 		model.persist();
-	}
-
-	/**
-	 * Sets the account entry ID of this employee.
-	 *
-	 * @param accountEntryId the account entry ID of this employee
-	 */
-	@Override
-	public void setAccountEntryId(long accountEntryId) {
-		model.setAccountEntryId(accountEntryId);
 	}
 
 	/**

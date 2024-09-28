@@ -5,10 +5,12 @@
 
 package com.management.app.service;
 
+import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.search.BaseModelSearchResult;
 import com.liferay.portal.kernel.search.Sort;
 import com.liferay.portal.kernel.service.ServiceWrapper;
 import com.liferay.portal.kernel.service.persistence.BasePersistence;
+import com.management.app.exception.NoSuchEmployeeException;
 import com.management.app.model.Employee;
 
 /**
@@ -248,6 +250,11 @@ public class EmployeeLocalServiceWrapper
 		return _employeeLocalService.fetchEmployee(employeeId);
 	}
 
+	@Override
+	public Employee fetchEmployeeByUserId(long companyId, long userId) {
+		return _employeeLocalService.fetchEmployeeByUserId(companyId, userId);
+	}
+
 	/**
 	 * Returns the employee matching the UUID and group.
 	 *
@@ -268,6 +275,17 @@ public class EmployeeLocalServiceWrapper
 		getActionableDynamicQuery() {
 
 		return _employeeLocalService.getActionableDynamicQuery();
+	}
+
+	@Override
+	public java.util.List<com.management.app.model.Employee>
+			getAllEmployeeByManager(
+				long managerIdPK, long companyId, boolean hasPermission)
+		throws com.management.app.exception.NoSuchEmployeeException,
+			   com.management.app.exception.NoSuchManagerException {
+
+		return _employeeLocalService.getAllEmployeeByManager(
+			managerIdPK, companyId, hasPermission);
 	}
 
 	/**
@@ -316,17 +334,6 @@ public class EmployeeLocalServiceWrapper
 		int start, int end) {
 
 		return _employeeLocalService.getEmployees(start, end);
-	}
-
-	@Override
-	public java.util.List<com.management.app.model.Employee>
-	getAllManagersEmployee(
-				long managerIdPK, long companyId, boolean hasPermission)
-		throws com.management.app.exception.NoSuchEmployeeException,
-			   com.management.app.exception.NoSuchManagerException {
-
-		return _employeeLocalService.getAllManagersEmployee(
-			managerIdPK, companyId, hasPermission);
 	}
 
 	/**
