@@ -1,10 +1,10 @@
 package management.web.portlet;
 
-import management.web.constants.ManagementPortletKeys;
-
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
 
 import javax.portlet.Portlet;
+
+import management.web.constants.ManagementPortletKeys;
 
 import org.osgi.service.component.annotations.Component;
 
