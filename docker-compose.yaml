@@ -14,7 +14,7 @@ services:
     ports:
       - "3307:3306"
     volumes:
-      - ./docker-compose/database/dump/*.sql:/docker-entrypoint
+      - ./docker-compose/database/dump/:/docker-entrypoint-initdb.d
 
   elasticsearch:
     image: elasticsearch:7.17.17
@@ -46,3 +46,9 @@ services:
     volumes:
       - ./bundles/osgi/modules/:/opt/liferay/deploy/
       - ./docker-compose/liferay/files/:/mnt/liferay/files/
+
+  mailhog:
+    image: mailhog/mailhog:v1.0.1
+    ports:
+      - "8025:8025"
+      - "1025:1025"
