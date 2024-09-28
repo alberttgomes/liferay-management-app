@@ -71,6 +71,18 @@ public class ViewEmployeesManagementToolbarDisplayContext
     }
 
     @Override
+    public List<DropdownItem> getFilterDropdownItems() {
+        return new DropdownItemList() {
+            {
+                add(dropdownItem -> {
+                    dropdownItem.setHref(getPortletURL(), "engineer", "name");
+                    dropdownItem.setLabel("Engineer");
+                });
+            }
+        };
+    }
+
+    @Override
     public List<LabelItem> getFilterLabelItems() {
         return LabelItemListBuilder.add(
                 () -> !Objects.equals(getNavigation(), "all"),
@@ -103,6 +115,10 @@ public class ViewEmployeesManagementToolbarDisplayContext
 
             return liferayPortletResponse.createRenderURL();
         }
+    }
+
+    public String getPortletURLActionURL() {
+        return String.valueOf(getPortletURL());
     }
 
     @Override
