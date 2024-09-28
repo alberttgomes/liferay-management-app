@@ -14,4 +14,7 @@ public class ManagementPortletKeys {
 	public static final String MANAGEMENT_WEB =
 			"management_web_ManagementPortlet";
 
+	public static final String EMPLOYEE_DASHBOARD_WEB =
+			"management_web_EmployeeDashboardPortlet";
+
 }
