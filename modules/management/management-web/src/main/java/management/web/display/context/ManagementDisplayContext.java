@@ -1,5 +1,9 @@
 package management.web.display.context;
 
+import com.liferay.frontend.data.set.model.FDSActionDropdownItem;
+import com.liferay.frontend.data.set.model.FDSSortItemBuilder;
+import com.liferay.frontend.data.set.model.FDSSortItemList;
+import com.liferay.frontend.data.set.model.FDSSortItemListBuilder;
 import com.liferay.frontend.taglib.clay.servlet.taglib.util.CreationMenu;
 import com.liferay.frontend.taglib.clay.servlet.taglib.util.SelectOption;
 import com.liferay.portal.kernel.exception.PortalException;
@@ -8,6 +12,7 @@ import com.liferay.portal.kernel.portlet.LiferayWindowState;
 import com.liferay.portal.kernel.portlet.url.builder.PortletURLBuilder;
 import com.liferay.portal.kernel.service.UserLocalService;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
+import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.WebKeys;
 
 import com.management.app.exception.NoSuchEmployeeException;
@@ -37,6 +42,34 @@ public class ManagementDisplayContext {
                 httpServletRequest);
     }
 
+    public String getAPIURL(long employeeId) {
+        return "/o/management/v1.0/employee/employee-by-id/" + employeeId;
+    }
+
+    public String getAPIURL() {
+        return "/o/management/v1.0/employee";
+    }
+
+    public CreationMenu getCreationMenu() throws Exception {
+        CreationMenu creationMenu = new CreationMenu();
+
+        creationMenu.addDropdownItem(
+                dropdownItem -> {
+                    dropdownItem.setHref(getEmployeeDetailsRenderURL());
+                    dropdownItem.setLabel("Employee Details");
+                    dropdownItem.setTarget("modal-lg");
+                });
+
+        creationMenu.addDropdownItem(
+                dropdownItem -> {
+                    dropdownItem.setHref(getEmployeeRequestRenderURL());
+                    dropdownItem.setLabel("Open a request to employee");
+                    dropdownItem.setTarget("modal-lg");
+                });
+
+        return creationMenu;
+    }
+
     public List<SelectOption> getEmployeeOptions(long selectedEmployeeRequestId) {
         List<SelectOption> selectOptions = new ArrayList<>();
 
@@ -46,6 +79,13 @@ public class ManagementDisplayContext {
                         String.valueOf(EmployeeRequestConstant.BENEFIT_EDUCATION),
                         selectedEmployeeRequestId ==
                                 EmployeeRequestConstant.BENEFIT_EDUCATION));
+
+        selectOptions.add(
+                new SelectOption(
+                        "Request promotion to employee",
+                        String.valueOf(EmployeeRequestConstant.PROMOTION),
+                        selectedEmployeeRequestId ==
+                                EmployeeRequestConstant.PROMOTION));
 
         selectOptions.add(
                 new SelectOption(
@@ -84,32 +124,33 @@ public class ManagementDisplayContext {
         ).buildString();
     }
 
-    public CreationMenu getCreationMenu() throws Exception {
-        CreationMenu creationMenu = new CreationMenu();
-
-        creationMenu.addDropdownItem(
-            dropdownItem -> {
-                dropdownItem.setHref(getEmployeeDetailsRenderURL());
-                dropdownItem.setLabel("Employee Details");
-                dropdownItem.setTarget("modal-lg");
-            });
-
-        creationMenu.addDropdownItem(
-            dropdownItem -> {
-                dropdownItem.setHref(getEmployeeRequestRenderURL());
-                dropdownItem.setLabel("Open a request to employee");
-                dropdownItem.setTarget("modal-lg");
-            });
-
-        return creationMenu;
-    }
-
-    public String getName() {
-        return "ManagementDisplayContext";
-    }
-
     public EmployeeDisplay getEmployeeDisplay() throws PortalException {
         return EmployeeDisplay.of(_setEmployee(_httpServletRequest));
+    }
+
+    public List<FDSActionDropdownItem> getFDSActionDropdownItems() {
+        return ListUtil.fromArray(
+                new FDSActionDropdownItem(
+                        PortletURLBuilder.createRenderURL(
+                                _managementRequestHelper.getLiferayPortletResponse()
+                        ).setMVCRenderCommandName(
+                                "/management/employee_promotion"
+                        ).setParameter(
+                                "employeeId", "{employeeId}"
+                        ).buildString(),
+                        "list-ul", "employee-promotion",
+                        "Request a promotion to Employee", "post",
+                        "get", null));
+    }
+
+    public FDSSortItemList getFDSSortItemList() {
+        return FDSSortItemListBuilder.add(
+                FDSSortItemBuilder.setDirection(
+                        "asc"
+                ).setKey(
+                        "typeName"
+                ).build()
+        ).build();
     }
 
     public long[] getSelectedRequestIds() {
