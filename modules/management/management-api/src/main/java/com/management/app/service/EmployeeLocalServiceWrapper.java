@@ -423,13 +423,13 @@ public class EmployeeLocalServiceWrapper
 	@Override
 	public BaseModelSearchResult<Employee>
 			searchEmployees(
-				long companyId, String className, long classPK, String keywords,
+				long companyId, String className, String keywords,
 				java.util.LinkedHashMap<String, Object> params, int start,
 				int end, Sort sort)
 		throws com.liferay.portal.kernel.exception.PortalException {
 
 		return _employeeLocalService.searchEmployees(
-			companyId, className, classPK, keywords, params, start, end, sort);
+			companyId, className, keywords, params, start, end, sort);
 	}
 
 	/**

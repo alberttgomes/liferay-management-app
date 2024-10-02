@@ -374,13 +374,13 @@ public class EmployeeLocalServiceUtil {
 	}
 
 	public static BaseModelSearchResult<Employee> searchEmployees(
-			long companyId, String className, long classPK, String keywords,
+			long companyId, String className, String keywords,
 			java.util.LinkedHashMap<String, Object> params, int start, int end,
 			Sort sort)
 		throws PortalException {
 
 		return getService().searchEmployees(
-			companyId, className, classPK, keywords, params, start, end, sort);
+			companyId, className, keywords, params, start, end, sort);
 	}
 
 	/**
