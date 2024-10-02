@@ -6,12 +6,12 @@ import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.WebKeys;
 
-import management.web.constants.ManagementPortletKeys;
-import management.web.display.EmployeeDisplay;
-
 import javax.portlet.PortletException;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
+
+import management.web.constants.ManagementPortletKeys;
+import management.web.display.EmployeeDisplay;
 
 import org.osgi.service.component.annotations.Component;
 
@@ -32,8 +32,9 @@ public class EditEmployeeEntryMVCRenderCommand implements MVCRenderCommand {
             RenderRequest renderRequest, RenderResponse renderResponse)
         throws PortletException {
 
-        ThemeDisplay themeDisplay = (ThemeDisplay)renderRequest.getAttribute(
-                WebKeys.THEME_DISPLAY);
+        ThemeDisplay themeDisplay =
+                (ThemeDisplay)renderRequest.getAttribute(
+                        WebKeys.THEME_DISPLAY);
 
         if (!themeDisplay.isSignedIn()) {
             SessionErrors.add(renderRequest, PrincipalException.class);
