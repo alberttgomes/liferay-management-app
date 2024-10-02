@@ -5,8 +5,8 @@ package com.management.app.constants;
  */
 public class EmployeeListTypeConstants {
 
-    public static final String EMPLOYEE_ENTRY_DEPARTMENT =
-            "department";
+    public static final String EMPLOYEE_ENTRY_ENGINEER_DEPARTMENT =
+            "engineer";
 
     public static final String EMPLOYEE_ENTRY_MANAGERS =
             "managers";
