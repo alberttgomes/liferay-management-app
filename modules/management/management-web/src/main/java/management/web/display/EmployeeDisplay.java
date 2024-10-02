@@ -68,10 +68,12 @@ public class EmployeeDisplay {
     private EmployeeDisplay(Employee employee) {
         _employeeId = employee.getEmployeeId();
         _department = employee.getDepartment();
-        _fullName = employee.getFirstName() + StringPool.SPACE + employee.getLastName();
+        _fullName = employee.getFirstName() +
+                StringPool.SPACE + employee.getLastName();
         _position = employee.getPosition();
         _screenName = _buildScreenName(
-                employee.getFirstName(), employee.getLastName(), _employeeId);
+                employee.getFirstName(),
+                employee.getLastName(), _employeeId);
     }
 
     private String _buildScreenName(
