@@ -9,7 +9,7 @@ public class EmployeeRequestConstant {
 
     public static final long COURSE = 3;
 
-    public static final long COURSE_TO_EMPLOYEE = 5;
+    public static final long COURSE_TO_EMPLOYEE = 4;
 
     public static final long DEPENDENT_HEALTH_PLAN = 1;
 
@@ -18,7 +18,6 @@ public class EmployeeRequestConstant {
     public static final long DISMISSAL_EMPLOYEE = -2;
 
     public static final long PROMOTION = 2;
-
 
     public static long[] GET_EMPLOYEE_REQUEST_IDS() {
         return new long[] {

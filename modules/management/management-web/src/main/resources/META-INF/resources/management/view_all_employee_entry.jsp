@@ -1,22 +1,18 @@
 <%@ include file="../init.jsp" %>
 
 <%
+    liferayPortletRequest.setAttribute("employeeId", user.getUserId());
     SearchContainer<EmployeeDisplay> employeeEntryDisplaySearchContainer = ManagementDisplaySearchContainerFactory.create(liferayPortletRequest, liferayPortletResponse);
     ViewEmployeesManagementToolbarDisplayContext viewEmployeesManagementToolbarDisplayContext = new ViewEmployeesManagementToolbarDisplayContext(request, liferayPortletRequest, liferayPortletResponse, employeeEntryDisplaySearchContainer);
-    String searchContainerId = "employeeSearchContainerId";
 %>
 
 <clay:management-toolbar
-        searchContainerId="<%= searchContainerId %>"
-        searchFormName="fm"
-        searchActionURL="<%= viewEmployeesManagementToolbarDisplayContext.getPortletURLActionURL() %>"
-        itemsTotal="<%= viewEmployeesManagementToolbarDisplayContext.getItemsTotal() %>"
-        filterDropdownItems="<%= viewEmployeesManagementToolbarDisplayContext.getFilterDropdownItems() %>"
+        managementToolbarDisplayContext="<%= viewEmployeesManagementToolbarDisplayContext %>"
 />
 
 <clay:container-fluid>
     <liferay-ui:search-container
-            id="<%=searchContainerId%>"
+            id="<%= viewEmployeesManagementToolbarDisplayContext.getSearchContainerId() %>"
             searchContainer="<%= employeeEntryDisplaySearchContainer %>"
             total="<%= employeeEntryDisplaySearchContainer.getTotal() %>"
     >
@@ -27,7 +23,16 @@
         >
             <liferay-ui:search-container-column-text
                     cssClass="table-cell-expand"
-                    name="fullName"
+                    name="Id"
+            >
+                <clay:label
+                        label="<%= String.valueOf(employeeDisplay.getEmployeeId()) %>"
+                />
+            </liferay-ui:search-container-column-text>
+
+            <liferay-ui:search-container-column-text
+                    cssClass="table-cell-expand"
+                    name="Name"
             >
                 <clay:label
                         label="<%= employeeDisplay.getFullName() %>"
@@ -36,7 +41,7 @@
 
             <liferay-ui:search-container-column-text
                     cssClass="table-cell-expand"
-                    name="position"
+                    name="Position"
             >
                 <clay:label
                         label="<%= employeeDisplay.getPosition() %>"
@@ -45,7 +50,7 @@
 
             <liferay-ui:search-container-column-text
                     cssClass="table-cell-expand"
-                    name="position"
+                    name="Department"
             >
                 <clay:label
                         label="<%= employeeDisplay.getDepartment() %>"
