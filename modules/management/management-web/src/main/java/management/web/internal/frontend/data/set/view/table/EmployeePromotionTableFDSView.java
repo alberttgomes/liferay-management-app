@@ -1,26 +1,26 @@
-package management.web.frontend.data.set.view.table;
+package management.web.internal.frontend.data.set.view.table;
 
 import com.liferay.frontend.data.set.view.FDSView;
 import com.liferay.frontend.data.set.view.table.BaseTableFDSView;
-
 import com.liferay.frontend.data.set.view.table.FDSTableSchema;
 import com.liferay.frontend.data.set.view.table.FDSTableSchemaBuilder;
 import com.liferay.frontend.data.set.view.table.FDSTableSchemaBuilderFactory;
+
+import java.util.Locale;
+
 import management.web.constants.EmployeeDetailsFDSNames;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
-import java.util.Locale;
-
 /**
  * @author Albert Cabral
  */
 @Component(
-        property = "frontend.data.set.name=" + EmployeeDetailsFDSNames.EMPLOYEE_DETAILS,
+        property = "frontend.data.set.name=" + EmployeeDetailsFDSNames.EMPLOYEE_PROMOTION,
         service = FDSView.class
 )
-public class EmployeeDetailsTableFDSView extends BaseTableFDSView {
+public class EmployeePromotionTableFDSView extends BaseTableFDSView {
 
     @Override
     public FDSTableSchema getFDSTableSchema(Locale locale) {
@@ -28,13 +28,20 @@ public class EmployeeDetailsTableFDSView extends BaseTableFDSView {
                 _fdsTableSchemaBuilderFactory.create();
 
         return fdsTableSchemaBuilder.add(
-                "department", "Department"
+                "department", "department",
+                fdsTableSchemaField -> fdsTableSchemaField.setSortable(true)
         ).add(
-                "email", "Email"
+                "employeeId", "employeeId",
+                fdsTableSchemaField -> fdsTableSchemaField.setSortable(true)
         ).add(
-                "fullName", "Name"
+                "firstName", "firstName",
+                fdsTableSchemaField -> fdsTableSchemaField.setSortable(true)
         ).add(
-                "position", "Position"
+                "lastName", "lastName",
+                fdsTableSchemaField -> fdsTableSchemaField.setSortable(true)
+        ).add(
+                "position", "position",
+                fdsTableSchemaField -> fdsTableSchemaField.setSortable(true)
         ).build();
     }
 
