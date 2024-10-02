@@ -8,21 +8,18 @@ import com.liferay.portal.kernel.portlet.LiferayPortletRequest;
 import com.liferay.portal.kernel.portlet.LiferayPortletResponse;
 import com.liferay.portal.kernel.portlet.PortletURLUtil;
 import com.liferay.portal.kernel.portlet.SearchOrderByUtil;
-import com.liferay.portal.kernel.search.BaseModelSearchResult;
-import com.liferay.portal.kernel.search.Sort;
-import com.liferay.portal.kernel.search.SortFactoryUtil;
+import com.liferay.portal.kernel.search.*;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.ParamUtil;
-import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
-import com.management.app.constants.EmployeeListTypeConstants;
 import com.management.app.model.Employee;
 import com.management.app.service.EmployeeLocalServiceUtil;
-import management.web.constants.ManagementPortletKeys;
-import management.web.display.EmployeeDisplay;
 
 import java.util.LinkedHashMap;
 import java.util.Objects;
+
+import management.web.constants.ManagementPortletKeys;
+import management.web.display.EmployeeDisplay;
 
 /**
  * @author Albert Cabral
@@ -43,37 +40,19 @@ public class ManagementDisplaySearchContainerFactory {
         searchContainer.setId("employeeSearchContainerId");
         searchContainer.setOrderByCol(
                 SearchOrderByUtil.getOrderByCol(
-                        liferayPortletRequest, ManagementPortletKeys.MANAGEMENT_WEB,
+                        liferayPortletRequest,
+                        ManagementPortletKeys.MANAGEMENT_WEB,
                         "order-by-col", "name"));
         searchContainer.setOrderByType(
                 SearchOrderByUtil.getOrderByType(
-                        liferayPortletRequest, ManagementPortletKeys.MANAGEMENT_WEB,
+                        liferayPortletRequest,
+                        ManagementPortletKeys.MANAGEMENT_WEB,
                         "order-by-type", "asc"));
 
         String keywords = ParamUtil.getString(
                 liferayPortletRequest, "keywords");
 
-        String type = ParamUtil.getString(liferayPortletRequest, "type");
-
         LinkedHashMap<String, Object> params = new LinkedHashMap<>();
-
-        if (Validator.isNotNull(type) && !type.equals("all")) {
-            params.put(
-                    "typeNames",
-                    new String[] {
-                            type,
-                            EmployeeListTypeConstants.EMPLOYEE_ENTRY_DEPARTMENT
-                    });
-        }
-        else {
-            params.put(
-                    "typeNames",
-                    new String[] {
-                            EmployeeListTypeConstants.EMPLOYEE_ENTRY_DEPARTMENT,
-                            EmployeeListTypeConstants.EMPLOYEE_ENTRY_MANAGERS,
-                            EmployeeListTypeConstants.EMPLOYEE_ENTRY_POSITION
-                    });
-        }
 
         ThemeDisplay themeDisplay =
                 (ThemeDisplay)liferayPortletRequest.getAttribute(
@@ -82,7 +61,6 @@ public class ManagementDisplaySearchContainerFactory {
         BaseModelSearchResult<Employee> baseModelSearchResult =
                 EmployeeLocalServiceUtil.searchEmployees(
                         themeDisplay.getCompanyId(), Employee.class.getName(),
-                        ParamUtil.getLong(liferayPortletRequest, "employeeId"),
                         keywords, params, searchContainer.getStart(),
                         searchContainer.getEnd(),
                         _getSort(
@@ -91,7 +69,8 @@ public class ManagementDisplaySearchContainerFactory {
 
         searchContainer.setResultsAndTotal(
                 () -> TransformUtil.transform(
-                        baseModelSearchResult.getBaseModels(), EmployeeDisplay::of),
+                        baseModelSearchResult.getBaseModels(),
+                        EmployeeDisplay::of),
                 baseModelSearchResult.getLength());
 
         searchContainer.setRowChecker(
