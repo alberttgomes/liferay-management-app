@@ -327,7 +327,7 @@ public interface EmployeeLocalService
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public BaseModelSearchResult<Employee> searchEmployees(
-			long companyId, String className, long classPK, String keywords,
+			long companyId, String className, String keywords,
 			java.util.LinkedHashMap<String, Object> params, int start, int end,
 			Sort sort)
 		throws PortalException;
