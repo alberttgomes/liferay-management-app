@@ -6,7 +6,7 @@ package com.management.app.constants;
 public class ManagementConstants {
 
     public static final String MANAGEMENT_DOMAIN =
-            "liferay.com";
+            "management.com";
 
     public static final String MANAGEMENT_USER_GROUP =
             "Management Portal User Group";
