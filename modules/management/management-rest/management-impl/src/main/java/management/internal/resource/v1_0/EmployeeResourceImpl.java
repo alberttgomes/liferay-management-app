@@ -46,11 +46,16 @@ public class EmployeeResourceImpl extends BaseEmployeeResourceImpl {
 
 	@Override
 	public Page<Employee> getEmployees() throws Exception {
-		List<com.management.app.model.Employee> baseEmployeeModelResult =
-				_employeeLocalService.getEmployees(
-						QueryUtil.ALL_POS, QueryUtil.ALL_POS);
+		List<Employee> employees = new ArrayList<>();
 
-		return Page.of(new ArrayList<>());
+		for (com.management.app.model.Employee employee :
+				_employeeLocalService.getEmployees(
+						QueryUtil.ALL_POS, QueryUtil.ALL_POS)) {
+
+			employees.add(_employeeResourceDTOConverter.toDTO(employee));
+		}
+
+		return Page.of(employees);
 	}
 
 	@Override
