@@ -9,16 +9,16 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.search.*;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.ListUtil;
-
 import com.liferay.portal.kernel.util.StringBundler;
+
 import com.management.app.model.Employee;
 import com.management.app.service.EmployeeLocalService;
 
-import javax.portlet.PortletRequest;
-import javax.portlet.PortletResponse;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Locale;
+import javax.portlet.PortletRequest;
+import javax.portlet.PortletResponse;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -42,22 +42,25 @@ public class EmployeeIndexer extends BaseIndexer<Employee> {
                 getBaseModelDocument(
                         Employee.class.getName(), employee);
 
-        document.addKeyword(
-                Field.CLASS_PK, employee.getEmployeeId());
-        document.addText(
-                Field.NAME, employee.getFirstName());
+        long[] employeeIds = _getAllEmployees();
+
         document.addKeyword(
                 Field.STATUS, employee.getStatus());
-        document.addKeyword(
-                "employeeIds", _getAllEmployees());
-        document.addKeyword(
-                "userId", employee.getUserId());
-        document.addKeyword(
-                "engineer", employee.getDepartment());
-        document.addKeyword(
-                "general", employee.getDepartment());
-        document.addKeyword(
+        document.addNumber(
+                "allEmployeeIds", employeeIds);
+        document.addNumber(
+                "employeeId", employee.getEmployeeId());
+        document.addText(
+                "department", employee.getDepartment());
+        document.addText(
+                Field.NAME, employee.getFirstName());
+        document.addText(
                 "position", employee.getPosition());
+
+        if (employee.getIsManager()) {
+            document.addKeyword(
+                    "isManager", employee.getIsManager());
+        }
 
         return document;
     }
