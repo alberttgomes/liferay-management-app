@@ -1,4 +1,4 @@
-package management.web.frontend.data.set.provider;
+package management.web.internal.frontend.data.set.provider;
 
 import com.liferay.frontend.data.set.provider.FDSDataProvider;
 import com.liferay.frontend.data.set.provider.search.FDSKeywords;
@@ -55,7 +55,6 @@ public class EmployeeDetailsFDSDataProvider
                 manager.getManagerId(), themeDisplay.getCompanyId(), true);
 
         for (Employee employee : employees) {
-
             User user = UserLocalServiceUtil.getUser(
                     employee.getUserId());
 
