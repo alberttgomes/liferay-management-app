@@ -60,26 +60,13 @@ public class ViewEmployeesManagementToolbarDisplayContext
                 dropdownItem -> {
                     dropdownItem.setHref(
                             liferayPortletResponse.createRenderURL(),
-                            "mvcRenderCommandName",
-                            "/management/edit_employee_management", "backURL",
+                            "mvcPath",
+                            "/management/edit_employee_entry.jsp", "backURL",
                             currentURLObj.toString(), "employeeId",
                             ParamUtil.getLong(liferayPortletRequest, "employeeId"));
-                    dropdownItem.setLabel(
-                            LanguageUtil.get(httpServletRequest, "add-employee"));
+                    dropdownItem.setLabel("Add a new employee entry");
                 }
         ).build();
-    }
-
-    @Override
-    public List<DropdownItem> getFilterDropdownItems() {
-        return new DropdownItemList() {
-            {
-                add(dropdownItem -> {
-                    dropdownItem.setHref(getPortletURL(), "engineer", "name");
-                    dropdownItem.setLabel("Engineer");
-                });
-            }
-        };
     }
 
     @Override
@@ -117,10 +104,6 @@ public class ViewEmployeesManagementToolbarDisplayContext
         }
     }
 
-    public String getPortletURLActionURL() {
-        return String.valueOf(getPortletURL());
-    }
-
     @Override
     protected String getFilterNavigationDropdownItemsLabel() {
         return LanguageUtil.get(httpServletRequest, "filter-by-type");
@@ -130,11 +113,6 @@ public class ViewEmployeesManagementToolbarDisplayContext
     protected String getNavigation() {
         return ParamUtil.getString(
                 liferayPortletRequest, getNavigationParam(), "all");
-    }
-
-    @Override
-    protected String[] getNavigationKeys() {
-        return new String[] {"all", "engineer", "Software Engineer"};
     }
 
     @Override
