@@ -29,7 +29,6 @@ import com.management.app.model.Employee;
 import com.management.app.model.Manager;
 import com.management.app.service.ManagerLocalService;
 import com.management.app.service.base.EmployeeLocalServiceBaseImpl;
-import com.management.app.service.impl.util.EmployeeStructure;
 
 import java.io.Serializable;
 import java.util.*;
@@ -48,7 +47,6 @@ import org.osgi.service.component.annotations.Reference;
 )
 public class EmployeeLocalServiceImpl extends EmployeeLocalServiceBaseImpl {
 
-    @Indexable(type = IndexableType.REINDEX)
     @Override
     public Employee addEmployee(
             String firstName, String lastName, String department, String position,
@@ -58,14 +56,13 @@ public class EmployeeLocalServiceImpl extends EmployeeLocalServiceBaseImpl {
 
         long employeeId = CounterLocalServiceUtil.increment();
 
-        _validate(firstName, lastName, position, level, department);
+        _validate(firstName, lastName, position, level, department, false);
 
         return _addEmployee(
                 firstName, lastName, department, position,
                 level, stateCode, employeeId, isManager, user);
     }
 
-    @Indexable(type = IndexableType.REINDEX)
     @Override
     public Employee deleteEmployee(long employeeId) throws NoSuchEmployeeException {
         if (employeePersistence.findByEmployeeId(employeeId).isEmpty() ||
@@ -83,16 +80,9 @@ public class EmployeeLocalServiceImpl extends EmployeeLocalServiceBaseImpl {
 
     @Override
     public Employee getEmployee(long employeeId) {
-        if (employeePersistence.fetchByPrimaryKey(employeeId) == null) {
-            _log.error("No employee found with the primary key " + employeeId);
-
-            return null;
-        }
-
         return employeePersistence.fetchByPrimaryKey(employeeId);
     }
 
-    @Indexable(type = IndexableType.REINDEX)
     @Override
     public List<Employee> getAllEmployeeByManager(
             long managerIdPK, long companyId, boolean hasPermission)
@@ -171,9 +161,8 @@ public class EmployeeLocalServiceImpl extends EmployeeLocalServiceBaseImpl {
 
             _validate(
                     employee.getFirstName(), employee.getLastName(),
-                    position, level, department);
+                    position, level, department, true);
 
-            employee.setIsManager(isManager);
             employee.setDepartment(department);
             employee.setLevel(level);
             employee.setPosition(position);
@@ -187,6 +176,22 @@ public class EmployeeLocalServiceImpl extends EmployeeLocalServiceBaseImpl {
                         employee.getEmployeeId(),
                         employee.getGroupId(),
                         employee.getMvccVersion());
+            }
+
+            User employeeUser = _userLocalService.fetchUser(
+                    employee.getUserId());
+
+            if (employeeUser != null) {
+                employeeUser.setJobTitle(employee.getPosition());
+
+                _userLocalService.updateUser(employeeUser);
+            }
+            else {
+                if (_log.isWarnEnabled()) {
+                    _log.warn(StringBundler.concat(
+                            "Cannot to update user job title ",
+                            "with the primary key ", employee.getUserId()));
+                }
             }
 
             return employee;
@@ -206,12 +211,12 @@ public class EmployeeLocalServiceImpl extends EmployeeLocalServiceBaseImpl {
 
     @Override
     public BaseModelSearchResult<Employee> searchEmployees(
-            long companyId, String className, long classPK, String keywords,
+            long companyId, String className, String keywords,
             LinkedHashMap<String, Object> params, int start, int end, Sort sort)
         throws PortalException {
 
         SearchContext searchContext = _buildSearchContext(
-                companyId, className, classPK, keywords, params, start, end, sort);
+                companyId, className, keywords, params, start, end, sort);
 
         return _searchEmployees(searchContext);
     }
@@ -261,7 +266,7 @@ public class EmployeeLocalServiceImpl extends EmployeeLocalServiceBaseImpl {
                 user.getUserId(), employee.getEmployeeId(),
                 employee.getGroupId());
 
-        User employeeUser = UserLocalServiceUtil.addUser(
+        User employeeUser = _userLocalService.addUser(
                 user.getUserId(), employee.getCompanyId(), false, "batman",
                 "batman", true, screenNameUser, emailAddress,
                 user.getLocale(), employee.getFirstName(), null, employee.getLastName(),
@@ -270,13 +275,17 @@ public class EmployeeLocalServiceImpl extends EmployeeLocalServiceBaseImpl {
                 null, null, null, null,
                 true, serviceContext);
 
+        employeeUser.setUuid(employee.getUuid());
+
+        employeeUser = _userLocalService.updateUser(employeeUser);
+
         employee.setUserId(employeeUser.getUserId());
 
         Employee managerEmployee = fetchEmployeeByUserId(
                 employee.getCompanyId(), user.getUserId());
 
         employee.setManagerIdFK(
-                managerEmployee == null ? 0 :
+                managerEmployee == null ? user.getUserId() :
                         managerEmployee.getManagerIdFK());
 
         employee = employeePersistence.update(employee);
@@ -287,7 +296,7 @@ public class EmployeeLocalServiceImpl extends EmployeeLocalServiceBaseImpl {
     }
 
     private SearchContext _buildSearchContext(
-            long companyId, String className, long classPK, String keywords,
+            long companyId, String className, String keywords,
             LinkedHashMap<String, Object> params, int start, int end, Sort sort) {
 
         SearchContext searchContext = new SearchContext();
@@ -297,17 +306,16 @@ public class EmployeeLocalServiceImpl extends EmployeeLocalServiceBaseImpl {
                         Field.CLASS_NAME_ID,
                         ClassNameLocalServiceUtil.getClassNameId(className)
                 ).put(
-                        Field.CLASS_PK, classPK
-                ).put(
-                        Field.NAME, keywords
-                ).put(
                         "department", keywords
                 ).put(
-                        "name", params
+                        "keywords", keywords
                 ).put(
-                        "position", keywords
+                        "params",
+                        LinkedHashMapBuilder.<String, Object>put(
+                                "keywords", keywords
+                        ).build()
                 ).put(
-                        "screenName", keywords
+                        "jobTitle", keywords
                 ).build());
 
         searchContext.setCompanyId(companyId);
@@ -421,7 +429,7 @@ public class EmployeeLocalServiceImpl extends EmployeeLocalServiceBaseImpl {
 
     private void _validate(
             String firstName, String lastName, String position,
-            int level, String department)
+            int level, String department, boolean isPromotion)
         throws NoSuchManagerException {
 
         try {
@@ -438,19 +446,6 @@ public class EmployeeLocalServiceImpl extends EmployeeLocalServiceBaseImpl {
             else {
                 Map<String, String> departmentMap = HashMapBuilder.put(
                         "department", department).build();
-
-                // Validate job available positions
-
-                if (EmployeeStructure.DEPARTMENT_ENGINEER.equals(department) ||
-                        EmployeeStructure.DEPARTMENT_GENERAL.equals(department)) {
-
-                    if (_log.isDebugEnabled()) {
-                        _log.debug("Department valid " + department);
-                    }
-                }
-                else {
-                    throw new RuntimeException("");
-                }
 
                 JSONObject jsonObject = _departmentsJSONObject();
 
@@ -483,12 +478,24 @@ public class EmployeeLocalServiceImpl extends EmployeeLocalServiceBaseImpl {
                     throw new RuntimeException("No available level " + level);
                 }
 
-                if (employeePersistence.fetchByF_L_First(
-                        firstName, lastName, null) != null) {
+                if (isPromotion) {
+                    if (employeePersistence.fetchByF_L_First(
+                            firstName, lastName, null) == null) {
 
-                    throw new NoSuchManagerException(
-                            "Employee with the first " + firstName + " and last " +
-                                    lastName + " name already exists");
+                        throw new NoSuchManagerException(
+                                StringBundler.concat(
+                                        "Employee not found with the name ",
+                                        firstName, StringPool.SPACE, lastName));
+                    }
+                }
+                else {
+                    if (employeePersistence.fetchByF_L_First(
+                            firstName, lastName, null) != null) {
+
+                        throw new NoSuchManagerException(
+                                "Employee with the first " + firstName + " and last " +
+                                        lastName + " name already exists");
+                    }
                 }
             }
         }
@@ -575,5 +582,8 @@ public class EmployeeLocalServiceImpl extends EmployeeLocalServiceBaseImpl {
 
     @Reference
     private ManagerLocalService _managerLocalService;
+
+    @Reference
+    private UserLocalService _userLocalService;
 
 }
