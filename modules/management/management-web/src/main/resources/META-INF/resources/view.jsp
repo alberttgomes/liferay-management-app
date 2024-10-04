@@ -31,35 +31,30 @@
 
             <clay:container-fluid>
                 <clay:row>
-                    <clay:col
-                            md="3"
-                    >
+                    <clay:col md="3">
                         <img src="" alt="banner-manager-view" />
                     </clay:col>
 
-                    <clay:col
-                            md="6"
-                    >
-                        <aui:form action="<%= editEmployeeEntryRequestURL %>" method="post" name="fm">
-                            <aui:input label="permission" name="permission" type="hidden" value="<%= true %>" />
+                    <clay:col md="6">
+                        <div class="button-group">
+                            <aui:form action="<%= editEmployeeEntryRequestURL %>" method="post" name="fm">
+                                <aui:input label="permission" name="permission" type="hidden" value="<%= true %>" />
 
-                            <div class="button-group">
                                 <aui:button-row>
                                     <aui:button type="submit" value="Create Employee Here" />
                                 </aui:button-row>
-                            </div>
-                        </aui:form>
+                            </aui:form>
 
-                        <aui:form action="<%= viewEmployeeEntryRequestURL %>" method="post" name="fm">
-                            <aui:input label="permission" name="permission" type="hidden" value="<%= true %>" />
+                            <aui:form action="<%= viewEmployeeEntryRequestURL %>" method="post" name="fm">
+                                <aui:input label="permission" name="permission" type="hidden" value="<%= true %>" />
 
-                            <div class="button-group">
                                 <aui:button-row>
                                     <aui:button type="submit" value="Edit Employees Here" />
                                 </aui:button-row>
-                            </div>
-                        </aui:form>
+                            </aui:form>
+                        </div>
                     </clay:col>
+
                     <clay:col md="6">
                         <h1>Information</h1>
 
@@ -88,3 +83,5 @@
     </c:otherwise>
 
 </c:choose>
+
+<css></css>

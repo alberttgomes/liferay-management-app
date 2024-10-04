@@ -9,6 +9,8 @@ taglib uri="http://liferay.com/tld/frontend-data-set" prefix="frontend-data-set"
 taglib prefix="liferay-ui" uri="http://liferay.com/tld/ui" %><%@
 taglib prefix="liferay-frontend" uri="http://liferay.com/tld/aui" %>
 
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/main.scss" />
+
 <%@ page import="com.liferay.portal.kernel.util.Constants" %><%@
 page import="management.web.constants.ManagementPortletKeys" %><%@
 page import="com.liferay.portal.kernel.util.ParamUtil" %><%@
