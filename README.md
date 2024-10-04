@@ -7,8 +7,8 @@
    - Java11
 
   ## Artifacts
-  - Download dump from [Drive]("https://")
-  - Download document library from [Drive](""https://)
+  - Download dump from [Drive]("[https://?](https://drive.google.com/drive/folders/119ru6sVE5WrFPiHwVzfaK-j5ELtqvFOC)")
+  - Download document library from [Drive]("https://drive.google.com/drive/folders/16zYwNSLNeX9PHvIBtbVykoANGiucUZ3j")
 
   ## Prepare Environment
   - Put dump file into /management-env/database/
