@@ -4,8 +4,8 @@ import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.portlet.bridges.mvc.BaseMVCActionCommand;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCActionCommand;
 import com.liferay.portal.kernel.portlet.url.builder.PortletURLBuilder;
-import com.liferay.portal.kernel.service.UserLocalService;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
+import com.liferay.portal.kernel.util.Constants;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Portal;
 import com.liferay.portal.kernel.util.WebKeys;
@@ -20,7 +20,6 @@ import javax.servlet.http.HttpServletRequest;
 
 import management.web.constants.EmployeeRequestConstant;
 import management.web.constants.ManagementPortletKeys;
-import management.web.display.context.ManagementDisplayContext;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -49,38 +48,44 @@ public class OpenRequestEmployeeMVCActionCommand extends BaseMVCActionCommand {
         String reason = ParamUtil.getString(actionRequest, "reason");
         long type = Long.parseLong(ParamUtil.getString(actionRequest, "type"));
 
-        if (!(type == EmployeeRequestConstant.PROMOTION)) {
-            return;
+        if (type == EmployeeRequestConstant.PROMOTION) {
+            Employee employee = _employeeLocalService.getEmployee(employeeId);
+
+            if (employee == null) {
+                return;
+            }
+
+            HttpServletRequest httpServletRequest =
+                    _portal.getHttpServletRequest(actionRequest);
+
+            ThemeDisplay themeDisplay =
+                    (ThemeDisplay)httpServletRequest.getAttribute(
+                            WebKeys.THEME_DISPLAY);
+
+            employee = _employeeLocalService.employeePromoting(
+                    newPosition, themeDisplay.getUserId(), employee.getDepartment(),
+                    newLevel, employeeId, true);
+
+            actionRequest.setAttribute(
+                    "employeeId", employee.getEmployeeId());
+
+            sendRedirect(actionRequest, actionResponse);
+        }
+        else if (type == EmployeeRequestConstant.DISMISSAL_EMPLOYEE) {
+            _employeeLocalService.deleteEmployee(employeeId);
+
+            actionResponse.sendRedirect(
+                    PortletURLBuilder.createRenderURL(
+                            _portal.getLiferayPortletResponse(actionResponse)
+                    ).setMVCPath(
+                            "/view.jsp"
+                    ).buildString());
         }
 
-        Employee employee = _employeeLocalService.getEmployee(employeeId);
-
-        if (employee == null) {
-            return;
-        }
-
-        HttpServletRequest httpServletRequest =
-                _portal.getHttpServletRequest(actionRequest);
-
-        ThemeDisplay themeDisplay =
-                (ThemeDisplay)httpServletRequest.getAttribute(
-                        WebKeys.THEME_DISPLAY);
-
-        employee = _employeeLocalService.employeePromoting(
-                newPosition, themeDisplay.getUserId(), employee.getDepartment(),
-                newLevel, employeeId, true);
-
-        actionRequest.setAttribute(
-                "employeeId", employee.getEmployeeId());
-
-        sendRedirect(actionRequest, actionResponse);
     }
 
     @Reference
     private EmployeeLocalService _employeeLocalService;
-
-    @Reference
-    private UserLocalService _userLocalService;
 
     @Reference
     private Portal _portal;
