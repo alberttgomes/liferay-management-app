@@ -107,6 +107,10 @@
 
 		<!-- Finder methods -->
 
+		<finder name="C_E" return-type="java.util.List&lt;Employee">
+			<finder-column name="companyId" />
+			<finder-column name="employeeIdPK" />
+		</finder>
 		<finder name="CompanyId" return-type="Collection">
 			<finder-column name="companyId" />
 		</finder>
