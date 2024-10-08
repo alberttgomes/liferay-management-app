@@ -25,6 +25,7 @@ import com.liferay.portal.kernel.transaction.Transactional;
 import com.liferay.portal.kernel.util.OrderByComparator;
 
 import com.management.app.exception.NoSuchEmployeeException;
+import com.management.app.exception.NoSuchManagerException;
 import com.management.app.model.Manager;
 
 import java.io.Serializable;
@@ -202,6 +203,9 @@ public interface ManagerLocalService
 	public Manager fetchManagerByFirstNameAndLastName(
 			String firstName, String lastName)
 		throws Exception;
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public Manager findByCompanyIdAndEmployeeId(long companyId, long employeeId) throws NoSuchManagerException;
 
 	/**
 	 * Returns the manager matching the UUID and group.

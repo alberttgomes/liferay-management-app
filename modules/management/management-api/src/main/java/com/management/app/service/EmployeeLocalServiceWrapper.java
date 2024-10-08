@@ -280,12 +280,12 @@ public class EmployeeLocalServiceWrapper
 	@Override
 	public java.util.List<com.management.app.model.Employee>
 			getAllEmployeeByManager(
-				long managerIdPK, long companyId, boolean hasPermission)
+			long employeeId, long companyId, boolean hasPermission)
 		throws com.management.app.exception.NoSuchEmployeeException,
 			   com.management.app.exception.NoSuchManagerException {
 
 		return _employeeLocalService.getAllEmployeeByManager(
-			managerIdPK, companyId, hasPermission);
+				employeeId, companyId, hasPermission);
 	}
 
 	/**

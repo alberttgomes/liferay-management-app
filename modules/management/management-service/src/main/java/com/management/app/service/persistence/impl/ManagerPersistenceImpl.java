@@ -1442,6 +1442,242 @@ public class ManagerPersistenceImpl
 	private static final String _FINDER_COLUMN_UUID_C_COMPANYID_2 =
 		"manager.companyId = ?";
 
+	private FinderPath _finderPathFetchByC_E;
+	private FinderPath _finderPathCountByC_E;
+
+	/**
+	 * Returns the manager where companyId = &#63; and employeeIdPK = &#63; or throws a <code>NoSuchManagerException</code> if it could not be found.
+	 *
+	 * @param companyId the company ID
+	 * @param employeeIdPK the employee ID pk
+	 * @return the matching manager
+	 * @throws NoSuchManagerException if a matching manager could not be found
+	 */
+	@Override
+	public Manager findByC_E(long companyId, long employeeIdPK)
+		throws NoSuchManagerException {
+
+		Manager manager = fetchByC_E(companyId, employeeIdPK);
+
+		if (manager == null) {
+			StringBundler sb = new StringBundler(6);
+
+			sb.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+			sb.append("companyId=");
+			sb.append(companyId);
+
+			sb.append(", employeeIdPK=");
+			sb.append(employeeIdPK);
+
+			sb.append("}");
+
+			if (_log.isDebugEnabled()) {
+				_log.debug(sb.toString());
+			}
+
+			throw new NoSuchManagerException(sb.toString());
+		}
+
+		return manager;
+	}
+
+	/**
+	 * Returns the manager where companyId = &#63; and employeeIdPK = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
+	 *
+	 * @param companyId the company ID
+	 * @param employeeIdPK the employee ID pk
+	 * @return the matching manager, or <code>null</code> if a matching manager could not be found
+	 */
+	@Override
+	public Manager fetchByC_E(long companyId, long employeeIdPK) {
+		return fetchByC_E(companyId, employeeIdPK, true);
+	}
+
+	/**
+	 * Returns the manager where companyId = &#63; and employeeIdPK = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
+	 *
+	 * @param companyId the company ID
+	 * @param employeeIdPK the employee ID pk
+	 * @param useFinderCache whether to use the finder cache
+	 * @return the matching manager, or <code>null</code> if a matching manager could not be found
+	 */
+	@Override
+	public Manager fetchByC_E(
+		long companyId, long employeeIdPK, boolean useFinderCache) {
+
+		Object[] finderArgs = null;
+
+		if (useFinderCache) {
+			finderArgs = new Object[] {companyId, employeeIdPK};
+		}
+
+		Object result = null;
+
+		if (useFinderCache) {
+			result = finderCache.getResult(
+				_finderPathFetchByC_E, finderArgs, this);
+		}
+
+		if (result instanceof Manager) {
+			Manager manager = (Manager)result;
+
+			if ((companyId != manager.getCompanyId()) ||
+				(employeeIdPK != manager.getEmployeeIdPK())) {
+
+				result = null;
+			}
+		}
+
+		if (result == null) {
+			StringBundler sb = new StringBundler(4);
+
+			sb.append(_SQL_SELECT_MANAGER_WHERE);
+
+			sb.append(_FINDER_COLUMN_C_E_COMPANYID_2);
+
+			sb.append(_FINDER_COLUMN_C_E_EMPLOYEEIDPK_2);
+
+			String sql = sb.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query query = session.createQuery(sql);
+
+				QueryPos queryPos = QueryPos.getInstance(query);
+
+				queryPos.add(companyId);
+
+				queryPos.add(employeeIdPK);
+
+				List<Manager> list = query.list();
+
+				if (list.isEmpty()) {
+					if (useFinderCache) {
+						finderCache.putResult(
+							_finderPathFetchByC_E, finderArgs, list);
+					}
+				}
+				else {
+					if (list.size() > 1) {
+						Collections.sort(list, Collections.reverseOrder());
+
+						if (_log.isWarnEnabled()) {
+							if (!useFinderCache) {
+								finderArgs = new Object[] {
+									companyId, employeeIdPK
+								};
+							}
+
+							_log.warn(
+								"ManagerPersistenceImpl.fetchByC_E(long, long, boolean) with parameters (" +
+									StringUtil.merge(finderArgs) +
+										") yields a result set with more than 1 result. This violates the logical unique restriction. There is no order guarantee on which result is returned by this finder.");
+						}
+					}
+
+					Manager manager = list.get(0);
+
+					result = manager;
+
+					cacheResult(manager);
+				}
+			}
+			catch (Exception exception) {
+				throw processException(exception);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		if (result instanceof List<?>) {
+			return null;
+		}
+		else {
+			return (Manager)result;
+		}
+	}
+
+	/**
+	 * Removes the manager where companyId = &#63; and employeeIdPK = &#63; from the database.
+	 *
+	 * @param companyId the company ID
+	 * @param employeeIdPK the employee ID pk
+	 * @return the manager that was removed
+	 */
+	@Override
+	public Manager removeByC_E(long companyId, long employeeIdPK)
+		throws NoSuchManagerException {
+
+		Manager manager = findByC_E(companyId, employeeIdPK);
+
+		return remove(manager);
+	}
+
+	/**
+	 * Returns the number of managers where companyId = &#63; and employeeIdPK = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param employeeIdPK the employee ID pk
+	 * @return the number of matching managers
+	 */
+	@Override
+	public int countByC_E(long companyId, long employeeIdPK) {
+		FinderPath finderPath = _finderPathCountByC_E;
+
+		Object[] finderArgs = new Object[] {companyId, employeeIdPK};
+
+		Long count = (Long)finderCache.getResult(finderPath, finderArgs, this);
+
+		if (count == null) {
+			StringBundler sb = new StringBundler(3);
+
+			sb.append(_SQL_COUNT_MANAGER_WHERE);
+
+			sb.append(_FINDER_COLUMN_C_E_COMPANYID_2);
+
+			sb.append(_FINDER_COLUMN_C_E_EMPLOYEEIDPK_2);
+
+			String sql = sb.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query query = session.createQuery(sql);
+
+				QueryPos queryPos = QueryPos.getInstance(query);
+
+				queryPos.add(companyId);
+
+				queryPos.add(employeeIdPK);
+
+				count = (Long)query.uniqueResult();
+
+				finderCache.putResult(finderPath, finderArgs, count);
+			}
+			catch (Exception exception) {
+				throw processException(exception);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_C_E_COMPANYID_2 =
+		"manager.companyId = ? AND ";
+
+	private static final String _FINDER_COLUMN_C_E_EMPLOYEEIDPK_2 =
+		"manager.employeeIdPK = ?";
+
 	private FinderPath _finderPathWithPaginationFindByCompanyId;
 	private FinderPath _finderPathWithoutPaginationFindByCompanyId;
 	private FinderPath _finderPathCountByCompanyId;
@@ -2540,6 +2776,11 @@ public class ManagerPersistenceImpl
 			new Object[] {manager.getUuid(), manager.getGroupId()}, manager);
 
 		finderCache.putResult(
+			_finderPathFetchByC_E,
+			new Object[] {manager.getCompanyId(), manager.getEmployeeIdPK()},
+			manager);
+
+		finderCache.putResult(
 			_finderPathFetchByE_M,
 			new Object[] {manager.getEmployeeIdPK(), manager.getManagerId()},
 			manager);
@@ -2619,6 +2860,13 @@ public class ManagerPersistenceImpl
 
 		finderCache.putResult(_finderPathCountByUUID_G, args, Long.valueOf(1));
 		finderCache.putResult(_finderPathFetchByUUID_G, args, managerModelImpl);
+
+		args = new Object[] {
+			managerModelImpl.getCompanyId(), managerModelImpl.getEmployeeIdPK()
+		};
+
+		finderCache.putResult(_finderPathCountByC_E, args, Long.valueOf(1));
+		finderCache.putResult(_finderPathFetchByC_E, args, managerModelImpl);
 
 		args = new Object[] {
 			managerModelImpl.getEmployeeIdPK(), managerModelImpl.getManagerId()
@@ -3136,6 +3384,16 @@ public class ManagerPersistenceImpl
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByUuid_C",
 			new String[] {String.class.getName(), Long.class.getName()},
 			new String[] {"uuid_", "companyId"}, false);
+
+		_finderPathFetchByC_E = new FinderPath(
+			FINDER_CLASS_NAME_ENTITY, "fetchByC_E",
+			new String[] {Long.class.getName(), Long.class.getName()},
+			new String[] {"companyId", "employeeIdPK"}, true);
+
+		_finderPathCountByC_E = new FinderPath(
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByC_E",
+			new String[] {Long.class.getName(), Long.class.getName()},
+			new String[] {"companyId", "employeeIdPK"}, false);
 
 		_finderPathWithPaginationFindByCompanyId = new FinderPath(
 			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByCompanyId",

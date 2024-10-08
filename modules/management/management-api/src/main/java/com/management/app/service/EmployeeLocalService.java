@@ -230,7 +230,7 @@ public interface EmployeeLocalService
 	@Indexable(type = IndexableType.REINDEX)
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public List<Employee> getAllEmployeeByManager(
-			long managerIdPK, long companyId, boolean hasPermission)
+			long employeeId, long companyId, boolean hasPermission)
 		throws NoSuchEmployeeException, NoSuchManagerException;
 
 	/**
