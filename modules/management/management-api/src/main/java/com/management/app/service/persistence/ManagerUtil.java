@@ -519,6 +519,70 @@ public class ManagerUtil {
 	}
 
 	/**
+	 * Returns the manager where companyId = &#63; and employeeIdPK = &#63; or throws a <code>NoSuchManagerException</code> if it could not be found.
+	 *
+	 * @param companyId the company ID
+	 * @param employeeIdPK the employee ID pk
+	 * @return the matching manager
+	 * @throws NoSuchManagerException if a matching manager could not be found
+	 */
+	public static Manager findByC_E(long companyId, long employeeIdPK)
+		throws com.management.app.exception.NoSuchManagerException {
+
+		return getPersistence().findByC_E(companyId, employeeIdPK);
+	}
+
+	/**
+	 * Returns the manager where companyId = &#63; and employeeIdPK = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
+	 *
+	 * @param companyId the company ID
+	 * @param employeeIdPK the employee ID pk
+	 * @return the matching manager, or <code>null</code> if a matching manager could not be found
+	 */
+	public static Manager fetchByC_E(long companyId, long employeeIdPK) {
+		return getPersistence().fetchByC_E(companyId, employeeIdPK);
+	}
+
+	/**
+	 * Returns the manager where companyId = &#63; and employeeIdPK = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
+	 *
+	 * @param companyId the company ID
+	 * @param employeeIdPK the employee ID pk
+	 * @param useFinderCache whether to use the finder cache
+	 * @return the matching manager, or <code>null</code> if a matching manager could not be found
+	 */
+	public static Manager fetchByC_E(
+		long companyId, long employeeIdPK, boolean useFinderCache) {
+
+		return getPersistence().fetchByC_E(
+			companyId, employeeIdPK, useFinderCache);
+	}
+
+	/**
+	 * Removes the manager where companyId = &#63; and employeeIdPK = &#63; from the database.
+	 *
+	 * @param companyId the company ID
+	 * @param employeeIdPK the employee ID pk
+	 * @return the manager that was removed
+	 */
+	public static Manager removeByC_E(long companyId, long employeeIdPK)
+		throws com.management.app.exception.NoSuchManagerException {
+
+		return getPersistence().removeByC_E(companyId, employeeIdPK);
+	}
+
+	/**
+	 * Returns the number of managers where companyId = &#63; and employeeIdPK = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param employeeIdPK the employee ID pk
+	 * @return the number of matching managers
+	 */
+	public static int countByC_E(long companyId, long employeeIdPK) {
+		return getPersistence().countByC_E(companyId, employeeIdPK);
+	}
+
+	/**
 	 * Returns all the managers where companyId = &#63;.
 	 *
 	 * @param companyId the company ID

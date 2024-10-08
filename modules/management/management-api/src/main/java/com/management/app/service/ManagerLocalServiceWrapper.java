@@ -5,8 +5,11 @@
 
 package com.management.app.service;
 
+import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.service.ServiceWrapper;
 import com.liferay.portal.kernel.service.persistence.BasePersistence;
+import com.management.app.exception.NoSuchManagerException;
+import com.management.app.model.Manager;
 
 /**
  * Provides a wrapper for {@link ManagerLocalService}.
@@ -233,6 +236,13 @@ public class ManagerLocalServiceWrapper
 
 		return _managerLocalService.fetchManagerByFirstNameAndLastName(
 			firstName, lastName);
+	}
+
+	@Override
+	public Manager findByCompanyIdAndEmployeeId(long companyId, long employeeId)
+		throws NoSuchManagerException {
+
+		return _managerLocalService.findByCompanyIdAndEmployeeId(companyId, employeeId);
 	}
 
 	/**

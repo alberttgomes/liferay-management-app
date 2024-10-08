@@ -379,6 +379,56 @@ public interface ManagerPersistence extends BasePersistence<Manager> {
 	public int countByUuid_C(String uuid, long companyId);
 
 	/**
+	 * Returns the manager where companyId = &#63; and employeeIdPK = &#63; or throws a <code>NoSuchManagerException</code> if it could not be found.
+	 *
+	 * @param companyId the company ID
+	 * @param employeeIdPK the employee ID pk
+	 * @return the matching manager
+	 * @throws NoSuchManagerException if a matching manager could not be found
+	 */
+	public Manager findByC_E(long companyId, long employeeIdPK)
+		throws NoSuchManagerException;
+
+	/**
+	 * Returns the manager where companyId = &#63; and employeeIdPK = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
+	 *
+	 * @param companyId the company ID
+	 * @param employeeIdPK the employee ID pk
+	 * @return the matching manager, or <code>null</code> if a matching manager could not be found
+	 */
+	public Manager fetchByC_E(long companyId, long employeeIdPK);
+
+	/**
+	 * Returns the manager where companyId = &#63; and employeeIdPK = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
+	 *
+	 * @param companyId the company ID
+	 * @param employeeIdPK the employee ID pk
+	 * @param useFinderCache whether to use the finder cache
+	 * @return the matching manager, or <code>null</code> if a matching manager could not be found
+	 */
+	public Manager fetchByC_E(
+		long companyId, long employeeIdPK, boolean useFinderCache);
+
+	/**
+	 * Removes the manager where companyId = &#63; and employeeIdPK = &#63; from the database.
+	 *
+	 * @param companyId the company ID
+	 * @param employeeIdPK the employee ID pk
+	 * @return the manager that was removed
+	 */
+	public Manager removeByC_E(long companyId, long employeeIdPK)
+		throws NoSuchManagerException;
+
+	/**
+	 * Returns the number of managers where companyId = &#63; and employeeIdPK = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param employeeIdPK the employee ID pk
+	 * @return the number of matching managers
+	 */
+	public int countByC_E(long companyId, long employeeIdPK);
+
+	/**
 	 * Returns all the managers where companyId = &#63;.
 	 *
 	 * @param companyId the company ID
