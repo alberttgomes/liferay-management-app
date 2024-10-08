@@ -25,6 +25,7 @@ import com.liferay.portal.kernel.workflow.WorkflowConstants;
 import com.management.app.constants.ManagementConstants;
 import com.management.app.exception.NoSuchEmployeeException;
 import com.management.app.exception.NoSuchManagerException;
+import com.management.app.internal.helper.EmployeeStructureHelper;
 import com.management.app.model.Employee;
 import com.management.app.model.Manager;
 import com.management.app.service.ManagerLocalService;
@@ -501,6 +502,46 @@ public class EmployeeLocalServiceImpl extends EmployeeLocalServiceBaseImpl {
         }
         catch (RuntimeException runtimeException) {
             throw new NoSuchManagerException(runtimeException);
+        }
+
+    }
+
+    private void _validatePromotion(
+            boolean betweenLevels, String department, int newLevel, int oldLevel,
+            String newPosition, String oldPosition) {
+
+        if (department.equals(
+                EmployeeStructureHelper.DEPARTMENT_ENGINEER)) {
+
+            if (newPosition.equals(oldPosition)) {
+                return;
+            }
+
+            Map<String, Long> hierarchyEngineersPositionsHashMap =
+                    EmployeeStructureHelper.HIERARCHY_ENGINEERS_POSITIONS_HASH_MAP;
+
+            if (hierarchyEngineersPositionsHashMap.containsKey(newPosition)) {
+                long hierarchyOldPosition =
+                        hierarchyEngineersPositionsHashMap.get(
+                                oldPosition);
+
+                long hierarchyNewPosition =
+                        hierarchyEngineersPositionsHashMap.get(
+                                newPosition);
+
+                if (hierarchyOldPosition >= hierarchyNewPosition) {
+                    throw new RuntimeException(
+                            "Invalid promotion transaction. Old position is" +
+                                    " and larger than new position");
+                }
+            }
+        }
+        else if (department.equals(
+                EmployeeStructureHelper.DEPARTMENT_GENERAL)) {
+
+            if (newPosition.equals(oldPosition)) {
+                return;
+            }
         }
 
     }
