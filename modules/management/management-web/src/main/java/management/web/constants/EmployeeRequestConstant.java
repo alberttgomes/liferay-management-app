@@ -19,14 +19,14 @@ public class EmployeeRequestConstant {
 
     public static final long PROMOTION = 2;
 
-    public static long[] GET_EMPLOYEE_REQUEST_IDS() {
+    public static long[] getEmployeeRequestIds() {
         return new long[] {
                 BENEFIT_EDUCATION, DEPENDENT_HEALTH_PLAN,
                 DISMISSAL, PROMOTION
         };
     }
 
-    public static long[] GET_MANAGER_REQUEST_IDS() {
+    public static long[] getManagerRequestIds() {
         return new long[] {
                 PROMOTION, DISMISSAL_EMPLOYEE,
                 COURSE, COURSE_TO_EMPLOYEE

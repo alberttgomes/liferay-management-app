@@ -1,4 +1,4 @@
-package com.management.app.search;
+package com.management.app.internal.search;
 
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.dao.orm.IndexableActionableDynamicQuery;
@@ -7,6 +7,7 @@ import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.search.*;
+import com.liferay.portal.kernel.search.filter.BooleanFilter;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.StringBundler;
@@ -42,12 +43,8 @@ public class EmployeeIndexer extends BaseIndexer<Employee> {
                 getBaseModelDocument(
                         Employee.class.getName(), employee);
 
-        long[] employeeIds = _getAllEmployees();
-
         document.addKeyword(
                 Field.STATUS, employee.getStatus());
-        document.addNumber(
-                "allEmployeeIds", employeeIds);
         document.addNumber(
                 "employeeId", employee.getEmployeeId());
         document.addText(
@@ -77,7 +74,6 @@ public class EmployeeIndexer extends BaseIndexer<Employee> {
         summary.setMaxContentLength(200);
 
         return summary;
-
     }
 
     @Override

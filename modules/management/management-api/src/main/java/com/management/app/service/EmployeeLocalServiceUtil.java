@@ -216,11 +216,11 @@ public class EmployeeLocalServiceUtil {
 
 	public static Employee employeePromoting(
 			String position, long userId, String department, int level,
-			long employeeId, boolean isManager)
+			long employeeId, boolean isManager, boolean betweenLevels)
 		throws PortalException {
 
 		return getService().employeePromoting(
-			position, userId, department, level, employeeId, isManager);
+			position, userId, department, level, employeeId, isManager, betweenLevels);
 	}
 
 	public static Employee fetchEmployee(long employeeId) {
@@ -373,6 +373,15 @@ public class EmployeeLocalServiceUtil {
 		return getService().getPersistedModel(primaryKeyObj);
 	}
 
+    public static BaseModelSearchResult<Employee> searchEmployees(
+            long employeeId, String firstName, String department,
+            int start, int end, Sort sort)
+        throws PortalException {
+
+        return getService().searchEmployees(
+                employeeId, firstName, department, start, end, sort);
+    }
+
 	public static BaseModelSearchResult<Employee> searchEmployees(
 			long companyId, String className, String keywords,
 			java.util.LinkedHashMap<String, Object> params, int start, int end,
@@ -396,6 +405,17 @@ public class EmployeeLocalServiceUtil {
 	public static Employee updateEmployee(Employee employee) {
 		return getService().updateEmployee(employee);
 	}
+
+    public static Employee updateEmployee(
+            String firstName, String lastName, String department,
+            long employeeId, String stateCode, boolean isManager,
+            long userId)
+        throws PortalException {
+
+        return getService().updateEmployee(
+                firstName, lastName, department, employeeId,
+                stateCode, isManager, userId);
+    }
 
 	public static EmployeeLocalService getService() {
 		return _service;

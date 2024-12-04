@@ -1,7 +1,5 @@
-package com.management.app.internal.helper;
+package com.management.app.internal.constant;
 
-import com.liferay.petra.string.StringBundler;
-import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.util.HashMapBuilder;
 
 import java.util.Map;
@@ -9,7 +7,7 @@ import java.util.Map;
 /**
  * @author Albert Cabral
  */
-public class EmployeeStructureHelper {
+public class EmployeeStructureConstants {
 
     // Departments
 
@@ -20,11 +18,6 @@ public class EmployeeStructureHelper {
     public static final String[] DEPARTMENTS = {
             DEPARTMENT_ENGINEER, DEPARTMENT_GENERAL};
 
-    public static final String ALL_COMPANY_STRUCTURE =
-            StringBundler.concat("structure \n\t\t",
-                    StringPool.OPEN_CURLY_BRACE, "\n\tdepartments: ", DEPARTMENTS,
-                    StringPool.COMMA_AND_SPACE, StringPool.CLOSE_CURLY_BRACE);
-
     // Levels by Position
 
     public static int LEVEL_ONE = 1;
@@ -32,6 +25,7 @@ public class EmployeeStructureHelper {
     public static int LEVEL_THREE = 3;
     public static int LEVEL_FOUR = 4;
     public static int LEVEL_FIVE = 5;
+    public static int LEVEL_UNIQUE = 6;
 
     public static int[] LEVELS_ASSOC_SOFTWARE_ENGINEER = {
             LEVEL_ONE, LEVEL_TWO, LEVEL_THREE, LEVEL_FOUR};
@@ -54,7 +48,7 @@ public class EmployeeStructureHelper {
     public static int[] LEVELS_SENIOR_SOFTWARE_ENGINEER = {
             LEVEL_ONE, LEVEL_TWO, LEVEL_THREE};
 
-    public static int[] LEVELS_SOFTWARE_ENGINEER = {
+    public static int[] LEVELS_MID_SOFTWARE_ENGINEER = {
             LEVEL_ONE, LEVEL_TWO, LEVEL_THREE, LEVEL_FOUR, LEVEL_FIVE};
 
     public static int[] LEVELS_TEAM_LEADER_SOFTWARE_ENGINEER = {
@@ -67,6 +61,7 @@ public class EmployeeStructureHelper {
     public static final long HIERARCHY_DIRECTOR_SOFTWARE_ENGINEER_LONG = 7;
     public static final long HIERARCHY_HUMAN_SOFTWARE_ENGINEER = 1;
     public static final long HIERARCHY_MID_SOFTWARE_ENGINEER = 2;
+    public static final long HIERARCHY_INCIDENT_MANAGEMENT_ENGINEER = 3;
     public static final long HIERARCHY_PRODUCT_DESIGN = 1;
     public static final long HIERARCHY_SENIOR_SOFTWARE_ENGINEER = 3;
     public static final long HIERARCHY_TEAM_LEADER_SOFTWARE_ENGINEER = 4;
@@ -106,21 +101,19 @@ public class EmployeeStructureHelper {
     public static final String TITLE_TEAM_LEADER_SOFTWARE_ENGINEER =
             "Team Leader Software Engineer";
 
-    public static final Map<String, Long>
-            HIERARCHY_ENGINEERS_POSITIONS_HASH_MAP =
-                HashMapBuilder.put(
-                        TITLE_ASSOC_SOFTWARE_ENGINEER,
-                        HIERARCHY_ASSOC_SOFTWARE_ENGINEER
-                ).put(
-                        TITLE_MID_SOFTWARE_ENGINEER,
-                        HIERARCHY_MID_SOFTWARE_ENGINEER
-                ).put(
-                        TITLE_SENIOR_SOFTWARE_ENGINEER,
-                        HIERARCHY_SENIOR_SOFTWARE_ENGINEER
-                ).put(
-                        TITLE_SENIOR_SOFTWARE_ENGINEER,
-                        HIERARCHY_SENIOR_SOFTWARE_ENGINEER
-                ).build();
+    public static Map<String, Long> getHierarchyPositionEngineerMap() {
+        return HashMapBuilder.put(
+                TITLE_ASSOC_SOFTWARE_ENGINEER, HIERARCHY_ASSOC_SOFTWARE_ENGINEER
+        ).put(
+                TITLE_MID_SOFTWARE_ENGINEER, HIERARCHY_MID_SOFTWARE_ENGINEER
+        ).put(
+                TITLE_SENIOR_SOFTWARE_ENGINEER, HIERARCHY_SENIOR_SOFTWARE_ENGINEER
+        ).put(
+                TITLE_TEAM_LEADER_SOFTWARE_ENGINEER, HIERARCHY_TEAM_LEADER_SOFTWARE_ENGINEER
+        ).put(
+                TITLE_INCIDENT_MANAGEMENT_ENGINEER, HIERARCHY_INCIDENT_MANAGEMENT_ENGINEER
+        ).build();
+    }
 
     public static final Map<String, Long>
             HIERARCHY_PRODUCT_DESIGN_POSITIONS_HASH_MAP =
@@ -139,13 +132,34 @@ public class EmployeeStructureHelper {
             TITLE_MID_SOFTWARE_ENGINEER, TITLE_SENIOR_SOFTWARE_ENGINEER,
             TITLE_TEAM_LEADER_SOFTWARE_ENGINEER};
 
-    public static Map<String, int[]> POSITIONS_BY_JOB_TITLE_MAP =
-            HashMapBuilder.put(
-                    TITLE_ASSOC_SOFTWARE_ENGINEER,
-                    LEVELS_ASSOC_SOFTWARE_ENGINEER
-            ).put(
-                    TITLE_CHIEF_TECHNOLOGY_OFFICER,
-                    new int[LEVEL_ONE]
-            ).build();
+    public static Map<String, int[]> getAllPositionAndLevelsMap() {
+        return HashMapBuilder.put(
+                TITLE_ASSOC_SOFTWARE_ENGINEER, LEVELS_ASSOC_SOFTWARE_ENGINEER
+        ).put(
+                TITLE_CHIEF_TECHNOLOGY_OFFICER, new int[LEVEL_UNIQUE]
+        ).put(
+                TITLE_DIRECTOR_OF_ENGINEER, new int[LEVEL_UNIQUE]
+        ).put(
+                TITLE_HUMAN_RESOURCES, LEVELS_HUMAN_RESOURCES
+        ).put(
+                TITLE_INCIDENT_MANAGEMENT_ENGINEER, LEVELS_INCIDENT_MANAGEMENT_ENGINEER
+        ).put(
+                TITLE_MARKETING,  new int[LEVEL_UNIQUE]
+        ).put(
+                TITLE_MID_SOFTWARE_ENGINEER, LEVELS_MID_SOFTWARE_ENGINEER
+        ).put(
+                TITLE_OPERATION_IT, new int[LEVEL_UNIQUE]
+        ).put(
+                TITLE_PRODUCT_DESIGN, LEVELS_PRODUCT_DESIGN
+        ).put(
+                TITLE_PRODUCT_MANAGER, LEVELS_PRODUCT_MANAGER
+        ).put(
+                TITLE_SALES_PRODUCT, new int[LEVEL_UNIQUE]
+        ).put(
+                TITLE_SENIOR_SOFTWARE_ENGINEER, LEVELS_SENIOR_SOFTWARE_ENGINEER
+        ).put(
+                TITLE_TEAM_LEADER_SOFTWARE_ENGINEER, LEVELS_TEAM_LEADER_SOFTWARE_ENGINEER
+        ).build();
+    }
 
 }

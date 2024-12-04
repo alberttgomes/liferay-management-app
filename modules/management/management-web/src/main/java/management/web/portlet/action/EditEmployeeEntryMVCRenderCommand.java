@@ -19,11 +19,11 @@ import org.osgi.service.component.annotations.Component;
  * @author Albert Cabral
  */
 @Component(
-        property = {
-                "javax.portlet.name=" + ManagementPortletKeys.MANAGEMENT_WEB,
-                "mvc.command.name=/management/edit_employee_management"
-        },
-        service = MVCRenderCommand.class
+    property = {
+        "javax.portlet.name=" + ManagementPortletKeys.MANAGEMENT_WEB,
+        "mvc.command.name=/management/edit_employee_management"
+    },
+    service = MVCRenderCommand.class
 )
 public class EditEmployeeEntryMVCRenderCommand implements MVCRenderCommand {
 
@@ -55,7 +55,6 @@ public class EditEmployeeEntryMVCRenderCommand implements MVCRenderCommand {
                 employeeDisplay);
 
         return "/management/employee_entry.jsp";
-
     }
 
 }

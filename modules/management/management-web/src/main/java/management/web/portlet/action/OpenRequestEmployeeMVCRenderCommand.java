@@ -19,11 +19,11 @@ import org.osgi.service.component.annotations.Reference;
  * @author Albert Cabral
  */
 @Component(
-        property = {
-                "javax.portlet.name=" + ManagementPortletKeys.EMPLOYEE_DASHBOARD_WEB,
-                "mvc.command.name=/management/view_request_employee"
-        },
-        service = MVCRenderCommand.class
+    property = {
+        "javax.portlet.name=" + ManagementPortletKeys.EMPLOYEE_DASHBOARD_WEB,
+        "mvc.command.name=/management/view_request_employee"
+    },
+    service = MVCRenderCommand.class
 )
 public class OpenRequestEmployeeMVCRenderCommand implements MVCRenderCommand {
 

@@ -13,6 +13,7 @@ import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.management.app.exception.NoSuchEmployeeException;
+import com.management.app.exception.NoSuchManagerException;
 import com.management.app.model.Employee;
 import com.management.app.model.Manager;
 import com.management.app.service.EmployeeLocalService;
@@ -77,6 +78,13 @@ public class ManagerLocalServiceImpl extends ManagerLocalServiceBaseImpl {
 		}
 
 		return null;
+	}
+
+	@Override
+	public Manager findByCompanyIdAndEmployeeId(long companyId, long employeeId)
+		throws NoSuchManagerException {
+
+		return managerPersistence.findByC_E(companyId, employeeId);
 	}
 
 	private void _validate(long employeeId) throws PortalException {

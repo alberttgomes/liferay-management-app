@@ -7,6 +7,7 @@ package com.management.app.service;
 
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.search.BaseModelSearchResult;
+import com.liferay.portal.kernel.search.SearchContext;
 import com.liferay.portal.kernel.search.Sort;
 import com.liferay.portal.kernel.service.ServiceWrapper;
 import com.liferay.portal.kernel.service.persistence.BasePersistence;
@@ -237,12 +238,12 @@ public class EmployeeLocalServiceWrapper
 
 	@Override
 	public com.management.app.model.Employee employeePromoting(
-			String position, long userId, String department, int level,
-			long employeeId, boolean isManager)
+            String position, long userId, String department, int level,
+            long employeeId, boolean isManager, boolean betweenLevels)
 		throws com.liferay.portal.kernel.exception.PortalException {
 
 		return _employeeLocalService.employeePromoting(
-			position, userId, department, level, employeeId, isManager);
+			position, userId, department, level, employeeId, isManager, betweenLevels);
 	}
 
 	@Override
@@ -420,7 +421,24 @@ public class EmployeeLocalServiceWrapper
 		return _employeeLocalService.getPersistedModel(primaryKeyObj);
 	}
 
-	@Override
+    @Override
+    public BaseModelSearchResult<Employee> searchEmployees(
+            long employeeId, String firstName, String department,
+            int start, int end, Sort sort)
+        throws PortalException {
+
+        return _employeeLocalService.searchEmployees(
+                employeeId, firstName, department, start, end, sort);
+    }
+
+    @Override
+    public BaseModelSearchResult<Employee> searchEmployees(
+            SearchContext searchContext) throws PortalException {
+
+        return _employeeLocalService.searchEmployees(searchContext);
+    }
+
+    @Override
 	public BaseModelSearchResult<Employee>
 			searchEmployees(
 				long companyId, String className, String keywords,
@@ -449,7 +467,19 @@ public class EmployeeLocalServiceWrapper
 		return _employeeLocalService.updateEmployee(employee);
 	}
 
-	@Override
+    @Override
+    public Employee updateEmployee(
+            String firstName, String lastName, String department,
+            long employeeId, String stateCode, boolean isManager,
+            long userId)
+        throws PortalException {
+
+        return _employeeLocalService.updateEmployee(
+                firstName, lastName, department, employeeId,
+                stateCode, isManager, userId);
+    }
+
+    @Override
 	public BasePersistence<?> getBasePersistence() {
 		return _employeeLocalService.getBasePersistence();
 	}
