@@ -6,6 +6,6 @@ configurations.all {
 
 dependencies {
 	testIntegrationImplementation group: "com.liferay.portal", name: "release.dxp.api"
-	testIntegrationImplementation project(":modules:management:management-api")
-//	testIntegrationImplementation project(":modules:management:management-client")
+	testIntegrationImplementation project(":modules:management:management-rest:management-api")
+	testIntegrationImplementation project(":modules:management:management-rest:management-client")
 }

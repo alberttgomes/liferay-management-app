@@ -18,6 +18,7 @@ import com.management.app.service.ManagerLocalService;
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import management.web.constants.EmployeeDetailsFDSNames;
 import management.web.model.EmployeeDetails;
@@ -49,12 +50,16 @@ public class EmployeeDetailsFDSDataProvider
 
         Manager manager = _getManagerIdByCurrentUser(themeDisplay);
 
-        assert manager != null;
+        if (Objects.isNull(manager)) {
+            return new ArrayList<>();
+        }
 
-        List<Employee> employees = _employeeLocalService.getAllEmployeeByManager(
-                manager.getManagerId(), themeDisplay.getCompanyId(), true);
+        long companyId = themeDisplay.getCompanyId();
+        long employeeId = manager.getEmployeeIdPK();
 
-        for (Employee employee : employees) {
+        for (Employee employee : _employeeLocalService.getAllEmployeeByManager(
+                employeeId, companyId, true)) {
+
             User user = UserLocalServiceUtil.getUser(
                     employee.getUserId());
 
@@ -62,8 +67,10 @@ public class EmployeeDetailsFDSDataProvider
 
             employeeDetails.add(
                     new EmployeeDetails(
-                            employee.getDepartment(), user.getEmailAddress(),
-                            employee.getEmployeeId(), name, employee.getPosition()));
+                            employee.getDepartment(),
+                            user.getEmailAddress(),
+                            employee.getEmployeeId(), name,
+                            employee.getPosition()));
         }
 
         return employeeDetails;
@@ -82,20 +89,20 @@ public class EmployeeDetailsFDSDataProvider
 
         User user = themeDisplay.getUser();
 
-        if (user == null) {
+        if (Objects.isNull(user)) {
             return null;
         }
         else {
             Employee employee = _employeeLocalService.fetchEmployeeByUserId(
                     user.getCompanyId(), user.getUserId());
 
-            if (employee == null) {
+            if (Objects.isNull(employee)) {
                 return _managerLocalService.fetchManagerByUuidAndGroupId(
-                        user.getUuid(), user.getGroupId());
+                            user.getUuid(), user.getGroupId());
             }
 
-            return _managerLocalService.getManager(
-                    employee.getManagerIdFK());
+            return _managerLocalService.findByCompanyIdAndEmployeeId(
+                    employee.getCompanyId(), employee.getEmployeeId());
         }
     }
 

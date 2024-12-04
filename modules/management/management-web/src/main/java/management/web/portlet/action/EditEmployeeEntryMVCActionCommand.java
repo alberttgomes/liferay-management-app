@@ -12,14 +12,16 @@ import com.liferay.portal.kernel.workflow.WorkflowConstants;
 import com.management.app.model.Employee;
 import com.management.app.service.EmployeeLocalService;
 
-import management.web.constants.ManagementPortletKeys;
+import java.util.Locale;
+import java.util.Objects;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
 
-import java.util.Locale;
+import management.web.constants.ManagementPortletKeys;
 
 import management.web.display.EmployeeDisplay;
+
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
@@ -27,11 +29,11 @@ import org.osgi.service.component.annotations.Reference;
  * @author Albert Cabral
  */
 @Component(
-        property = {
-            "javax.portlet.name=" + ManagementPortletKeys.MANAGEMENT_WEB,
-            "mvc.command.name=/management/edit_employee_management"
-        },
-        service = MVCActionCommand.class
+    property = {
+        "javax.portlet.name=" + ManagementPortletKeys.MANAGEMENT_WEB,
+        "mvc.command.name=/management/edit_employee_management"
+    },
+    service = MVCActionCommand.class
 )
 public class EditEmployeeEntryMVCActionCommand extends BaseMVCActionCommand {
 
@@ -124,8 +126,8 @@ public class EditEmployeeEntryMVCActionCommand extends BaseMVCActionCommand {
         long employeeId = ParamUtil.getLong(
                 actionRequest, "employeeId");
 
-        Employee employee =
-                _employeeLocalService.fetchEmployee(employeeId);
+        Employee employee = _employeeLocalService.fetchEmployee(
+                employeeId);
 
         String department = ParamUtil.getString(
                 actionRequest, "department");
@@ -143,13 +145,13 @@ public class EditEmployeeEntryMVCActionCommand extends BaseMVCActionCommand {
                 actionRequest, "position");
 
         employee.setDepartment(
-                department == null || department.isEmpty() ?
+                Objects.isNull(department) ?
                         employee.getDepartment() : department);
         employee.setFirstName(
-                firstName == null || firstName.isEmpty() ?
+                Objects.isNull(firstName) ?
                         employee.getFirstName() : firstName);
         employee.setLastName(
-                lastName == null || lastName.isEmpty() ?
+                Objects.isNull(lastName) ?
                         employee.getLastName() : lastName);
         employee.setIsManager(
                 isManager || employee.getIsManager());
@@ -158,7 +160,7 @@ public class EditEmployeeEntryMVCActionCommand extends BaseMVCActionCommand {
         employee.setManagerIdFK(
                 managerIdPK > 0 ? managerIdPK : employee.getManagerIdFK());
         employee.setPosition(
-                position == null || position.isEmpty() ?
+                Objects.isNull(position) ?
                         employee.getPosition() : position);
 
         return _employeeLocalService.updateEmployee(employee);

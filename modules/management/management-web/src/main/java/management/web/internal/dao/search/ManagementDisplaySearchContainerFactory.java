@@ -12,6 +12,7 @@ import com.liferay.portal.kernel.search.*;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.WebKeys;
+
 import com.management.app.model.Employee;
 import com.management.app.service.EmployeeLocalServiceUtil;
 
@@ -19,19 +20,18 @@ import java.util.LinkedHashMap;
 import java.util.Objects;
 
 import management.web.constants.ManagementPortletKeys;
-import management.web.display.EmployeeDisplay;
 
 /**
  * @author Albert Cabral
  */
 public class ManagementDisplaySearchContainerFactory {
 
-    public static SearchContainer<EmployeeDisplay> create(
+    public static SearchContainer<Employee> create(
             LiferayPortletRequest liferayPortletRequest,
             LiferayPortletResponse liferayPortletResponse)
         throws PortalException {
 
-        SearchContainer<EmployeeDisplay> searchContainer = new SearchContainer<>(
+        SearchContainer<Employee> searchContainer = new SearchContainer<>(
                 liferayPortletRequest,
                 PortletURLUtil.getCurrent(
                         liferayPortletRequest, liferayPortletResponse),
@@ -67,11 +67,23 @@ public class ManagementDisplaySearchContainerFactory {
                                 searchContainer.getOrderByCol(),
                                 searchContainer.getOrderByType()));
 
-        searchContainer.setResultsAndTotal(
-                () -> TransformUtil.transform(
-                        baseModelSearchResult.getBaseModels(),
-                        EmployeeDisplay::of),
-                baseModelSearchResult.getLength());
+        if (baseModelSearchResult.getBaseModels().isEmpty()) {
+            baseModelSearchResult =
+                    EmployeeLocalServiceUtil.searchEmployees(
+                            Long.parseLong(keywords), keywords, keywords,
+                            searchContainer.getStart(), searchContainer.getEnd(),
+                            _getSort(
+                                    searchContainer.getOrderByCol(),
+                                    searchContainer.getOrderByType()));
+        }
+
+        BaseModelSearchResult<Employee> finalBaseModelSearchResult =
+                baseModelSearchResult;
+
+//        searchContainer.setResultsAndTotal(
+//                () -> TransformUtil.transfor
+//                        finalBaseModelSearchResult.getBaseModels(), Employee::getFirstName),
+//                baseModelSearchResult.getLength());
 
         searchContainer.setRowChecker(
                 new EmptyOnClickRowChecker(liferayPortletResponse));

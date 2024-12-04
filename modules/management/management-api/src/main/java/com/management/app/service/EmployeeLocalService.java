@@ -5,6 +5,7 @@
 
 package com.management.app.service;
 
+import com.liferay.dynamic.data.mapping.model.DDMFormInstanceRecord;
 import com.liferay.exportimport.kernel.lar.PortletDataContext;
 import com.liferay.petra.sql.dsl.query.DSLQuery;
 import com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery;
@@ -26,6 +27,7 @@ import com.liferay.portal.kernel.transaction.Propagation;
 import com.liferay.portal.kernel.transaction.Transactional;
 import com.liferay.portal.kernel.util.OrderByComparator;
 
+import com.liferay.search.experiences.rest.dto.v1_0.In;
 import com.management.app.exception.NoSuchEmployeeException;
 import com.management.app.exception.NoSuchManagerException;
 import com.management.app.model.Employee;
@@ -205,7 +207,7 @@ public interface EmployeeLocalService
 
 	public Employee employeePromoting(
 			String position, long userId, String department, int level,
-			long employeeId, boolean isManager)
+			long employeeId, boolean isManager, boolean betweenLevels)
 		throws PortalException;
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
@@ -325,7 +327,17 @@ public interface EmployeeLocalService
 	public PersistedModel getPersistedModel(Serializable primaryKeyObj)
 		throws PortalException;
 
-	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+    @Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+    public BaseModelSearchResult<Employee> searchEmployees(
+            long employeeId, String firstName, String department,
+            int start, int end, Sort sort)
+        throws PortalException;
+
+    @Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+    public BaseModelSearchResult<Employee>
+        searchEmployees(SearchContext searchContext) throws PortalException;
+
+    @Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public BaseModelSearchResult<Employee> searchEmployees(
 			long companyId, String className, String keywords,
 			java.util.LinkedHashMap<String, Object> params, int start, int end,
@@ -344,5 +356,13 @@ public interface EmployeeLocalService
 	 */
 	@Indexable(type = IndexableType.REINDEX)
 	public Employee updateEmployee(Employee employee);
+
+    @Indexable(type = IndexableType.REINDEX)
+    public Employee updateEmployee(
+            String firstName, String lastName, String department,
+            long employeeId, String stateCode, boolean isManager,
+            long userId)
+        throws PortalException;
+
 
 }

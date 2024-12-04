@@ -47,7 +47,8 @@ public class EmployeeDashboardPortlet extends MVCPortlet {
                 PortalUtil.getHttpServletRequest(renderRequest);
 
         ManagementDisplayContext managementDisplayContext =
-                new ManagementDisplayContext(httpServletRequest, _userLocalService);
+                new ManagementDisplayContext(
+                        httpServletRequest, _userLocalService);
 
         renderRequest.setAttribute(
                 WebKeys.PORTLET_DISPLAY_CONTEXT, managementDisplayContext);

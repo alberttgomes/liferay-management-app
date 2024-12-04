@@ -55,7 +55,7 @@ public interface EmployeeResource {
 
 	public Employee promotingEmployee(
 			String position, String department, int level,
-			long employeeId, boolean isManager) throws Exception;
+			long employeeId, boolean isManager, boolean betweenLevels) throws Exception;
 
     public Response deleteEmployeeById(Integer employeeId) throws Exception;
 

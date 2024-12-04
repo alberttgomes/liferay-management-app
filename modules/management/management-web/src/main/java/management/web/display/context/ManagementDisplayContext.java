@@ -6,13 +6,16 @@ import com.liferay.frontend.data.set.model.FDSSortItemList;
 import com.liferay.frontend.data.set.model.FDSSortItemListBuilder;
 import com.liferay.frontend.taglib.clay.servlet.taglib.util.CreationMenu;
 import com.liferay.frontend.taglib.clay.servlet.taglib.util.SelectOption;
+import com.liferay.portal.kernel.dao.search.SearchContainer;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.portlet.LiferayWindowState;
+import com.liferay.portal.kernel.portlet.PortletURLUtil;
 import com.liferay.portal.kernel.portlet.url.builder.PortletURLBuilder;
 import com.liferay.portal.kernel.service.UserLocalService;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.ListUtil;
+import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.WebKeys;
 
 import com.management.app.exception.NoSuchEmployeeException;
@@ -21,6 +24,7 @@ import com.management.app.service.EmployeeLocalServiceUtil;
 
 import java.util.ArrayList;
 import java.util.List;
+import javax.portlet.PortletURL;
 import javax.servlet.http.HttpServletRequest;
 
 import management.web.constants.EmployeeRequestConstant;
@@ -70,36 +74,40 @@ public class ManagementDisplayContext {
         return creationMenu;
     }
 
+    public String getDisplayStyle() {
+        return "list";
+    }
+
     public List<SelectOption> getEmployeeOptions(long selectedEmployeeRequestId) {
         List<SelectOption> selectOptions = new ArrayList<>();
 
         selectOptions.add(
-                new SelectOption(
-                        "Benefit Education",
-                        String.valueOf(EmployeeRequestConstant.BENEFIT_EDUCATION),
-                        selectedEmployeeRequestId ==
-                                EmployeeRequestConstant.BENEFIT_EDUCATION));
+            new SelectOption(
+                "Benefit Education",
+                String.valueOf(EmployeeRequestConstant.BENEFIT_EDUCATION),
+                selectedEmployeeRequestId ==
+                        EmployeeRequestConstant.BENEFIT_EDUCATION));
 
         selectOptions.add(
-                new SelectOption(
-                        "Request promotion to employee",
-                        String.valueOf(EmployeeRequestConstant.PROMOTION),
-                        selectedEmployeeRequestId ==
-                                EmployeeRequestConstant.PROMOTION));
+            new SelectOption(
+                "Request promotion to employee",
+                String.valueOf(EmployeeRequestConstant.PROMOTION),
+                selectedEmployeeRequestId ==
+                        EmployeeRequestConstant.PROMOTION));
 
         selectOptions.add(
-                new SelectOption(
-                        "Request a new course to employee",
-                        String.valueOf(EmployeeRequestConstant.COURSE_TO_EMPLOYEE),
-                        selectedEmployeeRequestId ==
-                                EmployeeRequestConstant.COURSE_TO_EMPLOYEE));
+            new SelectOption(
+                "Request a new course to employee",
+                String.valueOf(EmployeeRequestConstant.COURSE_TO_EMPLOYEE),
+                selectedEmployeeRequestId ==
+                        EmployeeRequestConstant.COURSE_TO_EMPLOYEE));
 
         selectOptions.add(
-                new SelectOption(
-                        "Request employee's dismissal",
-                        String.valueOf(EmployeeRequestConstant.DISMISSAL_EMPLOYEE),
-                        selectedEmployeeRequestId ==
-                                EmployeeRequestConstant.DISMISSAL_EMPLOYEE));
+            new SelectOption(
+                "Request employee's dismissal",
+                String.valueOf(EmployeeRequestConstant.DISMISSAL_EMPLOYEE),
+                selectedEmployeeRequestId ==
+                        EmployeeRequestConstant.DISMISSAL_EMPLOYEE));
 
         return selectOptions;
     }
@@ -130,31 +138,41 @@ public class ManagementDisplayContext {
 
     public List<FDSActionDropdownItem> getFDSActionDropdownItems() {
         return ListUtil.fromArray(
-                new FDSActionDropdownItem(
-                        PortletURLBuilder.createRenderURL(
-                                _managementRequestHelper.getLiferayPortletResponse()
-                        ).setMVCRenderCommandName(
-                                "/management/employee_promotion"
-                        ).setParameter(
-                                "employeeId", "{employeeId}"
-                        ).buildString(),
-                        "list-ul", "employee-promotion",
-                        "Request a promotion to Employee", "post",
-                        "get", null));
+            new FDSActionDropdownItem(
+                PortletURLBuilder.createRenderURL(
+                        _managementRequestHelper.getLiferayPortletResponse()
+                ).setMVCRenderCommandName(
+                        "/management/employee_promotion"
+                ).setParameter(
+                        "employeeId", "{employeeId}"
+                ).buildString(),
+                "list-ul", "employee-promotion",
+                "Request a promotion to Employee", "post",
+                "get", null));
     }
 
     public FDSSortItemList getFDSSortItemList() {
         return FDSSortItemListBuilder.add(
-                FDSSortItemBuilder.setDirection(
-                        "asc"
-                ).setKey(
-                        "typeName"
-                ).build()
+            FDSSortItemBuilder.setDirection(
+                    "asc"
+            ).setKey(
+                    "typeName"
+            ).build()
         ).build();
     }
 
+    protected String getKeywords() {
+        return ParamUtil.getString(_httpServletRequest, "keywords");
+    }
+
+    public PortletURL getPortletURL() {
+        return PortletURLUtil.getCurrent(
+            _managementRequestHelper.getLiferayPortletRequest(),
+            _managementRequestHelper.getLiferayPortletResponse());
+    }
+
     public long[] getSelectedRequestIds() {
-        return EmployeeRequestConstant.GET_MANAGER_REQUEST_IDS();
+        return EmployeeRequestConstant.getManagerRequestIds();
     }
 
     private Employee _setEmployee(HttpServletRequest httpServletRequest)
