@@ -13,16 +13,18 @@ public interface EmployeeManagementHelper {
 
     @Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
     Object addDependentHealthPlan(
-            long employeeId, long userManagerId) throws PortalException;
+        long employeeId, long userManagerId) throws PortalException;
 
+    @Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
     void dismissalEmployee(
-            long employeeId, long userManagerId) throws PortalException;
+        long employeeId, long userManagerId) throws PortalException;
 
     @Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
     Map<String, Object> requestBenefitEducation(
             String description, long employeeId, String value, String type)
-         throws PortalException;
+        throws PortalException;
 
+    @Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
     void requestDismissalSelf(
             String description, long employeeId, String value, String type)
         throws PortalException;
