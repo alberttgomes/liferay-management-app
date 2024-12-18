@@ -38,7 +38,6 @@ import com.liferay.portal.kernel.service.UserLocalService;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.HashMapBuilder;
 import com.liferay.portal.kernel.util.LinkedHashMapBuilder;
-import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
 
@@ -53,11 +52,14 @@ import com.management.app.service.base.EmployeeLocalServiceBaseImpl;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -271,6 +273,7 @@ public class EmployeeLocalServiceImpl extends EmployeeLocalServiceBaseImpl {
         }
     }
 
+    @Indexable(type = IndexableType.REINDEX)
     @Override
     public Employee updateEmployee(
             String firstName, String lastName, String department,
@@ -300,6 +303,7 @@ public class EmployeeLocalServiceImpl extends EmployeeLocalServiceBaseImpl {
         return employeePersistence.update(employee);
     }
 
+    @Indexable(type = IndexableType.REINDEX)
     private Employee _addEmployee(
             String firstName, String lastName, String department, String position,
             int level, String stateCode, long employeeId, boolean isManager,
@@ -356,7 +360,7 @@ public class EmployeeLocalServiceImpl extends EmployeeLocalServiceBaseImpl {
 
         employeeUser.setUuid(employee.getUuid());
 
-        employeeUser = _userLocalService.updateUser(employeeUser);
+        _userLocalService.updateUser(employeeUser);
 
         employee.setUserId(employeeUser.getUserId());
 
@@ -555,12 +559,15 @@ public class EmployeeLocalServiceImpl extends EmployeeLocalServiceBaseImpl {
                             lastName + " name already exists");
             }
             else {
-                if (!ListUtil.toList(
-                        EmployeeStructureConstants.DEPARTMENTS).contains(
-                        department)) {
+                Set<String> departmentsList = new HashSet<>();
 
+                Collections.addAll(
+                    departmentsList,
+                    EmployeeStructureConstants.DEPARTMENTS);
+
+                if (!departmentsList.contains(department)) {
                     throw new NoSuchManagerException(
-                        "No such department with the name " + department);
+                            "No such department with the name " + department);
                 }
 
                 _validateLevelAndPosition(level, position);
@@ -579,10 +586,13 @@ public class EmployeeLocalServiceImpl extends EmployeeLocalServiceBaseImpl {
                 EmployeeStructureConstants.getAllPositionAndLevelsMap();
 
         if (positionsAndLevels.containsKey(position)) {
-            List<?> levels = ListUtil.toList(
-                    positionsAndLevels.get(position));
+            List<String> levelsList = new ArrayList<>();
 
-            if (!levels.contains(level)) {
+            for (int l : positionsAndLevels.get(position)) {
+                levelsList.add(String.valueOf(l));
+            }
+
+            if (!levelsList.contains(String.valueOf(level))) {
                 throw new RuntimeException(
                     "No such level available for this position " + position +
                             "\n Level invaluable " + level);
