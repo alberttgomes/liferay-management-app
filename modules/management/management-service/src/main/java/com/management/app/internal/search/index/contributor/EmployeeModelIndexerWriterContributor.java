@@ -1,9 +1,5 @@
 package com.management.app.internal.search.index.contributor;
 
-import com.liferay.portal.kernel.dao.orm.DynamicQuery;
-import com.liferay.portal.kernel.dao.orm.ProjectionFactoryUtil;
-import com.liferay.portal.kernel.dao.orm.Property;
-import com.liferay.portal.kernel.dao.orm.PropertyFactoryUtil;
 import com.liferay.portal.search.batch.BatchIndexingActionable;
 import com.liferay.portal.search.batch.DynamicQueryBatchIndexingActionableFactory;
 import com.liferay.portal.search.spi.model.index.contributor.ModelIndexerWriterContributor;
@@ -33,39 +29,9 @@ public class EmployeeModelIndexerWriterContributor
             BatchIndexingActionable batchIndexingActionable,
             ModelIndexerWriterDocumentHelper modelIndexerWriterDocumentHelper) {
 
-        batchIndexingActionable.setAddCriteriaMethod(
-                dynamicQuery -> {
-                    Property empployeeIdProperty =
-                            _propertyFactory("employeeId");
-
-                    DynamicQuery employeeDynamicQuery =
-                            _employeeLocalService.dynamicQuery();
-
-                    employeeDynamicQuery.setProjection(
-                            ProjectionFactoryUtil.property("employeeId"));
-
-                    dynamicQuery.add(
-                            empployeeIdProperty.in(employeeDynamicQuery));
-
-                    Property employeeDepartmentProperty =
-                            _propertyFactory("department");
-
-                    employeeDynamicQuery.setProjection(
-                            ProjectionFactoryUtil.property("department"));
-
-                    dynamicQuery.add(
-                            employeeDepartmentProperty.in(employeeDynamicQuery));
-
-                    Property employeeFirstNameProperty =
-                            _propertyFactory("firstName");
-
-                    employeeDynamicQuery.setProjection(
-                            ProjectionFactoryUtil.property("firstName"));
-
-                    dynamicQuery.add(
-                            employeeFirstNameProperty.in(employeeDynamicQuery));
-
-                });
+        batchIndexingActionable.setPerformActionMethod(
+                (Employee employee) -> batchIndexingActionable.addDocuments(
+                        modelIndexerWriterDocumentHelper.getDocument(employee)));
     }
 
     @Override
@@ -79,10 +45,6 @@ public class EmployeeModelIndexerWriterContributor
     @Override
     public long getCompanyId(Employee employee) {
         return employee.getCompanyId();
-    }
-
-    private Property _propertyFactory(String propertyName) {
-        return PropertyFactoryUtil.forName(propertyName);
     }
 
     private final DynamicQueryBatchIndexingActionableFactory

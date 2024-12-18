@@ -1,6 +1,7 @@
 package com.management.app.internal.search.query.contributor;
 
 import com.liferay.portal.kernel.search.BooleanQuery;
+import com.liferay.portal.kernel.search.Field;
 import com.liferay.portal.search.query.QueryHelper;
 import com.liferay.portal.search.spi.model.query.contributor.KeywordQueryContributor;
 import com.liferay.portal.search.spi.model.query.contributor.helper.KeywordQueryContributorHelper;
@@ -23,24 +24,24 @@ public class EmployeeKeywordQueryContributor
         String keyword, BooleanQuery booleanQuery,
         KeywordQueryContributorHelper keywordQueryContributorHelper) {
 
-        _queryHelper.addSearchTerm(
+        queryHelper.addSearchTerm(
+                booleanQuery, keywordQueryContributorHelper.getSearchContext(),
+                Field.NAME, false);
+
+        queryHelper.addSearchTerm(
                 booleanQuery, keywordQueryContributorHelper.getSearchContext(),
                 "employeeId", false);
 
-        _queryHelper.addSearchTerm(
-                booleanQuery, keywordQueryContributorHelper.getSearchContext(),
-                "firstName", false);
-
-        _queryHelper.addSearchTerm(
-                booleanQuery, keywordQueryContributorHelper.getSearchContext(),
-                "lastName", false);
-
-        _queryHelper.addSearchLocalizedTerm(
+        queryHelper.addSearchTerm(
                 booleanQuery, keywordQueryContributorHelper.getSearchContext(),
                 "department", false);
+
+        queryHelper.addSearchTerm(
+                booleanQuery, keywordQueryContributorHelper.getSearchContext(),
+                "firstName", false);
     }
 
     @Reference
-    private QueryHelper _queryHelper;
+    protected QueryHelper queryHelper;
 
 }

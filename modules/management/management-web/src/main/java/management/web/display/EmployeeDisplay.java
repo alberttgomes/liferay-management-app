@@ -52,9 +52,9 @@ public class EmployeeDisplay {
                 "content.Language", locale, getClass());
 
         return LanguageUtil.get(
-                new AggregateResourceBundle(
-                        resourceBundle, PortalUtil.getResourceBundle(locale)),
-                "language");
+            new AggregateResourceBundle(
+                resourceBundle, PortalUtil.getResourceBundle(locale)),
+            "language");
     }
 
     private EmployeeDisplay() {

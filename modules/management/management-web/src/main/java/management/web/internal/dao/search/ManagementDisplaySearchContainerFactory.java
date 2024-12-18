@@ -20,34 +20,35 @@ import java.util.LinkedHashMap;
 import java.util.Objects;
 
 import management.web.constants.ManagementPortletKeys;
+import management.web.display.EmployeeDisplay;
 
 /**
  * @author Albert Cabral
  */
 public class ManagementDisplaySearchContainerFactory {
 
-    public static SearchContainer<Employee> create(
+    public static SearchContainer<EmployeeDisplay> create(
             LiferayPortletRequest liferayPortletRequest,
             LiferayPortletResponse liferayPortletResponse)
         throws PortalException {
 
-        SearchContainer<Employee> searchContainer = new SearchContainer<>(
-                liferayPortletRequest,
-                PortletURLUtil.getCurrent(
-                        liferayPortletRequest, liferayPortletResponse),
-                null, "no-employee-were-found");
+        SearchContainer<EmployeeDisplay> searchContainer = new SearchContainer<>(
+            liferayPortletRequest,
+            PortletURLUtil.getCurrent(
+                liferayPortletRequest, liferayPortletResponse),
+        null, "no-employee-were-found");
 
         searchContainer.setId("employeeSearchContainerId");
         searchContainer.setOrderByCol(
-                SearchOrderByUtil.getOrderByCol(
-                        liferayPortletRequest,
-                        ManagementPortletKeys.MANAGEMENT_WEB,
-                        "order-by-col", "name"));
+            SearchOrderByUtil.getOrderByCol(
+                liferayPortletRequest,
+                ManagementPortletKeys.MANAGEMENT_WEB,
+                "order-by-col", "name"));
         searchContainer.setOrderByType(
-                SearchOrderByUtil.getOrderByType(
-                        liferayPortletRequest,
-                        ManagementPortletKeys.MANAGEMENT_WEB,
-                        "order-by-type", "asc"));
+            SearchOrderByUtil.getOrderByType(
+                liferayPortletRequest,
+                ManagementPortletKeys.MANAGEMENT_WEB,
+                "order-by-type", "asc"));
 
         String keywords = ParamUtil.getString(
                 liferayPortletRequest, "keywords");
@@ -55,45 +56,33 @@ public class ManagementDisplaySearchContainerFactory {
         LinkedHashMap<String, Object> params = new LinkedHashMap<>();
 
         ThemeDisplay themeDisplay =
-                (ThemeDisplay)liferayPortletRequest.getAttribute(
-                        WebKeys.THEME_DISPLAY);
+            (ThemeDisplay)liferayPortletRequest.getAttribute(
+                WebKeys.THEME_DISPLAY);
 
         BaseModelSearchResult<Employee> baseModelSearchResult =
-                EmployeeLocalServiceUtil.searchEmployees(
-                        themeDisplay.getCompanyId(), Employee.class.getName(),
-                        keywords, params, searchContainer.getStart(),
-                        searchContainer.getEnd(),
-                        _getSort(
-                                searchContainer.getOrderByCol(),
-                                searchContainer.getOrderByType()));
+            EmployeeLocalServiceUtil.searchEmployees(
+                themeDisplay.getCompanyId(), Employee.class.getName(),
+                keywords, params, searchContainer.getStart(),
+                searchContainer.getEnd(),
+                _getSort(
+                        searchContainer.getOrderByCol(),
+                        searchContainer.getOrderByType()));
 
-        if (baseModelSearchResult.getBaseModels().isEmpty()) {
-            baseModelSearchResult =
-                    EmployeeLocalServiceUtil.searchEmployees(
-                            Long.parseLong(keywords), keywords, keywords,
-                            searchContainer.getStart(), searchContainer.getEnd(),
-                            _getSort(
-                                    searchContainer.getOrderByCol(),
-                                    searchContainer.getOrderByType()));
-        }
-
-        BaseModelSearchResult<Employee> finalBaseModelSearchResult =
-                baseModelSearchResult;
-
-//        searchContainer.setResultsAndTotal(
-//                () -> TransformUtil.transfor
-//                        finalBaseModelSearchResult.getBaseModels(), Employee::getFirstName),
-//                baseModelSearchResult.getLength());
+        searchContainer.setResultsAndTotal(
+                () -> TransformUtil.transform(
+                        baseModelSearchResult.getBaseModels(),
+                        EmployeeDisplay::of),
+                baseModelSearchResult.getLength());
 
         searchContainer.setRowChecker(
-                new EmptyOnClickRowChecker(liferayPortletResponse));
+            new EmptyOnClickRowChecker(liferayPortletResponse));
 
         return searchContainer;
     }
 
     private static Sort _getSort(String orderByCol, String orderByType) {
         return SortFactoryUtil.create(
-                orderByCol, Objects.equals(orderByType, "desc"));
+            orderByCol, Objects.equals(orderByType, "desc"));
     }
 
 }

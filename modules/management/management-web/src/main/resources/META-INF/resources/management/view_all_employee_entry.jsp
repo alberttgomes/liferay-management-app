@@ -4,28 +4,23 @@
 <%
     liferayPortletRequest.setAttribute("employeeId", user.getUserId());
 
-    SearchContainer<Employee> employeeEntryDisplaySearchContainer = ManagementDisplaySearchContainerFactory.create(liferayPortletRequest, liferayPortletResponse);
+    SearchContainer<EmployeeDisplay> employeeEntryDisplaySearchContainer = ManagementDisplaySearchContainerFactory.create(liferayPortletRequest, liferayPortletResponse);
 
     ViewEmployeesManagementToolbarDisplayContext viewEmployeesManagementToolbarDisplayContext = new ViewEmployeesManagementToolbarDisplayContext(request, liferayPortletRequest, liferayPortletResponse, employeeEntryDisplaySearchContainer);
 %>
 
 <clay:management-toolbar
-        searchContainerId="<%= viewEmployeesManagementToolbarDisplayContext.getSearchContainerId() %>"
-        searchFormName="fm"
-        searchActionURL="<%= viewEmployeesManagementToolbarDisplayContext.getSearchActionURL() %>"
-        selectable = "false"
-        itemsTotal="<%= viewEmployeesManagementToolbarDisplayContext.getTotalItems() %>"
-        filterDropdownItems="<%= viewEmployeesManagementToolbarDisplayContext.getFilterDropdownItems() %>"
+    managementToolbarDisplayContext="<%= viewEmployeesManagementToolbarDisplayContext %>"
 />
 
 <clay:container-fluid>
     <liferay-ui:search-container
             id="<%= viewEmployeesManagementToolbarDisplayContext.getSearchContainerId() %>"
-            searchContainer="<%= viewEmployeesManagementToolbarDisplayContext.getSearchContainer() %>"
-            total="<%= viewEmployeesManagementToolbarDisplayContext.getTotalItems() %>"
+            searchContainer="<%= employeeEntryDisplaySearchContainer %>"
+            total="<%= employeeEntryDisplaySearchContainer.getTotal() %>"
     >
         <liferay-ui:search-container-row
-                className="com.management.app.model.Employee"
+                className="management.web.display.EmployeeDisplay"
                 keyProperty="employeeId"
                 modelVar="employee"
         >
@@ -43,7 +38,7 @@
                     name="Name"
             >
                 <clay:label
-                        label="<%= employee.getFirstName() %>"
+                        label="<%= employee.getFullName() %>"
                 />
             </liferay-ui:search-container-column-text>
 
