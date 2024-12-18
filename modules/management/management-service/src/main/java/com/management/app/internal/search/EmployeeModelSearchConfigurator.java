@@ -4,7 +4,6 @@ import com.liferay.portal.kernel.search.Field;
 import com.liferay.portal.search.batch.DynamicQueryBatchIndexingActionableFactory;
 import com.liferay.portal.search.spi.model.index.contributor.ModelIndexerWriterContributor;
 import com.liferay.portal.search.spi.model.registrar.ModelSearchConfigurator;
-import com.liferay.portal.search.spi.model.result.contributor.ModelSummaryContributor;
 
 import com.management.app.model.Employee;
 import com.management.app.internal.search.index.contributor.EmployeeModelIndexerWriterContributor;
@@ -19,7 +18,7 @@ import org.osgi.service.component.annotations.Reference;
  */
 @Component(service = ModelSearchConfigurator.class)
 public class EmployeeModelSearchConfigurator
-        implements ModelSearchConfigurator<Employee> {
+    implements ModelSearchConfigurator<Employee> {
 
     @Override
     public String getClassName() {
@@ -28,7 +27,10 @@ public class EmployeeModelSearchConfigurator
 
     @Override
     public String[] getDefaultSelectedFieldNames() {
-        return new String[] {Field.NAME, Field.CLASS_PK};
+        return new String[] {
+            Field.COMPANY_ID, Field.ENTRY_CLASS_NAME, Field.ENTRY_CLASS_PK,
+            Field.MODIFIED_DATE, Field.NAME, Field.TYPE, Field.UID
+        };
     }
 
     @Override
@@ -41,14 +43,9 @@ public class EmployeeModelSearchConfigurator
     @Activate
     protected void activate() {
         _modelIndexerWriterContributor =
-                new EmployeeModelIndexerWriterContributor(
-                        _dynamicQueryBatchIndexingActionableFactory,
-                        _employeeLocalService);
-    }
-
-    @Override
-    public ModelSummaryContributor getModelSummaryContributor() {
-        return ModelSearchConfigurator.super.getModelSummaryContributor();
+            new EmployeeModelIndexerWriterContributor(
+                    _dynamicQueryBatchIndexingActionableFactory,
+                    _employeeLocalService);
     }
 
     @Reference

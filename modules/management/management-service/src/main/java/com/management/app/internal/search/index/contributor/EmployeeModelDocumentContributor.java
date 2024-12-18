@@ -25,19 +25,16 @@ public class EmployeeModelDocumentContributor
     @Override
     public void contribute(Document document, Employee employee) {
         try {
-            document.addKeyword(
-                    Field.CLASS_NAME_ID,
-                    classNameLocalService.getClassNameId(Employee.class));
-            document.addKeyword(
-                    Field.CLASS_TYPE_ID, employee.getEmployeeId());
-            document.addKeyword(
-                    Field.STATUS, employee.getStatus());
-            document.addKeyword(
+            document.addText(
+                    Field.NAME, employee.getFirstName());
+            document.addNumber(
                     "employeeId", employee.getEmployeeId());
             document.addKeyword(
-                    "firstName", employee.getFirstName());
-            document.addKeyword(
                     "department", employee.getDepartment());
+            document.addText(
+                    "firstName", employee.getFirstName());
+            document.addText(
+                    "lastName", employee.getFirstName());
         }
         catch (Exception exception) {
             if (_log.isErrorEnabled()) {

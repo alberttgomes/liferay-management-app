@@ -9,6 +9,10 @@ import com.liferay.counter.kernel.service.CounterLocalServiceUtil;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.aop.AopService;
+import com.liferay.portal.kernel.dao.orm.Disjunction;
+import com.liferay.portal.kernel.dao.orm.DynamicQuery;
+import com.liferay.portal.kernel.dao.orm.QueryUtil;
+import com.liferay.portal.kernel.dao.orm.RestrictionsFactoryUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
@@ -38,7 +42,6 @@ import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
 
-import com.management.app.constants.ManagementConstants;
 import com.management.app.exception.NoSuchEmployeeException;
 import com.management.app.exception.NoSuchManagerException;
 import com.management.app.internal.constant.EmployeeStructureConstants;
@@ -263,7 +266,8 @@ public class EmployeeLocalServiceImpl extends EmployeeLocalServiceBaseImpl {
         }
         catch (Exception exception) {
             throw new SearchException(
-                    "Unable to find any employees");
+                    "Unable to found indexed employees ",
+                            exception);
         }
     }
 
@@ -318,18 +322,20 @@ public class EmployeeLocalServiceImpl extends EmployeeLocalServiceBaseImpl {
 
         if (isManager) {
             _createManager(
-                    employee.getCompanyId(), employee.getEmployeeId(),
-                    employee.getGroupId(), employee.getMvccVersion());
+                employee.getCompanyId(), employee.getEmployeeId(),
+                employee.getGroupId(), employee.getMvccVersion());
         }
 
+        String domain = user.getEmailAddress().split("@")[1];
+
         String emailAddress = _createEmailAddressDomain(
-                employee.getFirstName(), employee.getLastName(),
-                ManagementConstants.MANAGEMENT_DOMAIN);
+            employee.getFirstName(), employee.getLastName(),
+            Objects.isNull(domain) ? "management.com" : domain);
 
         String userScreenName =
-                StringBundler.concat(
-                        employee.getFirstName(), StringPool.SPACE,
-                        employee.getLastName());
+            StringBundler.concat(
+                employee.getFirstName(), StringPool.SPACE,
+                employee.getLastName());
 
         int birthdayMonth = Calendar.SEPTEMBER;
         int birthdayDay = 19;
@@ -340,13 +346,13 @@ public class EmployeeLocalServiceImpl extends EmployeeLocalServiceBaseImpl {
                 employee.getGroupId());
 
         User employeeUser = _userLocalService.addUser(
-                user.getUserId(), employee.getCompanyId(), false, "batman",
-                "batman", true, userScreenName, emailAddress,
-                user.getLocale(), employee.getFirstName(), null, employee.getLastName(),
-                0L, 0L, true, birthdayMonth,
-                birthdayDay, birthdayYear, employee.getPosition(), UserConstants.TYPE_REGULAR,
-                null, null, null, null,
-                true, serviceContext);
+            user.getUserId(), employee.getCompanyId(), false, "batman",
+            "batman", true, userScreenName, emailAddress,
+            user.getLocale(), employee.getFirstName(), null, employee.getLastName(),
+            0L, 0L, true, birthdayMonth,
+            birthdayDay, birthdayYear, employee.getPosition(), UserConstants.TYPE_REGULAR,
+            null, null, null, null,
+            true, serviceContext);
 
         employeeUser.setUuid(employee.getUuid());
 
@@ -377,19 +383,19 @@ public class EmployeeLocalServiceImpl extends EmployeeLocalServiceBaseImpl {
         SearchContext searchContext = new SearchContext();
 
         searchContext.setAttributes(
-                HashMapBuilder.<String, Serializable>put(
-                        Field.CLASS_NAME_ID,
-                        ClassNameLocalServiceUtil.getClassNameId(className)
-                ).put(
-                        "department", keywords
-                ).put(
-                        "params",
-                        LinkedHashMapBuilder.<String, Object>put(
-                                "keywords", keywords
-                        ).build()
-                ).put(
-                        "position", keywords
-                ).build());
+            HashMapBuilder.<String, Serializable>put(
+                Field.CLASS_NAME_ID,
+                ClassNameLocalServiceUtil.getClassNameId(className)
+            ).put(
+                "department", keywords
+            ).put(
+                "params",
+                LinkedHashMapBuilder.<String, Object>put(
+                        "keywords", keywords
+                ).build()
+            ).put(
+                "position", keywords
+            ).build());
 
         searchContext.setCompanyId(companyId);
         searchContext.setEnd(end);
@@ -449,11 +455,11 @@ public class EmployeeLocalServiceImpl extends EmployeeLocalServiceBaseImpl {
             long employeeId, long groupId, long userId) {
 
         Map<String, Serializable> attributes =
-                HashMapBuilder.<String, Serializable>put(
-                            "employeeId", employeeId
-                        ).put(
-                            "createdBy", userId
-                        ).build();
+            HashMapBuilder.<String, Serializable>put(
+                    "employeeId", employeeId
+                ).put(
+                    "createdBy", userId
+                ).build();
 
         ServiceContext serviceContext = new ServiceContext();
 
@@ -479,6 +485,27 @@ public class EmployeeLocalServiceImpl extends EmployeeLocalServiceBaseImpl {
 
         _managerLocalService.createManager(
                 groupId, companyId, employeeId, mvccVersion);
+    }
+
+    private List<Employee> _findEmployeesByDynamicQuery(String key) {
+        DynamicQuery dynamicQuery = dynamicQuery();
+
+        Disjunction disjunction = RestrictionsFactoryUtil.disjunction();
+
+        disjunction.add(
+            RestrictionsFactoryUtil.eq(
+                    "employeeId", Long.parseLong(key)));
+        disjunction.add(
+            RestrictionsFactoryUtil.ilike(
+                    "department", key));
+        disjunction.add(
+            RestrictionsFactoryUtil.ilike(
+                    "firstName", key));
+
+        dynamicQuery.add(disjunction);
+
+        return dynamicQuery(
+                dynamicQuery, QueryUtil.ALL_POS, QueryUtil.ALL_POS);
     }
 
     private List<Employee> _getEmployees(Hits hits) throws PortalException {
@@ -524,8 +551,8 @@ public class EmployeeLocalServiceImpl extends EmployeeLocalServiceBaseImpl {
                     firstName, lastName, null) != null) {
 
                 throw new RuntimeException(
-                        "Employee with the first " + firstName + " and last " +
-                                lastName + " name already exists");
+                    "Employee with the first " + firstName + " and last " +
+                            lastName + " name already exists");
             }
             else {
                 if (!ListUtil.toList(
@@ -533,7 +560,7 @@ public class EmployeeLocalServiceImpl extends EmployeeLocalServiceBaseImpl {
                         department)) {
 
                     throw new NoSuchManagerException(
-                            "No such department with the name " + department);
+                        "No such department with the name " + department);
                 }
 
                 _validateLevelAndPosition(level, position);
@@ -557,13 +584,13 @@ public class EmployeeLocalServiceImpl extends EmployeeLocalServiceBaseImpl {
 
             if (!levels.contains(level)) {
                 throw new RuntimeException(
-                        "No such level available for this position " + position +
-                                "\n Level invaluable " + level);
+                    "No such level available for this position " + position +
+                            "\n Level invaluable " + level);
             }
         }
         else {
             throw new RuntimeException(
-                    "Is not available jobs titles to position name " + position);
+                "Is not available jobs titles to position name " + position);
         }
     }
 
@@ -631,10 +658,10 @@ public class EmployeeLocalServiceImpl extends EmployeeLocalServiceBaseImpl {
 
             if (!matcher.find()) {
                 throw new RuntimeException(
-                        StringBundler.concat(
-                                "Invalid field name ",
-                                content, "\n Is not applying the pattern ",
-                                pattern.pattern()));
+                    StringBundler.concat(
+                        "Invalid field name ",
+                        content, "\n Is not applying the pattern ",
+                        pattern.pattern()));
             }
         }
     }

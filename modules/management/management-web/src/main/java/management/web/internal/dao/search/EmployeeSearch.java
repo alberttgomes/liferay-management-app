@@ -27,7 +27,7 @@ public class EmployeeSearch extends SearchContainer<Employee> {
     public static final String EMPTY_RESULTS_MESSAGE = "no-entries-were-found";
 
     public static Map<String, String> orderableHeaders = HashMapBuilder.put(
-            "modified-date", "modified-date"
+        "modified-date", "modified-date"
     ).build();
 
     public static OrderByComparator<Employee> getEmployeeOrderByComparator(
@@ -66,15 +66,19 @@ public class EmployeeSearch extends SearchContainer<Employee> {
 
             setOrderableHeaders(orderableHeaders);
 
+            setEmptyResultsMessage("no-entries-were-found");
+
             String orderByCol = SearchOrderByUtil.getOrderByCol(
-                    portletRequest, DDMPortletKeys.DYNAMIC_DATA_MAPPING_FORM_ADMIN,
-                    "view-entries-order-by-col", "id");
+                portletRequest,
+                DDMPortletKeys.DYNAMIC_DATA_MAPPING_FORM_ADMIN,
+                "view-entries-order-by-col", "id");
 
             setOrderByCol(orderByCol);
 
             String orderByType = SearchOrderByUtil.getOrderByType(
-                    portletRequest, DDMPortletKeys.DYNAMIC_DATA_MAPPING_FORM_ADMIN,
-                    "view-entries-order-by-type", "asc");
+                portletRequest,
+                DDMPortletKeys.DYNAMIC_DATA_MAPPING_FORM_ADMIN,
+                "view-entries-order-by-type", "asc");
 
             setOrderByComparator(
                     getEmployeeOrderByComparator(
