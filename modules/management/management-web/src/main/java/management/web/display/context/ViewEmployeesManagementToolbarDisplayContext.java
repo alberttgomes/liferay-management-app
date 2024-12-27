@@ -1,8 +1,6 @@
 package management.web.display.context;
 
 import com.liferay.frontend.taglib.clay.servlet.taglib.display.context.SearchContainerManagementToolbarDisplayContext;
-import com.liferay.frontend.taglib.clay.servlet.taglib.util.CreationMenu;
-import com.liferay.frontend.taglib.clay.servlet.taglib.util.CreationMenuBuilder;
 import com.liferay.frontend.taglib.clay.servlet.taglib.util.LabelItem;
 import com.liferay.frontend.taglib.clay.servlet.taglib.util.LabelItemListBuilder;
 import com.liferay.petra.string.StringPool;
@@ -58,21 +56,6 @@ public class ViewEmployeesManagementToolbarDisplayContext
     @Override
     public String getComponentId() {
         return "employeesManagementToolbar";
-    }
-
-    @Override
-    public CreationMenu getCreationMenu() {
-        return CreationMenuBuilder.addPrimaryDropdownItem(
-            dropdownItem -> {
-                dropdownItem.setHref(
-                    liferayPortletResponse.createRenderURL(),
-                    "mvcPath",
-                    "/management/edit_employee_entry.jsp", "backURL",
-                    currentURLObj.toString(), "employeeId",
-                    ParamUtil.getLong(liferayPortletRequest, "employeeId"));
-                dropdownItem.setLabel("Add a new employee entry");
-            }
-        ).build();
     }
 
     @Override
