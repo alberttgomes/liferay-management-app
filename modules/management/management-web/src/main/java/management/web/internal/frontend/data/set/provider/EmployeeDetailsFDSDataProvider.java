@@ -66,11 +66,11 @@ public class EmployeeDetailsFDSDataProvider
             String name = user.getFullName();
 
             employeeDetails.add(
-                    new EmployeeDetails(
-                            employee.getDepartment(),
-                            user.getEmailAddress(),
-                            employee.getEmployeeId(), name,
-                            employee.getPosition()));
+                new EmployeeDetails(
+                    employee.getDepartment(),
+                    user.getEmailAddress(),
+                    employee.getEmployeeId(), name,
+                    employee.getPosition()));
         }
 
         return employeeDetails;
