@@ -1,4 +1,4 @@
-package com.management.app.internal.constant;
+package com.management.app.constants;
 
 import com.liferay.portal.kernel.util.HashMapBuilder;
 
@@ -13,10 +13,15 @@ public class EmployeeStructureConstants {
 
     public static final String DEPARTMENT_ENGINEER = "engineer";
 
-    public static final String DEPARTMENT_GENERAL = "general";
+    public static final String DEPARTMENT_HUMAN_RESOURCES = "human-resources";
+
+    public static final String DEPARTMENT_MARKETING = "marketing";
+
+    public static final String DEPARTMENT_GLOBAL_SERVICES = "global-services";
 
     public static final String[] DEPARTMENTS = {
-            DEPARTMENT_ENGINEER, DEPARTMENT_GENERAL};
+            DEPARTMENT_ENGINEER, DEPARTMENT_HUMAN_RESOURCES,
+            DEPARTMENT_MARKETING, DEPARTMENT_GLOBAL_SERVICES};
 
     // Levels by Position
 
@@ -73,7 +78,6 @@ public class EmployeeStructureConstants {
             "Chief Technology Officer";
 
     public static final String TITLE_DIRECTOR_OF_ENGINEER =
-
             "Director Of Engineer";
 
     public static final String TITLE_HUMAN_RESOURCES = "Human Resources";
@@ -81,12 +85,23 @@ public class EmployeeStructureConstants {
     public static final String TITLE_INCIDENT_MANAGEMENT_ENGINEER =
             "Incident Management Engineer";
 
+    public static final String TITLE_INTERN_SOFTWARE_ENGINEER =
+            "Intern Software Engineer";
+
+    public static final String TITLE_INTERN_HUMAN_RESOURCES =
+            "Intern Human Resources";
+
+    public static final String TITLE_INTERN_MARKETING = "Intern Marketing";
+
     public static final String TITLE_MARKETING = "Marketing";
 
-    public static final String TITLE_OPERATION_IT = "Operation IT";
+    public static final String TITLE_SENIOR_SPECIALIST_MARKETING =
+            "Senior Specialist Marketing";
 
     public static final String TITLE_MID_SOFTWARE_ENGINEER =
             "Mid Software Engineer";
+
+    public static final String TITLE_OPERATION_IT = "Operation IT";
 
     public static final String TITLE_PRODUCT_DESIGN = "Product Design";
 
@@ -115,24 +130,26 @@ public class EmployeeStructureConstants {
         ).build();
     }
 
-    public static final Map<String, Long>
-            HIERARCHY_PRODUCT_DESIGN_POSITIONS_HASH_MAP =
-                HashMapBuilder.put(
-                        TITLE_PRODUCT_DESIGN,
-                        HIERARCHY_PRODUCT_DESIGN
-                ).build();
+    public static Map<String, String[]> getPositionByDepartment(String department) {
+        switch (department) {
+            case DEPARTMENT_ENGINEER:
+                return Map.of(
+                    DEPARTMENT_ENGINEER, _POSITIONS_BY_ENGINEER_DEPARTMENT);
+            case DEPARTMENT_GLOBAL_SERVICES:
+                return Map.of(
+                    DEPARTMENT_ENGINEER, null);
+            case DEPARTMENT_HUMAN_RESOURCES:
+                return Map.of(
+                    DEPARTMENT_HUMAN_RESOURCES, _POSITIONS_BY_HUMAN_RESOURCES_DEPARTMENT);
+            case DEPARTMENT_MARKETING:
+                return Map.of(
+                    DEPARTMENT_MARKETING, _POSITIONS_BY_MARKETING_DEPARTMENT);
+            default:
+                throw new IllegalStateException("Unexpected value: " + department);
+        }
+    }
 
-    public static String[] POSITIONS_BY_GENERAL_DEPARTMENT = {
-            TITLE_HUMAN_RESOURCES, TITLE_MARKETING, TITLE_OPERATION_IT,
-            TITLE_PRODUCT_DESIGN, TITLE_PRODUCT_MANAGER, TITLE_SALES_PRODUCT};
-
-    public static String[] POSITIONS_BY_ENGINEER_DEPARTMENT = {
-            TITLE_ASSOC_SOFTWARE_ENGINEER, TITLE_CHIEF_TECHNOLOGY_OFFICER,
-            TITLE_DIRECTOR_OF_ENGINEER, TITLE_INCIDENT_MANAGEMENT_ENGINEER,
-            TITLE_MID_SOFTWARE_ENGINEER, TITLE_SENIOR_SOFTWARE_ENGINEER,
-            TITLE_TEAM_LEADER_SOFTWARE_ENGINEER};
-
-    public static Map<String, int[]> getAllPositionAndLevelsMap() {
+    public static Map<String, int[]> getAvailablePositionsMap() {
         return HashMapBuilder.put(
                 TITLE_ASSOC_SOFTWARE_ENGINEER, LEVELS_ASSOC_SOFTWARE_ENGINEER
         ).put(
@@ -143,6 +160,12 @@ public class EmployeeStructureConstants {
                 TITLE_HUMAN_RESOURCES, LEVELS_HUMAN_RESOURCES
         ).put(
                 TITLE_INCIDENT_MANAGEMENT_ENGINEER, LEVELS_INCIDENT_MANAGEMENT_ENGINEER
+        ).put(
+                TITLE_INTERN_HUMAN_RESOURCES, new int[]{LEVEL_ONE}
+        ).put(
+                TITLE_INTERN_MARKETING, new int[]{LEVEL_ONE}
+        ).put(
+                TITLE_INTERN_SOFTWARE_ENGINEER, new int[]{LEVEL_ONE}
         ).put(
                 TITLE_MARKETING,  new int[LEVEL_UNIQUE]
         ).put(
@@ -161,5 +184,20 @@ public class EmployeeStructureConstants {
                 TITLE_TEAM_LEADER_SOFTWARE_ENGINEER, LEVELS_TEAM_LEADER_SOFTWARE_ENGINEER
         ).build();
     }
+
+    private static final String[] _POSITIONS_BY_HUMAN_RESOURCES_DEPARTMENT = {
+            TITLE_HUMAN_RESOURCES, TITLE_INTERN_HUMAN_RESOURCES};
+
+    private static final String[] _POSITIONS_BY_MARKETING_DEPARTMENT = {
+            TITLE_MARKETING, TITLE_INTERN_MARKETING, TITLE_SENIOR_SPECIALIST_MARKETING};
+
+    private static final String[] _POSITIONS_BY_GENERAL_DEPARTMENT = {
+            TITLE_OPERATION_IT, TITLE_PRODUCT_DESIGN, TITLE_PRODUCT_MANAGER, TITLE_SALES_PRODUCT};
+
+    private static final String[] _POSITIONS_BY_ENGINEER_DEPARTMENT = {
+            TITLE_ASSOC_SOFTWARE_ENGINEER, TITLE_CHIEF_TECHNOLOGY_OFFICER,
+            TITLE_DIRECTOR_OF_ENGINEER, TITLE_INCIDENT_MANAGEMENT_ENGINEER,
+            TITLE_INTERN_SOFTWARE_ENGINEER, TITLE_MID_SOFTWARE_ENGINEER,
+            TITLE_SENIOR_SOFTWARE_ENGINEER, TITLE_TEAM_LEADER_SOFTWARE_ENGINEER};
 
 }
