@@ -12,9 +12,15 @@ public class ManagementPortletKeys {
 	public static final String MANAGER_PATH = "/managers";
 
 	public static final String MANAGEMENT_WEB =
-			"management_web_ManagementPortlet";
+			"com_management_web_RHManagersDashboardPortlet";
+
+	public static final String EMPLOYEE_DETAILS_WEB =
+			"com_management_web_EmployeeDetailsPortlet";
+
+	public static final String EMPLOYEE_REQUESTS_DASHBOARD_WEB =
+			"com_management_web_EmployeeRequestsDashboardPortlet";
 
 	public static final String EMPLOYEE_DASHBOARD_WEB =
-			"management_web_EmployeeDashboardPortlet";
+			"com_management_web_EmployeeDashboardPortlet";
 
 }
