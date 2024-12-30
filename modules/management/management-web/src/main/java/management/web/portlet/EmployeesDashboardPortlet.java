@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import management.web.constants.ManagementPortletKeys;
 import management.web.display.context.ManagementDisplayContext;
 
+import management.web.display.context.ViewEmployeeStaffMembersDisplayContext;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
@@ -24,10 +25,10 @@ import org.osgi.service.component.annotations.Reference;
  */
 @Component(
     property = {
-        "com.liferay.portlet.display-category=category.sample",
+        "com.liferay.portlet.display-category=Management",
         "com.liferay.portlet.header-portlet-css=/css/main.css",
         "com.liferay.portlet.instanceable=true",
-        "javax.portlet.display-name=ManagementWeb",
+        "javax.portlet.display-name=Employees Dashboard Portlet",
         "javax.portlet.init-param.template-path=/",
         "javax.portlet.init-param.view-template=/management/employee_dashboard.jsp",
         "javax.portlet.name=" + ManagementPortletKeys.EMPLOYEE_DASHBOARD_WEB,
@@ -36,7 +37,7 @@ import org.osgi.service.component.annotations.Reference;
     },
     service = Portlet.class
 )
-public class EmployeeDashboardPortlet extends MVCPortlet {
+public class EmployeesDashboardPortlet extends MVCPortlet {
 
     @Override
     public void render(
