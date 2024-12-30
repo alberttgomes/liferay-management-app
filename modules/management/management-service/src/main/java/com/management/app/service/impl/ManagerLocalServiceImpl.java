@@ -9,6 +9,10 @@ import com.liferay.counter.kernel.service.CounterLocalServiceUtil;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.aop.AopService;
 
+import com.liferay.portal.kernel.dao.orm.Disjunction;
+import com.liferay.portal.kernel.dao.orm.DynamicQuery;
+import com.liferay.portal.kernel.dao.orm.QueryUtil;
+import com.liferay.portal.kernel.dao.orm.RestrictionsFactoryUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
@@ -58,26 +62,27 @@ public class ManagerLocalServiceImpl extends ManagerLocalServiceBaseImpl {
 	@Override
 	public Manager fetchManagerByFirstNameAndLastName(
 			String firstName, String lastName) throws Exception {
-		List<Employee> employees = EmployeeLocalServiceUtil.getEmployees(-1, -1);
 
-		if (employees.isEmpty()) {
+		DynamicQuery dynamicQuery = EmployeeLocalServiceUtil.dynamicQuery();
+
+		Disjunction disjunction = RestrictionsFactoryUtil.disjunction();
+
+		disjunction.add(RestrictionsFactoryUtil.eq("firstName", firstName));
+		disjunction.add(RestrictionsFactoryUtil.eq("lastName", lastName));
+
+		dynamicQuery.add(disjunction);
+
+		List<Employee> employeeList = dynamicQuery(
+			dynamicQuery, QueryUtil.ALL_POS, QueryUtil.ALL_POS);
+
+		if (employeeList.isEmpty()) {
 			return null;
 		}
 
-		for (Employee employee : employees) {
-			if (firstName.equals(employee.getFirstName()) &&
-					lastName.equals(employee.getLastName())) {
+		Employee employee = employeeList.get(0);
 
-				_log.debug("Returning manager by full name " +
-						employee.getFirstName() + StringPool.SPACE + employee.getLastName());
-
-				return managerPersistence.fetchByE_M(
-						employee.getEmployeeId(), employee.getCompanyId());
-
-			}
-		}
-
-		return null;
+		return managerPersistence.fetchByC_E(
+				employee.getCompanyId(), employee.getEmployeeId());
 	}
 
 	@Override
