@@ -6,6 +6,7 @@
 package com.management.app.service;
 
 import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.search.BaseModelSearchResult;
 import com.liferay.portal.kernel.search.SearchContext;
 import com.liferay.portal.kernel.search.Sort;
@@ -53,15 +54,15 @@ public class EmployeeLocalServiceWrapper
 
 	@Override
 	public com.management.app.model.Employee addEmployee(
-			String firstName, String lastName, String department,
-			String position, int level, String stateCode, int status,
-			long managerIdPK, boolean isManager,
-			com.liferay.portal.kernel.model.User user)
+            String firstName, String lastName, String department,
+            String position, int level, String stateCode, int status,
+            long managerId, boolean isManager,
+            User user)
 		throws com.liferay.portal.kernel.exception.PortalException {
 
 		return _employeeLocalService.addEmployee(
 			firstName, lastName, department, position, level, stateCode, status,
-			managerIdPK, isManager, user);
+                managerId, isManager, user);
 	}
 
 	/**

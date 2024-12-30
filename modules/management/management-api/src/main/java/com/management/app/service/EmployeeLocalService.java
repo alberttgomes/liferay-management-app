@@ -5,7 +5,6 @@
 
 package com.management.app.service;
 
-import com.liferay.dynamic.data.mapping.model.DDMFormInstanceRecord;
 import com.liferay.exportimport.kernel.lar.PortletDataContext;
 import com.liferay.petra.sql.dsl.query.DSLQuery;
 import com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery;
@@ -27,7 +26,6 @@ import com.liferay.portal.kernel.transaction.Propagation;
 import com.liferay.portal.kernel.transaction.Transactional;
 import com.liferay.portal.kernel.util.OrderByComparator;
 
-import com.liferay.search.experiences.rest.dto.v1_0.In;
 import com.management.app.exception.NoSuchEmployeeException;
 import com.management.app.exception.NoSuchManagerException;
 import com.management.app.model.Employee;
@@ -79,7 +77,7 @@ public interface EmployeeLocalService
 	public Employee addEmployee(
 			String firstName, String lastName, String department,
 			String position, int level, String stateCode, int status,
-			long managerIdPK, boolean isManager, User user)
+			long managerId, boolean isManager, User user)
 		throws PortalException;
 
 	/**

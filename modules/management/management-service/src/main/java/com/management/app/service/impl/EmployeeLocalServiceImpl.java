@@ -43,7 +43,7 @@ import com.liferay.portal.kernel.workflow.WorkflowConstants;
 
 import com.management.app.exception.NoSuchEmployeeException;
 import com.management.app.exception.NoSuchManagerException;
-import com.management.app.internal.constant.EmployeeStructureConstants;
+import com.management.app.constants.EmployeeStructureConstants;
 import com.management.app.model.Employee;
 import com.management.app.model.Manager;
 import com.management.app.service.ManagerLocalService;
@@ -79,7 +79,7 @@ public class EmployeeLocalServiceImpl extends EmployeeLocalServiceBaseImpl {
     @Override
     public Employee addEmployee(
             String firstName, String lastName, String department, String position,
-            int level, String stateCode, int status, long managerIdPK,
+            int level, String stateCode, int status, long managerId,
             boolean isManager, User user)
         throws PortalException {
 
@@ -89,7 +89,7 @@ public class EmployeeLocalServiceImpl extends EmployeeLocalServiceBaseImpl {
 
         return _addEmployee(
                 firstName, lastName, department, position,
-                level, stateCode, employeeId, isManager, user);
+                level, stateCode, employeeId, isManager, user, managerId);
     }
 
     @Indexable(type = IndexableType.DELETE)
@@ -118,7 +118,7 @@ public class EmployeeLocalServiceImpl extends EmployeeLocalServiceBaseImpl {
 
         try {
             Manager manager = _managerLocalService.findByCompanyIdAndEmployeeId(
-                    companyId, employeeId);
+                companyId, employeeId);
 
             if (manager == null) {
                 throw new NoSuchManagerException(
@@ -307,7 +307,7 @@ public class EmployeeLocalServiceImpl extends EmployeeLocalServiceBaseImpl {
     private Employee _addEmployee(
             String firstName, String lastName, String department, String position,
             int level, String stateCode, long employeeId, boolean isManager,
-            User user)
+            User creatorUser, long managerId)
         throws PortalException {
 
         Employee employee = employeePersistence.create(employeeId);
@@ -321,7 +321,7 @@ public class EmployeeLocalServiceImpl extends EmployeeLocalServiceBaseImpl {
         employee.setPrimaryKey(employeeId);
         employee.setStateCode(stateCode);
         employee.setStatus(WorkflowConstants.STATUS_APPROVED);
-        employee.setGroupId(user.getGroupId());
+        employee.setGroupId(creatorUser.getGroupId());
         employee.setMvccVersion(0);
 
         if (isManager) {
@@ -330,7 +330,7 @@ public class EmployeeLocalServiceImpl extends EmployeeLocalServiceBaseImpl {
                 employee.getGroupId(), employee.getMvccVersion());
         }
 
-        String domain = user.getEmailAddress().split("@")[1];
+        String domain = creatorUser.getEmailAddress().split("@")[1];
 
         String emailAddress = _createEmailAddressDomain(
             employee.getFirstName(), employee.getLastName(),
@@ -346,13 +346,13 @@ public class EmployeeLocalServiceImpl extends EmployeeLocalServiceBaseImpl {
         int birthdayYear = 1995;
 
         ServiceContext serviceContext = _buildServiceContext(
-                user.getUserId(), employee.getEmployeeId(),
+                creatorUser.getUserId(), employee.getEmployeeId(),
                 employee.getGroupId());
 
         User employeeUser = _userLocalService.addUser(
-            user.getUserId(), employee.getCompanyId(), false, "batman",
+            creatorUser.getUserId(), employee.getCompanyId(), false, "batman",
             "batman", true, userScreenName, emailAddress,
-            user.getLocale(), employee.getFirstName(), null, employee.getLastName(),
+            creatorUser.getLocale(), employee.getFirstName(), null, employee.getLastName(),
             0L, 0L, true, birthdayMonth,
             birthdayDay, birthdayYear, employee.getPosition(), UserConstants.TYPE_REGULAR,
             null, null, null, null,
@@ -364,12 +364,23 @@ public class EmployeeLocalServiceImpl extends EmployeeLocalServiceBaseImpl {
 
         employee.setUserId(employeeUser.getUserId());
 
-        Employee managerEmployee = fetchEmployeeByUserId(
-                employee.getCompanyId(), user.getUserId());
+        Manager manager = _managerLocalService.fetchManager(managerId);
 
-        employee.setManagerIdFK(
-                managerEmployee == null ?
-                        user.getUserId() : managerEmployee.getEmployeeId());
+        if (Objects.isNull(manager)) {
+            employee.setManagerIdFK(creatorUser.getUserId());
+
+            if (_log.isWarnEnabled()) {
+                _log.warn(
+                    StringBundler.concat(
+                "Manager id for the Employee ",
+                        employee.getEmployeeId(),
+                        " was set with creatorUserId because not exists",
+                        " employee by company and user ",
+                        employee.getCompanyId(), creatorUser.getUserId()));
+            }
+        }
+
+        employee.setManagerIdFK(manager.getEmployeeIdPK());
 
         employee = employeePersistence.update(employee);
 
@@ -491,6 +502,7 @@ public class EmployeeLocalServiceImpl extends EmployeeLocalServiceBaseImpl {
                 groupId, companyId, employeeId, mvccVersion);
     }
 
+    @Deprecated
     private List<Employee> _findEmployeesByDynamicQuery(String key) {
         DynamicQuery dynamicQuery = dynamicQuery();
 
@@ -583,7 +595,7 @@ public class EmployeeLocalServiceImpl extends EmployeeLocalServiceBaseImpl {
         throws RuntimeException {
 
         Map<String, int[]> positionsAndLevels =
-                EmployeeStructureConstants.getAllPositionAndLevelsMap();
+                EmployeeStructureConstants.getAvailablePositionsMap();
 
         if (positionsAndLevels.containsKey(position)) {
             List<String> levelsList = new ArrayList<>();
