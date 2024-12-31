@@ -127,8 +127,8 @@ public class ManagementDisplayContext {
     }
 
     public boolean isManager() throws Exception {
-        Manager manager = ManagerLocalServiceUtil.fetchManagerByFirstNameAndLastName(
-                _employee.getFirstName(), _employee.getLastName());
+        Manager manager = ManagerLocalServiceUtil.findByCompanyIdAndEmployeeId(
+                _employee.getCompanyId(), _employee.getEmployeeId());
 
         return !Objects.isNull(manager);
     }

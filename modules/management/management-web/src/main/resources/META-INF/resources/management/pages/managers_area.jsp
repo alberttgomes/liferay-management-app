@@ -125,7 +125,7 @@
     </div>
 
     <div class="manager-area-leaders">
-        <div class="dashboard-header">
+        <div class="dashboard-header center">
             <h2 class="title-dashboard">Leaders at the Moment</h2>
         </div>
 
@@ -145,11 +145,15 @@
 </div>
 
 <style>
+    .center {
+        text-align: center !important;
+    }
     .dashboard-header {
         background-color: #333;
         color: #fff;
         padding: 10px 20px;
         font-size: 18px;
+        text-align: left;
     }
     .dashboard-buttons {
         display: flex;
@@ -208,21 +212,22 @@
     }
 
     .initiative-img {
+        align-items: center;
         width: 100%;
         height: auto;
-        max-height: 500px;
+        max-height: 350px;
         object-fit: cover;
         border-radius: 8px;
-        margin-bottom: 20px;
+        margin-bottom: 25px;
     }
 
     .initiative-description {
-        font-size: 16px;
+        font-size: 13px;
         line-height: 1.5;
         text-align: justify;
         color: #d9d9d9;
         padding: 10px;
-        background-color: #1f1f1f;
+        /*background-color: #1f1f1f;*/
         border-radius: 6px;
     }
 

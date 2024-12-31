@@ -11,6 +11,7 @@ import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.model.PersistedModel;
 import com.liferay.portal.kernel.util.OrderByComparator;
 
+import com.management.app.exception.NoSuchManagerException;
 import com.management.app.model.Manager;
 
 import java.io.Serializable;
@@ -213,6 +214,13 @@ public class ManagerLocalServiceUtil {
 
 		return getService().fetchManagerByFirstNameAndLastName(
 			firstName, lastName);
+	}
+
+	public static Manager findByCompanyIdAndEmployeeId(
+			long companyId, long employeeId)
+		throws NoSuchManagerException {
+
+		return getService().findByCompanyIdAndEmployeeId(companyId, employeeId);
 	}
 
 	/**

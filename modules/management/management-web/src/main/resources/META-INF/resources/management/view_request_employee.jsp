@@ -50,7 +50,7 @@
                 <div class="form-group">
                     <clay:row>
                         <clay:col
-                                md="9"
+                                md="12"
                         >
                             <aui:input label="Description" name="description" required="<%= true %>" size="300" value="" />
                         </clay:col>
@@ -60,7 +60,7 @@
                 <div class="form-group">
                     <clay:row>
                         <clay:col
-                                md="9"
+                                md="12"
                         >
                             <aui:input label="Reason" name="reason" required="<%= true %>" size="150" value="" />
                         </clay:col>
@@ -72,7 +72,7 @@
                         <div class="form-group">
                             <clay:row>
                                 <clay:col
-                                        md="9"
+                                        md="12"
                                 >
                                     <aui:input label="New Level" name="newLevel" required="<%= true %>" size="150" value="" />
                                 </clay:col>
@@ -82,7 +82,7 @@
                         <div class="form-group">
                             <clay:row>
                                 <clay:col
-                                        md="9"
+                                        md="12"
                                 >
                                     <aui:input label="New Position" name="newPosition" required="<%= true %>" size="150" value="" />
                                 </clay:col>
@@ -94,7 +94,7 @@
                 <div class="form-group">
                     <clay:row>
                         <clay:col
-                                md="9"
+                                md="12"
                         >
                             <aui:input label="EmployeeId" name="employeeId" required="<%= true %>" size="150" value="" />
                         </clay:col>
