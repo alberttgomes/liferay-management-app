@@ -50,25 +50,35 @@
         %>
     </div>
 
-    <div class="dashboard-content">
-        <h2 class="title-dashboard">Active Staff Members</h2>
+    <%
+        if (employeeDisplay.getDepartment().contains("human-resources")) {
+    %>
+            <div class="dashboard-content">
+                <h2 class="title-dashboard">Search by an employee</h2>
 
-        <clay:sheet-section
-                id="employeeDetails"
-        >
-            <%@ include file="view_details_employee.jsp" %>
-        </clay:sheet-section>
-    </div>
+                <clay:sheet-section
+                        id="employeeSearch"
+                >
+                    <%@ include file="view_all_employee_entry.jsp" %>
+                </clay:sheet-section>
+            </div>
+    <%
+        }
+        else {
+    %>
+            <div class="dashboard-content">
+                <h2 class="title-dashboard">Active Staff Members</h2>
 
-    <div class="dashboard-content">
-        <h2 class="title-dashboard">Search by an employee</h2>
+                <clay:sheet-section
+                        id="employeeDetails"
+                >
+                    <%@ include file="view_details_employee.jsp" %>
+                </clay:sheet-section>
+            </div>
+    <%
+        }
+    %>
 
-        <clay:sheet-section
-                id="employeeSearch"
-        >
-            <%@ include file="view_all_employee_entry.jsp" %>
-        </clay:sheet-section>
-    </div>
 </body>
 
 <style>
