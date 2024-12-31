@@ -20,7 +20,7 @@ import org.osgi.service.component.annotations.Component;
  */
 @Component(
     property = {
-        "javax.portlet.name=" + ManagementPortletKeys.MANAGEMENT_WEB,
+        "javax.portlet.name=" + ManagementPortletKeys.EMPLOYEE_DASHBOARD_WEB,
         "mvc.command.name=/management/edit_employee_management"
     },
     service = MVCRenderCommand.class

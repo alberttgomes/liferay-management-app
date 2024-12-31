@@ -30,7 +30,7 @@ import org.osgi.service.component.annotations.Reference;
  */
 @Component(
     property = {
-        "javax.portlet.name=" + ManagementPortletKeys.MANAGEMENT_WEB,
+        "javax.portlet.name=" + ManagementPortletKeys.EMPLOYEE_DASHBOARD_WEB,
         "mvc.command.name=/management/edit_employee_management"
     },
     service = MVCActionCommand.class
@@ -107,8 +107,8 @@ public class EditEmployeeEntryMVCActionCommand extends BaseMVCActionCommand {
         boolean isManager = ParamUtil.getBoolean(actionRequest, "isManager");
         String lastName = ParamUtil.getString(actionRequest, "lastName");
         int level = ParamUtil.getInteger(actionRequest, "level");
-        long managerIdPK = ParamUtil.getInteger(actionRequest, "managerIdPK");
         String position = ParamUtil.getString(actionRequest, "position");
+        long managerId = ParamUtil.getInteger(actionRequest, "managerId");
 
         Locale locale = actionRequest.getLocale();
 
@@ -117,7 +117,7 @@ public class EditEmployeeEntryMVCActionCommand extends BaseMVCActionCommand {
         return _employeeLocalService.addEmployee(
                 firstName, lastName, department, position,
                 level, locale.getCountry(), WorkflowConstants.STATUS_APPROVED,
-                managerIdPK, isManager, user);
+                managerId, isManager, user);
     }
 
     private Employee _updateEmployee(ActionRequest actionRequest)
