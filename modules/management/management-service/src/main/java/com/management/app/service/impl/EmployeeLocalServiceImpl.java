@@ -364,7 +364,8 @@ public class EmployeeLocalServiceImpl extends EmployeeLocalServiceBaseImpl {
 
         employee.setUserId(employeeUser.getUserId());
 
-        Manager manager = _managerLocalService.fetchManager(managerId);
+        Manager manager = _managerLocalService.findByCompanyIdAndEmployeeId(
+                employee.getCompanyId(), managerId);
 
         if (Objects.isNull(manager)) {
             employee.setManagerIdFK(creatorUser.getUserId());
@@ -607,12 +608,12 @@ public class EmployeeLocalServiceImpl extends EmployeeLocalServiceBaseImpl {
             if (!levelsList.contains(String.valueOf(level))) {
                 throw new RuntimeException(
                     "No such level available for this position " + position +
-                            "\n Level invaluable " + level);
+                        "level invaluable " + level);
             }
         }
         else {
             throw new RuntimeException(
-                "Is not available jobs titles to position name " + position);
+                "Not exist available position with the name " + position);
         }
     }
 

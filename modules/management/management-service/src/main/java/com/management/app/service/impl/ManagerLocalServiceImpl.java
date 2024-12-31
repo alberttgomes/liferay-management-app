@@ -29,6 +29,7 @@ import org.osgi.service.component.annotations.Reference;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @author Albert Cabral
@@ -88,8 +89,21 @@ public class ManagerLocalServiceImpl extends ManagerLocalServiceBaseImpl {
 	@Override
 	public Manager findByCompanyIdAndEmployeeId(long companyId, long employeeId)
 		throws NoSuchManagerException {
+		try {
 
-		return managerPersistence.findByC_E(companyId, employeeId);
+			if (Objects.isNull(
+					EmployeeLocalServiceUtil.fetchEmployee(
+							employeeId))) {
+				return null;
+			}
+
+			return managerPersistence.findByC_E(companyId, employeeId);
+		}
+		catch (NoSuchManagerException noSuchManagerException) {
+			_log.error(noSuchManagerException.getMessage());
+
+			return null;
+		}
 	}
 
 	private void _validate(long employeeId) throws PortalException {
