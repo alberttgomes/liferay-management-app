@@ -1,15 +1,15 @@
+<%@ page import="management.web.display.context.ViewEmployeeStaffMembersDisplayContext" %>
 <%@ include file="../init.jsp" %>
 
 <%
-    ManagementDisplayContext managementDisplayContext = (ManagementDisplayContext)request.getAttribute(ManagementPortletKeys.EMPLOYEE_DISPLAY);
-    long employeeId = ParamUtil.getLong(request, "employeeId");
+    ViewEmployeeStaffMembersDisplayContext viewEmployeeStaffMembersDisplayContext = new ViewEmployeeStaffMembersDisplayContext(request);
 %>
 
 <clay:container-fluid>
     <frontend-data-set:headless-display
-            apiURL="<%= managementDisplayContext.getAPIURL() %>"
-            fdsActionDropdownItems="<%= managementDisplayContext.getFDSActionDropdownItems() %>"
-            fdsSortItemList="<%= managementDisplayContext.getFDSSortItemList() %>"
+            apiURL="<%= viewEmployeeStaffMembersDisplayContext.getAPIURL() %>"
+            fdsActionDropdownItems="<%= viewEmployeeStaffMembersDisplayContext.getFDSActionDropdownItems() %>"
+            fdsSortItemList="<%= viewEmployeeStaffMembersDisplayContext.getFDSSortItemList() %>"
             id="<%= EmployeeDetailsFDSNames.EMPLOYEE_PROMOTION %>"
             style="fluid"
     />
