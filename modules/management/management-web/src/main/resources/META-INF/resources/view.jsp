@@ -1,3 +1,4 @@
+<%@ page import="com.liferay.portal.kernel.model.UserConstants" %>
 <%@ include file="/init.jsp" %>
 
 <portlet:renderURL var="editEmployeeEntryRequestURL">
@@ -10,9 +11,9 @@
 
 <%
     Employee employee = null;
-    EmployeeDisplay employeeDisplay = null;
+    EmployeeDisplay employeeDisplay;
 
-    if (user != null) {
+    if (user != null && user.getType() != UserConstants.TYPE_GUEST) {
         employee = EmployeeLocalServiceUtil.fetchEmployeeByUuidAndGroupId(user.getUuid(), user.getGroupId());
         employeeDisplay = EmployeeDisplay.of(employee);
     }
@@ -79,9 +80,7 @@
     </c:when>
 
     <c:otherwise>
-        <c:redirect url="/error.jsp" />
+        <c:redirect url="/management/view_guest_users.jsp" />
     </c:otherwise>
 
 </c:choose>
-
-<css></css>

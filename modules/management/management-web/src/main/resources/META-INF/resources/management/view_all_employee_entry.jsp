@@ -1,4 +1,3 @@
-<%@ page import="com.liferay.portal.kernel.service.UserLocalServiceUtil" %>
 <%@ include file="../init.jsp" %>
 
 <%
