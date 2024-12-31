@@ -1,30 +1,24 @@
 package management.web.display.context;
 
-import com.liferay.frontend.data.set.model.FDSActionDropdownItem;
-import com.liferay.frontend.data.set.model.FDSSortItemBuilder;
-import com.liferay.frontend.data.set.model.FDSSortItemList;
-import com.liferay.frontend.data.set.model.FDSSortItemListBuilder;
 import com.liferay.frontend.taglib.clay.servlet.taglib.util.CreationMenu;
 import com.liferay.frontend.taglib.clay.servlet.taglib.util.SelectOption;
-import com.liferay.portal.kernel.dao.search.SearchContainer;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.portlet.LiferayWindowState;
-import com.liferay.portal.kernel.portlet.PortletURLUtil;
 import com.liferay.portal.kernel.portlet.url.builder.PortletURLBuilder;
 import com.liferay.portal.kernel.service.UserLocalService;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
-import com.liferay.portal.kernel.util.ListUtil;
-import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.WebKeys;
 
 import com.management.app.exception.NoSuchEmployeeException;
 import com.management.app.model.Employee;
+import com.management.app.model.Manager;
 import com.management.app.service.EmployeeLocalServiceUtil;
+import com.management.app.service.ManagerLocalServiceUtil;
 
 import java.util.ArrayList;
 import java.util.List;
-import javax.portlet.PortletURL;
+import java.util.Objects;
 import javax.servlet.http.HttpServletRequest;
 
 import management.web.constants.EmployeeRequestConstant;
@@ -46,14 +40,6 @@ public class ManagementDisplayContext {
                 httpServletRequest);
     }
 
-    public String getAPIURL(long employeeId) {
-        return "/o/management/v1.0/employee/employee-by-id/" + employeeId;
-    }
-
-    public String getAPIURL() {
-        return "/o/management/v1.0/employee";
-    }
-
     public CreationMenu getCreationMenu() throws Exception {
         CreationMenu creationMenu = new CreationMenu();
 
@@ -72,10 +58,6 @@ public class ManagementDisplayContext {
                 });
 
         return creationMenu;
-    }
-
-    public String getDisplayStyle() {
-        return "list";
     }
 
     public List<SelectOption> getEmployeeOptions(long selectedEmployeeRequestId) {
@@ -133,68 +115,46 @@ public class ManagementDisplayContext {
     }
 
     public EmployeeDisplay getEmployeeDisplay() throws PortalException {
-        return EmployeeDisplay.of(_setEmployee(_httpServletRequest));
-    }
+        if (Objects.isNull(_employee)) {
+            return EmployeeDisplay.of(_setEmployee(_httpServletRequest));
+        }
 
-    public List<FDSActionDropdownItem> getFDSActionDropdownItems() {
-        return ListUtil.fromArray(
-            new FDSActionDropdownItem(
-                PortletURLBuilder.createRenderURL(
-                        _managementRequestHelper.getLiferayPortletResponse()
-                ).setMVCRenderCommandName(
-                        "/management/employee_promotion"
-                ).setParameter(
-                        "employeeId", "{employeeId}"
-                ).buildString(),
-                "list-ul", "employee-promotion",
-                "Request a promotion to Employee", "post",
-                "get", null));
-    }
-
-    public FDSSortItemList getFDSSortItemList() {
-        return FDSSortItemListBuilder.add(
-            FDSSortItemBuilder.setDirection(
-                    "asc"
-            ).setKey(
-                    "typeName"
-            ).build()
-        ).build();
-    }
-
-    protected String getKeywords() {
-        return ParamUtil.getString(_httpServletRequest, "keywords");
-    }
-
-    public PortletURL getPortletURL() {
-        return PortletURLUtil.getCurrent(
-            _managementRequestHelper.getLiferayPortletRequest(),
-            _managementRequestHelper.getLiferayPortletResponse());
+        return EmployeeDisplay.of(_employee);
     }
 
     public long[] getSelectedRequestIds() {
         return EmployeeRequestConstant.getManagerRequestIds();
     }
 
+    public boolean isManager() throws Exception {
+        Manager manager = ManagerLocalServiceUtil.fetchManagerByFirstNameAndLastName(
+                _employee.getFirstName(), _employee.getLastName());
+
+        return !Objects.isNull(manager);
+    }
+
     private Employee _setEmployee(HttpServletRequest httpServletRequest)
         throws PortalException {
 
         try {
-            ThemeDisplay themeDisplay = (ThemeDisplay)
-                    httpServletRequest.getAttribute(WebKeys.THEME_DISPLAY);
+            ThemeDisplay themeDisplay =
+                (ThemeDisplay)
+                    httpServletRequest.getAttribute(
+                        WebKeys.THEME_DISPLAY);
 
-            User user = _userLocalService.getUser(themeDisplay.getUserId());
+            User user = _userLocalService.getUser(
+                    themeDisplay.getUserId());
 
             if (user == null) {
                 throw new NoSuchEmployeeException(
                         "Current user session not found");
             }
 
-            Employee employee =
-                    EmployeeLocalServiceUtil.fetchEmployeeByUserId(
-                            user.getCompanyId(), user.getUserId());
+            Employee employee = EmployeeLocalServiceUtil.fetchEmployeeByUserId(
+                user.getCompanyId(), user.getUserId());
 
-            if (_employee != null) {
-                _employee = employee;
+            if (_employee == null) {
+                _setEmployee(employee);
 
                 return _employee;
             }
@@ -222,6 +182,10 @@ public class ManagementDisplayContext {
                     noSuchEmployeeException);
         }
 
+    }
+
+    private void _setEmployee(Employee employee) {
+        this._employee = employee;
     }
 
     private Employee _employee;
