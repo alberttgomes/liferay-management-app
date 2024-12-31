@@ -20,7 +20,7 @@ import org.osgi.service.component.annotations.Reference;
     property = "frontend.data.set.name=" + EmployeeDetailsFDSNames.EMPLOYEE_PROMOTION,
     service = FDSView.class
 )
-public class EmployeePromotionTableFDSView extends BaseTableFDSView {
+public class EmployeeActiveStaffMembersTableFDSView extends BaseTableFDSView {
 
     @Override
     public FDSTableSchema getFDSTableSchema(Locale locale) {
@@ -28,6 +28,9 @@ public class EmployeePromotionTableFDSView extends BaseTableFDSView {
                 _fdsTableSchemaBuilderFactory.create();
 
         return fdsTableSchemaBuilder.add(
+            "department", "Department",
+            fdsTableSchemaField -> fdsTableSchemaField.setSortable(true)
+        ).add(
             "firstName", "First Name",
             fdsTableSchemaField -> fdsTableSchemaField.setSortable(true)
         ).add(
