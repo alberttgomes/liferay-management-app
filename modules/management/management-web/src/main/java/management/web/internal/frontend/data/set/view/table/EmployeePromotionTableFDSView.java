@@ -17,8 +17,8 @@ import org.osgi.service.component.annotations.Reference;
  * @author Albert Cabral
  */
 @Component(
-        property = "frontend.data.set.name=" + EmployeeDetailsFDSNames.EMPLOYEE_PROMOTION,
-        service = FDSView.class
+    property = "frontend.data.set.name=" + EmployeeDetailsFDSNames.EMPLOYEE_PROMOTION,
+    service = FDSView.class
 )
 public class EmployeePromotionTableFDSView extends BaseTableFDSView {
 
@@ -28,20 +28,14 @@ public class EmployeePromotionTableFDSView extends BaseTableFDSView {
                 _fdsTableSchemaBuilderFactory.create();
 
         return fdsTableSchemaBuilder.add(
-                "department", "department",
-                fdsTableSchemaField -> fdsTableSchemaField.setSortable(true)
+            "firstName", "First Name",
+            fdsTableSchemaField -> fdsTableSchemaField.setSortable(true)
         ).add(
-                "employeeId", "employeeId",
-                fdsTableSchemaField -> fdsTableSchemaField.setSortable(true)
+            "lastName", "Last Name",
+            fdsTableSchemaField -> fdsTableSchemaField.setSortable(true)
         ).add(
-                "firstName", "firstName",
-                fdsTableSchemaField -> fdsTableSchemaField.setSortable(true)
-        ).add(
-                "lastName", "lastName",
-                fdsTableSchemaField -> fdsTableSchemaField.setSortable(true)
-        ).add(
-                "position", "position",
-                fdsTableSchemaField -> fdsTableSchemaField.setSortable(true)
+            "position", "Position",
+            fdsTableSchemaField -> fdsTableSchemaField.setSortable(true)
         ).build();
     }
 
