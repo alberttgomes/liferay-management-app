@@ -16,13 +16,13 @@
 
   ### Document Library
 
-  - Download document library: [DL]("https://drive.google.com/drive/folders/16zYwNSLNeX9PHvIBtbVykoANGiucUZ3j")
+  - Download document library: [DL](https://drive.google.com/drive/folders/16zYwNSLNeX9PHvIBtbVykoANGiucUZ3j)
   
-  - Replace `document_library` directory in `bundles/data/document_library` by downloaded Document Library.
+  - Replace the `document_library` directory in `bundles/data/document_library` with the Document Library downloaded.
   
   ### Database
   
-  - Downlaod dump file from: [DUMP]("https://drive.google.com/drive/folders/119ru6sVE5WrFPiHwVzfaK-j5ELtqvFOC")
+  - Download dump file from: [DUMP](https://drive.google.com/drive/folders/119ru6sVE5WrFPiHwVzfaK-j5ELtqvFOC)
 
   - Put int `/docker-compose/database/dump/` directory
   
