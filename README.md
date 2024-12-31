@@ -6,39 +6,70 @@
    - Gradle
    - Java11
 
-  ## Artifacts
-  - Download dump from [Drive]("[https://?](https://drive.google.com/drive/folders/119ru6sVE5WrFPiHwVzfaK-j5ELtqvFOC)")
-  - Download document library from [Drive]("https://drive.google.com/drive/folders/16zYwNSLNeX9PHvIBtbVykoANGiucUZ3j")
-
   ## Prepare Environment
-  - Put dump file into /management-env/database/
-  - Put document library into /management-ent/liferay/data/
 
+  - Run the command:
+  
+    ```
+    blade gw initBundle
+    ```
+
+  ### Document Library
+
+  - Download document library: [DL]("https://drive.google.com/drive/folders/16zYwNSLNeX9PHvIBtbVykoANGiucUZ3j")
+  
+  - Replace `document_library` directory in `bundles/data/document_library` by downloaded Document Library.
+  
+  ### Database
+  
+  - Downlaod dump file from: [DUMP]("https://drive.google.com/drive/folders/119ru6sVE5WrFPiHwVzfaK-j5ELtqvFOC")
+
+  - Put int `/docker-compose/database/dump/` directory
+  
   ## Deploy
+  
    - Go to the modules folder and run the command:
+   
      ```
        blade gw clean deploy
      ```
       
-  ## Up
+  ## Up The Portal
+  
   - Back to the root project folder and run the command:
     ```
+    
       docker compose -p management up --b  build -d
     ```
+
     and
+    
     ```
       docker compose logs -f liferay
     ```
 
   
-  ## Access
+  ## Access to the Portal
+
   - User Portal Admin
 
         Email: test@liferay.com
         Password: test1
 
-  - User Employee
+  ## Users for business rule:
 
-        Email: albert.gomes@management.br
-        Password: batman1
+  1. Human-Resources Department User:
+      
+          Email: mariah.silva@liferay.com
+          Password: test
+  
+  2. Manager Employee User:
+  
+          Email: albert.gomes@liferay.com
+          Password: batman1
+  
+  3. User Employee
+  
+          Email: mario.pereira@liferay.com
+          Password: robbin
   
