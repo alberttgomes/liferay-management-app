@@ -1,4 +1,5 @@
 <%@ page import="management.web.model.EmployeeDetails" %>
+<%@ page import="java.util.Date" %>
 
 <%
     EmployeeDetails details = (EmployeeDetails)request.getAttribute("EmployeeDetails");
@@ -11,7 +12,7 @@
                 <h2 class="details-title">Employee Details</h2>
                 <ul>
                     <li class="item">
-                        <p>Full Name:</p> <%= details.getFullName() %>
+                        <p>Name:</p> <%= details.getFullName() %>
                     </li>
                     <li class="item">
                         <p>Email:</p> <%= details.getEmail() %>
@@ -24,6 +25,9 @@
                     </li>
                     <li class="item">
                         <p>Employee Identifier:</p> <%= details.getEmployeeId() %>
+                    </li>
+                    <li class="item">
+                        <p>Start Date:</p> <%= details.getStartDate() %>
                     </li>
                 </ul>
             </div>

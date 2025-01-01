@@ -70,7 +70,9 @@ public class EmployeeDetailsFDSDataProvider
                     employee.getDepartment(),
                     user.getEmailAddress(),
                     employee.getEmployeeId(), name,
-                    employee.getPosition()));
+                    employee.getLevel(),
+                    employee.getPosition(),
+                    employee.getCreateDate()));
         }
 
         return employeeDetails;

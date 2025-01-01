@@ -67,7 +67,8 @@ public class EmployeeDetailsPortlet extends MVCPortlet {
                 new EmployeeDetails(
                     employee.getDepartment(), employeeUser.getEmailAddress(),
                     employee.getEmployeeId(), employeeUser.getFullName(),
-                    employee.getPosition()));
+                    employee.getLevel(), employee.getPosition(),
+                    employeeUser.getCreateDate()));
         }
         catch (PortalException portalException) {
             throw new RuntimeException(portalException);
