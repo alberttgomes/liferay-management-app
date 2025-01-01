@@ -8,17 +8,26 @@
     <portlet:param name="mvcPath" value="/management/view_all_employee_entry.jsp" />
 </portlet:renderURL>
 
+<portlet:renderURL var="backToEmployeeAreaURL">
+    <portlet:param name="mvcPath" value="employee_dashboard.jsp"/>
+</portlet:renderURL>
+
 <div class="dashboard-main">
     <div class="dashboard-header">
         Requests Area
     </div>
     <div class="dashboard-buttons">
+        <button onclick="location.href='/web/portal/'">Employee Area</button>
         <button onclick="location.href='<%= newRequest %>'">New Request</button>
         <button onclick="location.href='<%= myRequests %>'">My Requests</button>
     </div>
 </div>
 
 <style>
+    .back-to-employee-dashboard {
+        text-align: left;
+        padding: 3px;
+    }
     .dashboard-main {
         margin: 0;
         font-family: Arial, sans-serif;
