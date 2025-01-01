@@ -81,7 +81,7 @@
                                 int activeIndex_= 0;
 
                                 for (ArticlesDisplay articlesDisplay : ArticlesContentHelper.getArticlesDisplay(
-                                        "Initiatives", themeDisplay.getScopeGroupId())) {
+                                        "Guides", themeDisplay.getScopeGroupId())) {
                             %>
                             <div class="carousel-item <%= (activeIndex_ == 0) ? "active" : "" %>">
                                 <div class="initiative-content">
