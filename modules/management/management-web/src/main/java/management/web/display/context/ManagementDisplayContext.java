@@ -126,11 +126,16 @@ public class ManagementDisplayContext {
         return EmployeeRequestConstant.getManagerRequestIds();
     }
 
-    public boolean isManager() throws Exception {
-        Manager manager = ManagerLocalServiceUtil.findByCompanyIdAndEmployeeId(
-                _employee.getCompanyId(), _employee.getEmployeeId());
+    public boolean isManager() {
+        try {
+            Manager manager = ManagerLocalServiceUtil.findByCompanyIdAndEmployeeId(
+                    _employee.getCompanyId(), _employee.getEmployeeId());
 
-        return !Objects.isNull(manager);
+            return !Objects.isNull(manager);
+        }
+        catch (Exception exception) {
+            return false;
+        }
     }
 
     private Employee _setEmployee(HttpServletRequest httpServletRequest)
@@ -147,7 +152,7 @@ public class ManagementDisplayContext {
 
             if (user == null) {
                 throw new NoSuchEmployeeException(
-                        "Current user session not found");
+                    "Current user session not found");
             }
 
             Employee employee = EmployeeLocalServiceUtil.fetchEmployeeByUserId(
@@ -171,15 +176,15 @@ public class ManagementDisplayContext {
             }
             else {
                 throw new NoSuchEmployeeException(
-                        "Unable to return employee accessing to user " +
-                                user.getUserId());
+                    "Unable to return employee accessing to user " +
+                        user.getUserId());
             }
         }
         catch (NoSuchEmployeeException noSuchEmployeeException) {
             throw new NoSuchEmployeeException(
-                    "Unable to found employee in that request " +
-                            httpServletRequest.getRequestURL(),
-                    noSuchEmployeeException);
+                "Unable to found employee in that request " +
+                        httpServletRequest.getRequestURL(),
+                noSuchEmployeeException);
         }
 
     }
