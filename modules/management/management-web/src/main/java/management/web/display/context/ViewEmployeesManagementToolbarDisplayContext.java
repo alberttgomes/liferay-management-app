@@ -26,7 +26,7 @@ import management.web.display.EmployeeDisplay;
  * @author Albert Cabral
  */
 public class ViewEmployeesManagementToolbarDisplayContext
-        extends SearchContainerManagementToolbarDisplayContext {
+    extends SearchContainerManagementToolbarDisplayContext {
 
     public ViewEmployeesManagementToolbarDisplayContext(
         HttpServletRequest httpServletRequest,

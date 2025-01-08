@@ -21,15 +21,15 @@ public class EmployeeRequestConstant {
 
     public static long[] getEmployeeRequestIds() {
         return new long[] {
-                BENEFIT_EDUCATION, DEPENDENT_HEALTH_PLAN,
-                DISMISSAL, PROMOTION
+            BENEFIT_EDUCATION, DEPENDENT_HEALTH_PLAN,
+            DISMISSAL, PROMOTION
         };
     }
 
     public static long[] getManagerRequestIds() {
         return new long[] {
-                PROMOTION, DISMISSAL_EMPLOYEE,
-                COURSE, COURSE_TO_EMPLOYEE
+            PROMOTION, DISMISSAL_EMPLOYEE,
+            COURSE, COURSE_TO_EMPLOYEE
         };
     }
 

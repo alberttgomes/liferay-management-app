@@ -627,20 +627,20 @@ public class EmployeeLocalServiceImpl extends EmployeeLocalServiceBaseImpl {
             if (employeePersistence.fetchByF_L_First(
                     firstName, lastName, null) == null) {
                 throw new NoSuchManagerException(
-                        StringBundler.concat(
-                                "Employee not found with the name ",
-                                firstName, StringPool.SPACE, lastName));
+                    StringBundler.concat(
+                        "Employee not found with the name ",
+                        firstName, StringPool.SPACE, lastName));
             }
 
             if (!betweenLevels && newPosition.equals(oldPosition)) {
                 throw new RuntimeException(
-                        "Invalid promotion transaction. " +
-                                "Position cannot be identical to actual.");
+                    "Invalid promotion transaction. " +
+                        "Position cannot be identical to actual.");
             }
             else if (betweenLevels && !newPosition.equals(oldPosition)) {
                 if (newLevel <= oldLevel) {
                     throw new RuntimeException(
-                            "Invalid promotion transaction between levels.");
+                        "Invalid promotion transaction between levels.");
                 }
             }
             else {
@@ -657,14 +657,14 @@ public class EmployeeLocalServiceImpl extends EmployeeLocalServiceBaseImpl {
 
                     if (hierarchyOldPosition >= hierarchyNewPosition) {
                         throw new RuntimeException(
-                                "Invalid promotion transaction. Actual level cannot be" +
-                                        " equal or larger than new level.");
+                            "Invalid promotion transaction. Actual level cannot be" +
+                                " equal or larger than new level.");
                     }
                 }
                 else {
                     throw new RuntimeException(
-                            "New position is not available for department " +
-                                    department);
+                        "New position is not available for department " +
+                                department);
                 }
             }
         }

@@ -7,13 +7,13 @@ import com.liferay.portal.kernel.model.UserConstants;
 import com.liferay.portal.kernel.servlet.BaseFilter;
 import com.liferay.portal.kernel.util.PortalUtil;
 
+import com.management.app.model.Employee;
+import com.management.app.service.EmployeeLocalService;
+
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import com.management.app.model.Employee;
-import com.management.app.service.EmployeeLocalService;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
