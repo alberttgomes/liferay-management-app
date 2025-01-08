@@ -9,6 +9,8 @@ import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.json.JSONException;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
 import com.liferay.portal.kernel.xml.Document;
 import com.liferay.portal.kernel.xml.DocumentException;
@@ -26,11 +28,22 @@ import management.web.display.ArticlesDisplay;
  */
 public class ArticlesContentHelper {
 
-    public static List<ArticlesDisplay> getArticlesDisplay(String folderName, long groupId)
+    public static List<ArticlesDisplay> getArticlesDisplay(
+            String folderName, long groupId, String structureName)
         throws DocumentException, JSONException {
 
         JournalFolder journalFolder = JournalFolderLocalServiceUtil.fetchFolder(
                 groupId, folderName);
+
+        if (journalFolder == null) {
+            if (_log.isWarnEnabled()) {
+                _log.warn(
+                "Returning a empty list to ArticlesDisplay " +
+                        "because " + folderName + " folder is not found.");
+            }
+
+            return new ArrayList<>();
+        }
 
         List<JournalArticle> journalArticlesByFolderName = new ArrayList<>();
 
@@ -42,9 +55,7 @@ public class ArticlesContentHelper {
 
             DDMStructure ddmStructure = journalArticle.getDDMStructure();
 
-            String fieldLabel = ddmStructure.getName();
-
-            if (fieldLabel.contains("Initiatives Article")) {
+            if (ddmStructure.getName().contains(structureName)) {
                 journalArticlesByFolderName.add(journalArticle);
             }
         }
@@ -79,20 +90,21 @@ public class ArticlesContentHelper {
             articlesDisplayList.add(articlesDisplay);
         }
 
-
         return articlesDisplayList;
     }
 
     private static List<Node> _getNodeContent(String field, String content)
-            throws DocumentException {
+        throws DocumentException {
 
         Document document = SAXReaderUtil.read(new StringReader(content));
 
         String xPathFieldGroup =
-                "/root/dynamic-element[@type='fieldset']/dynamic-element[@type='"
-                        + field + "']/dynamic-content";
+            "/root/dynamic-element[@type='fieldset']/dynamic-element[@type='"
+                + field + "']/dynamic-content";
 
         return document.selectNodes(xPathFieldGroup);
     }
+
+    private static final Log _log = LogFactoryUtil.getLog(ArticlesContentHelper.class);
 
 }
