@@ -6,11 +6,7 @@ taglib uri="http://liferay.com/tld/theme" prefix="liferay-theme" %><%@
 taglib uri="http://liferay.com/tld/ui" prefix="liferay-ui" %><%@
 taglib uri="http://liferay.com/tld/clay" prefix="clay" %><%@
 taglib uri="http://liferay.com/tld/frontend-data-set" prefix="frontend-data-set" %><%@
-taglib prefix="liferay-ui" uri="http://liferay.com/tld/ui" %><%@
 taglib prefix="liferay-frontend" uri="http://liferay.com/tld/aui" %>
-
-
-<link rel="stylesheet" href="${pageContext.request.contextPath}/css/main.scss" />
 
 <%@ page import="com.liferay.journal.model.JournalArticle" %><%@
 page import="com.liferay.dynamic.data.mapping.model.DDMStructure" %><%@
@@ -38,8 +34,18 @@ page import="com.management.app.service.EmployeeLocalServiceUtil" %><%@
 page import="java.util.ArrayList" %><%@
 page import="java.util.List" %><%@
 page import="com.liferay.portal.kernel.util.StringUtil" %><%@
-page import="management.web.constants.EmployeeRequestConstant" %>
+page import="management.web.constants.EmployeeRequestConstant" %><%@
+page import="management.web.display.helper.ArticlesContentHelper" %><%@
+page import="management.web.display.ArticlesDisplay" %><%@
+page import="com.management.app.constants.EmployeeStructureConstants" %>
 
 <liferay-theme:defineObjects />
 
 <portlet:defineObjects />
+
+<%--Links--%>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" >
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/main.scss" />
+
+<%--Scripts--%>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
