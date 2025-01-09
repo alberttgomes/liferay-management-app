@@ -1,9 +1,5 @@
-<%@ page import="management.web.display.helper.ArticlesContentHelper" %>
-<%@ page import="management.web.display.ArticlesDisplay" %>
-<%@ include file="../../init.jsp" %>
 
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" />
+<%@ include file="../../init.jsp" %>
 
 <%
     ManagementDisplayContext managementDisplayContext = (ManagementDisplayContext) request.getAttribute(WebKeys.PORTLET_DISPLAY_CONTEXT);
@@ -19,6 +15,25 @@
         <button onclick="location.href='/web/portal/manager-requests'">Manager Requests</button>
     </div>
 
+    <div class="manager-area-leaders">
+        <div class="dashboard-header center">
+            <h2 class="title-dashboard">Leaders at the Moment</h2>
+        </div>
+
+        <clay:sheet-section
+                id="employeeDetails"
+        >
+            <frontend-data-set:classic-display
+                    creationMenu="<%= managementDisplayContext.getCreationMenu() %>"
+                    dataProviderKey="<%= EmployeeDetailsFDSNames.EMPLOYEE_DETAILS %>"
+                    id="<%= EmployeeDetailsFDSNames.EMPLOYEE_DETAILS %>"
+                    itemsPerPage="<%= 10 %>"
+                    showSearch="<%= false %>"
+                    style="fluid"
+            />
+        </clay:sheet-section>
+    </div>
+
     <div class="manager-area-body">
         <div class="row">
             <div class="col-6">
@@ -31,29 +46,29 @@
                                 int activeIndex = 0;
 
                                 for (ArticlesDisplay articlesDisplay : ArticlesContentHelper.getArticlesDisplay(
-                                        "Initiatives", themeDisplay.getScopeGroupId())) {
+                                        "Initiatives", themeDisplay.getScopeGroupId(), "Initiatives Article")) {
                             %>
-                                <div class="carousel-item <%= (activeIndex == 0) ? "active" : "" %>">
-                                    <div class="initiative-content">
-                                        <h2 class="initiative-title"><%= articlesDisplay.getTitle() %></h2>
-                                        <div class="initiative-files d-flex">
-                                            <%
-                                                for (String imageURL : articlesDisplay.getImagesURL()) {
-                                            %>
-                                                    <div class="initiative-img me-2">
-                                                        <img
-                                                            alt="initiative-img"
-                                                            class="img-fluid initiative-img"
-                                                            src="<%= imageURL %>"
-                                                        />
-                                                    </div>
-                                            <%
-                                                }
-                                            %>
+                                    <div class="carousel-item <%= (activeIndex == 0) ? "active" : "" %>">
+                                        <div class="initiative-content">
+                                            <h4 class="initiative-title"><%= articlesDisplay.getTitle() %></h4>
+                                            <div class="initiative-files d-flex">
+                                                <%
+                                                    for (String imageURL : articlesDisplay.getImagesURL()) {
+                                                %>
+                                                        <div class="initiative-img me-2">
+                                                            <img
+                                                                alt="initiative-img"
+                                                                class="img-fluid initiative-img"
+                                                                src="<%= imageURL %>"
+                                                            />
+                                                        </div>
+                                                <%
+                                                    }
+                                                %>
+                                            </div>
+                                            <div class="initiative-description"><%= articlesDisplay.getDescription() %></div>
                                         </div>
-                                        <div class="initiative-description"><%= articlesDisplay.getDescription() %></div>
                                     </div>
-                                </div>
                             <%
                                     activeIndex++;
                                 }
@@ -81,29 +96,29 @@
                                 int activeIndex_= 0;
 
                                 for (ArticlesDisplay articlesDisplay : ArticlesContentHelper.getArticlesDisplay(
-                                        "Guides", themeDisplay.getScopeGroupId())) {
+                                        "Guides", themeDisplay.getScopeGroupId(), "Initiatives Article")) {
                             %>
-                            <div class="carousel-item <%= (activeIndex_ == 0) ? "active" : "" %>">
-                                <div class="initiative-content">
-                                    <h2 class="initiative-title"><%= articlesDisplay.getTitle() %></h2>
-                                    <div class="initiative-files d-flex">
-                                        <%
-                                            for (String imageURL : articlesDisplay.getImagesURL()) {
-                                        %>
-                                        <div class="initiative-img me-2">
-                                            <img
-                                                    alt="initiative-img"
-                                                    class="img-fluid initiative-img"
-                                                    src="<%= imageURL %>"
-                                            />
+                                    <div class="carousel-item <%= (activeIndex_ == 0) ? "active" : "" %>">
+                                        <div class="initiative-content">
+                                            <h4 class="initiative-title"><%= articlesDisplay.getTitle() %></h4>
+                                            <div class="initiative-files d-flex">
+                                                <%
+                                                    for (String imageURL : articlesDisplay.getImagesURL()) {
+                                                %>
+                                                        <div class="initiative-img me-2">
+                                                            <img
+                                                                alt="initiative-img"
+                                                                class="img-fluid initiative-img"
+                                                                src="<%= imageURL %>"
+                                                            />
+                                                        </div>
+                                                <%
+                                                    }
+                                                %>
+                                            </div>
+                                            <div class="initiative-description"><%= articlesDisplay.getDescription() %></div>
                                         </div>
-                                        <%
-                                            }
-                                        %>
                                     </div>
-                                    <div class="initiative-description"><%= articlesDisplay.getDescription() %></div>
-                                </div>
-                            </div>
                             <%
                                     activeIndex_++;
                                 }
@@ -123,44 +138,38 @@
             </div>
         </div>
     </div>
-
-    <div class="manager-area-leaders">
-        <div class="dashboard-header center">
-            <h2 class="title-dashboard">Leaders at the Moment</h2>
-        </div>
-
-        <clay:sheet-section
-                id="employeeDetails"
-        >
-            <frontend-data-set:classic-display
-                    creationMenu="<%= managementDisplayContext.getCreationMenu() %>"
-                    dataProviderKey="<%= EmployeeDetailsFDSNames.EMPLOYEE_DETAILS %>"
-                    id="<%= EmployeeDetailsFDSNames.EMPLOYEE_DETAILS %>"
-                    itemsPerPage="<%= 10 %>"
-                    showSearch="<%= false %>"
-                    style="fluid"
-            />
-        </clay:sheet-section>
-    </div>
 </div>
 
 <style>
+    .carousel-inner {
+        border-radius: 10px;
+        overflow: hidden;
+    }
+
+    .carousel-item {
+        padding: 20px;
+        background: #1c1c1c;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.7);
+        text-align: left;
+    }
+
+    .carousel-control-prev-icon,
+    .carousel-control-next-icon {
+        filter: invert(100%);
+    }
+
     .center {
         text-align: center !important;
     }
-    .dashboard-header {
-        background-color: #333;
-        color: #fff;
-        padding: 10px 20px;
-        font-size: 18px;
-        text-align: left;
-    }
+
     .dashboard-buttons {
         display: flex;
         justify-content: center;
         align-items: center;
         height: 300px;
     }
+
     .dashboard-buttons button {
         margin: 0 15px;
         padding: 15px 30px;
@@ -172,8 +181,59 @@
         border-radius: 5px;
         transition: background-color 0.3s;
     }
+
     .dashboard-buttons button:hover {
         background-color: #555;
+    }
+
+    .dashboard-header {
+        background-color: #333;
+        color: #fff;
+        padding: 10px 20px;
+        font-size: 18px;
+        text-align: left;
+    }
+
+    .initiative-description {
+        font-size: 13px;
+        line-height: 1.5;
+        text-align: justify;
+        color: #d9d9d9;
+        padding: 10px;
+        border-radius: 6px;
+    }
+
+    .initiative-img {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+    }
+
+    .initiative-img img {
+        border-radius: 10px;
+        width: 100%;
+        max-width: 500px;
+        height: 300px;
+        object-fit: cover;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.7);
+    }
+
+    .initiatives-title, .initiative-title {
+        font-weight: bold;
+        color: #fff;
+        margin-top: 15px;
+    }
+
+    .initiative-description {
+        font-size: 16px;
+        line-height: 1.6;
+        text-align: justify;
+        padding: 10px;
+        border-radius: 8px;
+        max-width: 600px;
+        width: 100%;
+        margin: 15px auto;
     }
 
     .manager-initiatives {
@@ -184,64 +244,22 @@
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
     }
 
-    .initiatives-title {
-        font-size: 24px;
-        font-weight: bold;
-        text-align: center;
-        margin-bottom: 20px;
-        color: #fff;
-    }
-
-    .carousel-item {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: space-between;
-        padding: 20px;
-        background-color: #292929;
-        border-radius: 10px;
-        color: #fff;
-    }
-
-    .initiative-title {
-        font-size: 20px;
-        font-weight: bold;
-        margin-bottom: 15px;
-        color: #007bff;
-        text-align: center;
-    }
-
-    .initiative-img {
-        align-items: center;
-        width: 100%;
-        height: auto;
-        max-height: 350px;
-        object-fit: cover;
-        border-radius: 8px;
-        margin-bottom: 25px;
-    }
-
-    .initiative-description {
-        font-size: 13px;
-        line-height: 1.5;
-        text-align: justify;
-        color: #d9d9d9;
-        padding: 10px;
-        /*background-color: #1f1f1f;*/
-        border-radius: 6px;
-    }
-
     .row {
         margin: 0 !important;
     }
 
     @media (max-width: 768px) {
-        .carousel-item {
-            padding: 15px;
+        .dashboard-buttons {
+            flex-direction: column;
+            gap: 10px;
         }
 
-        .initiative-title {
-            font-size: 18px;
+        .initiative-img img {
+            height: 250px;
+        }
+
+        .initiatives-title {
+            font-size: 20px;
         }
 
         .initiative-description {
